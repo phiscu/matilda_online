@@ -42,11 +42,11 @@ mpl.rcParams['font.family'] = font_name
 
 mpl.rcParams['font.size'] = 14
 mpl.rcParams['font.weight'] = 'bold'
-mpl.rcParams['axes.labelsize'] = 15
+mpl.rcParams['axes.labelsize'] = 14
 plt.rcParams['legend.fontsize'] = 10
-mpl.rcParams['axes.titlesize'] = 18
+mpl.rcParams['axes.titlesize'] = 16
 mpl.rcParams['axes.titleweight'] = 'bold'
-mpl.rcParams['figure.titlesize'] = 24
+mpl.rcParams['figure.titlesize'] = 22
 mpl.rcParams['figure.titleweight'] = 'heavy'
 
 # Gitterlinien
@@ -532,7 +532,6 @@ class MatildaSummary:
 
     def prepare_data_for_plot(self):
         """Prepare all necessary data for plotting"""
-        # Extract results from MATILDA scenarios
         self.runoff = {'SSP2': self.get_matilda_result_all_models('SSP2', 'total_runoff'),
                       'SSP5': self.get_matilda_result_all_models('SSP5', 'total_runoff')}
 
@@ -718,7 +717,7 @@ class MatildaSummary:
                 ydata = line.get_ydata()
                 last_val = ydata[-1]
                 perc_val = last_val / max(ydata) * 100
-                label = r"{:.0f} km² ({:.0f}\%)".format(last_val, perc_val)
+                label = "{:.0f} km² ({:.0f}%)".format(last_val, perc_val)
                 ax0l.annotate(label,
                             xy=(1, last_val), xytext=(55, min(max(ydata) * 0.9, last_val * 4)),
                             va='center', ha='right', fontsize=8,
