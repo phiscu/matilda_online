@@ -176,8 +176,8 @@ def aridity(df, hist_starty=1986, hist_endy=2015):
     hist_pot = aridity_pot[(aridity_pot.index >= hist_starty) & (aridity_pot.index <= hist_endy)].mean()
     hist_act = aridity_act[(aridity_act.index >= hist_starty) & (aridity_act.index <= hist_endy)].mean()
     # Calculate rolling mean with a 30y period
-    aridity_pot_rolling = aridity_pot.rolling(window=30).mean()
-    aridity_act_rolling = aridity_act.rolling(window=30).mean()
+    aridity_pot_rolling = aridity_pot.rolling(window=30, min_periods=1).mean()
+    aridity_act_rolling = aridity_act.rolling(window=30, min_periods=1).mean()
     # Calculate the relative change in the aridity indexes
     pot_rel = 100 * (aridity_pot_rolling - hist_pot) / hist_pot
     act_rel = 100 * (aridity_act_rolling - hist_act) / hist_act
