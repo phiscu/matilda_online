@@ -9,7 +9,7 @@ from tools.helpers import read_era5l
 import configparser
 from scipy import stats
 import numpy as np
-from tools.helpers import parquet_to_dict, read_yaml, pickle_to_dict, get_si
+from tools.helpers import parquet_to_dict, read_yaml, pickle_to_dict, get_si, matilda_vars, confidence_interval
 from tools.indicators import indicator_vars, custom_df_indicators
 import warnings
 import seaborn as sns
@@ -19,17 +19,19 @@ from matplotlib.patches import Rectangle
 import matplotlib as mpl
 from dash import Dash, dcc, html, Input, Output
 from jupyter_server import serverapp
-import plotly.graph_objs as go
+import plotly.graph_objects as go
 import plotly.io as pio
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
+## Global style parameters
 # Use Seaborn white style
 sns.set_style("white")
 
 # Use Seaborn white style
 sns.set_style("white")
 
+# Fonts
 font_path = "tools/cmu.0/cmunrm.ttf"
 font_prop = fm.FontProperties(fname=font_path)
 fm.fontManager.addfont(font_path)
@@ -38,8 +40,6 @@ font_name = font_prop.get_name()
 mpl.rcParams['text.usetex'] = False
 mpl.rcParams['mathtext.fontset'] = 'cm' 
 mpl.rcParams['font.family'] = font_name 
-
-
 mpl.rcParams['font.size'] = 14
 mpl.rcParams['font.weight'] = 'bold'
 mpl.rcParams['axes.labelsize'] = 14
@@ -49,13 +49,14 @@ mpl.rcParams['axes.titleweight'] = 'bold'
 mpl.rcParams['figure.titlesize'] = 22
 mpl.rcParams['figure.titleweight'] = 'heavy'
 
-# Gitterlinien
+# Grid lines
 mpl.rcParams['axes.grid'] = True
 mpl.rcParams['grid.linestyle'] = '--'
 mpl.rcParams['grid.color'] = 'gray'
 mpl.rcParams['grid.linewidth'] = 0.5
 
 
+## Definitions
 
 def df2long(df, intv_sum='ME', intv_mean='YE', precip=False):
     """Resamples dataframes and converts them into long format to be passed to seaborn.lineplot()."""
@@ -474,6 +475,8 @@ class MatildaSummary:
         self.melt_ssp2 = None
         self.melt_ssp5 = None
         self.melt_diff = None
+        self.data_loaded = False
+
 
     def load_data(self):
         """Load all necessary data for plotting"""
@@ -505,6 +508,9 @@ class MatildaSummary:
         
         # Prepare data for plotting
         self.prepare_data_for_plot()
+        
+        # Set data flag
+        self.data_loaded = True
 
     def adjust_startdate(self, data_dict, start_date='2000-01-01'):
         """Adjust start date for dictionaries of dataframes"""
@@ -699,6 +705,10 @@ class MatildaSummary:
     def plot_summary(self, rolling=None, save_path=None, show=False):
         """Create the main summary plot with all components"""
         print("Creating MATILDA summary plot...")
+
+        if not self.data_loaded:
+            print("Loading data. Call .load_data() explicitly if you want to modify the data before plotting.")
+            self.load_data()
         
         # Set up the figure with gridspec
         gridspec = dict(hspace=0.0, height_ratios=[1, 2, 4, 1])
@@ -809,7 +819,9 @@ class MatildaSummary:
             ax2l.add_patch(Rectangle((start, 0), width=1, height=ymax_ax2l, alpha=0.1, facecolor='blue',
                          label='_obs_data', zorder=0))
 
-        ax2l.axvline(dt.datetime(2022, 12, 31), color='salmon')  # Present day line
+        ax2l.axvline(self.df_era5.index[-1], color='salmon')  # Line to separate historical and projection periods
+
+        self.df_era5.index
 
         # ----- Temperature (bottom panel) -----
         print("Plotting temperature...")
@@ -831,7 +843,7 @@ class MatildaSummary:
         ax3l.axhline(y=0, color='lightgrey', linestyle=':', linewidth=1)
         ax3l.text(dt.datetime(2001, 1, 1), 0, f"0 °C", ha='left', va='bottom', size=8, color='grey')
 
-        ax3l.axvline(dt.datetime(2022, 12, 31), color='salmon')  # Present day line
+        ax3l.axvline(self.df_era5.index[-1], color='salmon')  # Present day line
 
         # ----- Create legends -----
         print("Creating legends...")
@@ -1010,10 +1022,6 @@ def custom_df_matilda(dic, scenario, var, resample_freq=None):
 
     return combined_df
 
-
-from tools.helpers import matilda_vars
-import plotly.graph_objects as go
-from tools.helpers import confidence_interval
 
 def plot_ci_matilda(var, dic, resample_freq='YE', show=False):
     """
