@@ -21,42 +21,39 @@ from dash import Dash, dcc, html, Input, Output
 from jupyter_server import serverapp
 import plotly.graph_objs as go
 import plotly.io as pio
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 
 # Use Seaborn white style
 sns.set_style("white")
 
-# Use LaTeX for rendering text
-plt.rcParams['text.usetex'] = True     # overwrites several font settings
+# Use Seaborn white style
+sns.set_style("white")
 
-# Set consistent font type, size, and weight
-#plt.rcParams['font.size'] = 14
-#plt.rcParams['font.family'] = 'serif'
-#plt.rcParams['font.weight'] = 'bold'
+font_path = "tools/cmu.0/cmunrm.ttf"
+font_prop = fm.FontProperties(fname=font_path)
+fm.fontManager.addfont(font_path)
+font_name = font_prop.get_name() 
 
-# Set figure and subplot title size and weight
-plt.rcParams['figure.titlesize'] = 24
-plt.rcParams['figure.titleweight'] = 'heavy'
-plt.rcParams['axes.titlesize'] = 18
-plt.rcParams['axes.titleweight'] = 'bold'
+mpl.rcParams['text.usetex'] = False
+mpl.rcParams['mathtext.fontset'] = 'cm' 
+mpl.rcParams['font.family'] = font_name 
 
-# Set consistent grid style
-plt.rcParams['axes.grid'] = True
-plt.rcParams['grid.linestyle'] = '--'
-plt.rcParams['grid.color'] = 'gray'
-plt.rcParams['grid.linewidth'] = 0.5
 
-# Set axis style
-plt.rcParams['axes.labelsize']= 15
-#plt.rcParams['axes.linewidth'] = 1.0
+mpl.rcParams['font.size'] = 14
+mpl.rcParams['font.weight'] = 'bold'
+mpl.rcParams['axes.labelsize'] = 14
+plt.rcParams['legend.fontsize'] = 10
+mpl.rcParams['axes.titlesize'] = 16
+mpl.rcParams['axes.titleweight'] = 'bold'
+mpl.rcParams['figure.titlesize'] = 22
+mpl.rcParams['figure.titleweight'] = 'heavy'
 
-# get style for matplotlib plots
-# plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
-
-mpl.rcParams.update({
-    "text.usetex": True,
-    "font.family": "serif",            # or 'sans-serif', 'monospace', etc.
-    "font.serif": ["Computer Modern"], # default LaTeX serif font
-})
+# Gitterlinien
+mpl.rcParams['axes.grid'] = True
+mpl.rcParams['grid.linestyle'] = '--'
+mpl.rcParams['grid.color'] = 'gray'
+mpl.rcParams['grid.linewidth'] = 0.5
 
 
 
@@ -130,7 +127,7 @@ def cmip_plot(ax, df, target, title=None, precip=False, smooth_window=10, agg_le
     ax.grid(True)
 
 
-def cmip_plot_combined(data, target, title=None, precip=False, agg_level='monthly', smooth_window=10,
+def cmip_plot_combined(data, target, precip=False, agg_level='monthly', smooth_window=10,
                        target_label='Target', show=False, fig_path=None):
     """Combines multiple subplots of climate data in different scenarios before and after bias adjustment.
     Uses moving window smoothing in years instead of days."""
@@ -141,20 +138,18 @@ def cmip_plot_combined(data, target, title=None, precip=False, agg_level='monthl
     p_kwargs = {'target': target, 'smooth_window': smooth_window, 'target_label': target_label,
                 'precip': True, 'agg_level': agg_level}
 
-    if not precip:
-        cmip_plot(axis[0, 0], data['SSP2_raw'], show_target_label=True, title='SSP2 raw', **t_kwargs)
-        cmip_plot(axis[0, 1], data['SSP2_adjusted'], title='SSP2 adjusted', **t_kwargs)
-        cmip_plot(axis[1, 0], data['SSP5_raw'], title='SSP5 raw', **t_kwargs)
-        cmip_plot(axis[1, 1], data['SSP5_adjusted'], title='SSP5 adjusted', **t_kwargs)
-        if title:
-            figure.suptitle(f'{smooth_window} Year Rolling Mean of {agg_level.capitalize()} Precipitation')
-    else:
+    if precip:
         cmip_plot(axis[0, 0], data['SSP2_raw'], show_target_label=True, title='SSP2 raw', **p_kwargs)
         cmip_plot(axis[0, 1], data['SSP2_adjusted'], title='SSP2 adjusted', **p_kwargs)
         cmip_plot(axis[1, 0], data['SSP5_raw'], title='SSP5 raw', **p_kwargs)
         cmip_plot(axis[1, 1], data['SSP5_adjusted'], title='SSP5 adjusted', **p_kwargs)
-        if title:
-            figure.suptitle(f'{smooth_window} Year Rolling Mean of Air Temperature')
+        figure.suptitle(f'{smooth_window} Year Rolling Mean of {agg_level.capitalize()} Precipitation')
+    else:
+        cmip_plot(axis[0, 0], data['SSP2_raw'], show_target_label=True, title='SSP2 raw', **t_kwargs)
+        cmip_plot(axis[0, 1], data['SSP2_adjusted'], title='SSP2 adjusted', **t_kwargs)
+        cmip_plot(axis[1, 0], data['SSP5_raw'], title='SSP5 raw', **t_kwargs)
+        cmip_plot(axis[1, 1], data['SSP5_adjusted'], title='SSP5 adjusted', **t_kwargs)
+        figure.suptitle(f'{smooth_window} Year Rolling Mean of Air Temperature')
 
     figure.legend(data['SSP5_adjusted'].columns, loc='lower right', ncol=6, mode="expand")
     figure.tight_layout()
@@ -535,7 +530,6 @@ class MatildaSummary:
 
     def prepare_data_for_plot(self):
         """Prepare all necessary data for plotting"""
-        # Extract results from MATILDA scenarios
         self.runoff = {'SSP2': self.get_matilda_result_all_models('SSP2', 'total_runoff'),
                       'SSP5': self.get_matilda_result_all_models('SSP5', 'total_runoff')}
 
@@ -667,13 +661,16 @@ class MatildaSummary:
             sns.lineplot(data=df_pred, x='TIMESTAMP', y=val_name,
                          color=target_color, ax=ax, linestyle=ls_dict[i])
 
-        ax.set_ylabel(ylabel, labelpad=ylabel_pad)
+        ax.set_ylabel(ylabel, labelpad=ylabel_pad, fontsize = 12)
 
         if ylim is not None:
             ax.set_ylim(ylim)
 
         if target is not None:
             ax.plot(target, linewidth=1.5, c=target_color)
+        
+        ax.yaxis.set_ticks_position('left')
+        ax.tick_params(axis='y', right=False, labelright=False)
 
     def ensemble_max(self, param_scenarios, val_name, rolling=None, cutoff=None, intv_sum='YE'):
         """Calculate ensemble maximum with confidence interval"""
@@ -721,7 +718,7 @@ class MatildaSummary:
                 ydata = line.get_ydata()
                 last_val = ydata[-1]
                 perc_val = last_val / max(ydata) * 100
-                label = r"{:.0f} km² ({:.0f}\%)".format(last_val, perc_val)
+                label = "{:.0f} km² ({:.0f}%)".format(last_val, perc_val)
                 ax0l.annotate(label,
                             xy=(1, last_val), xytext=(55, min(max(ydata) * 0.9, last_val * 4)),
                             va='center', ha='right', fontsize=8,
@@ -740,9 +737,9 @@ class MatildaSummary:
         # Create stacked plots for both scenarios
         col = ["#eaeaea", "#d1e3ff"]  # Colors for snow and ice melt
         ax1l.stackplot(self.melt_ssp5.index, self.melt_ssp5['ssp5_avg_snow'], 
-                   self.melt_ssp5['ssp5_avg_ice'], colors=col)
+                   self.melt_ssp5['ssp5_avg_ice'], colors=col,edgecolor='none')
         ax1l.stackplot(self.melt_ssp2.index, self.melt_ssp2['ssp2_avg_snow']*-1, 
-                   self.melt_ssp2['ssp2_avg_ice']*-1, colors=col)
+                   self.melt_ssp2['ssp2_avg_ice']*-1, colors=col, edgecolor='none')
 
         ax1l.axhline(y=0, color='white', linestyle='-')  # Zero line
 
@@ -757,9 +754,9 @@ class MatildaSummary:
         ymax_ax1l_lower = round(-ymax_ax1l*1.1, 1)
         
         ax1l.set_ylim(ymax_ax1l_lower, ymax_ax1l_upper)
-        ax1l.set_ylabel('Melt (mm/a)', labelpad=10)
+        ax1l.set_ylabel('Melt (mm/a)', labelpad=8, fontsize = 12)
 
-        # Annotate final values
+        # Annotate final valuess
         y = self.melt_ssp5['ssp5_avg_snow'].iloc[-1]
         self.annotate_final_val(ax1l, y, ymax_ax1l*0.3, abs(y), 'mm')
         y = self.melt_ssp5['ssp5_avg_ice'].iloc[-1]+self.melt_ssp5['ssp5_avg_snow'].iloc[-1]
@@ -782,7 +779,7 @@ class MatildaSummary:
                           rolling=rolling, cutoff='2000-12-31'),
                 self.ensemble_max(param_scenarios=self.precipitation, val_name='prec', 
                           rolling=rolling, cutoff='2000-12-31'))
-        ymax_ax2l = ymax_ax2l * 1.1  # Some space for the legend
+        ymax_ax2l = ymax_ax2l * 1.3 
 
         # Plot runoff with observations
         if rolling is not None:
@@ -809,7 +806,7 @@ class MatildaSummary:
         # Add observation data rectangles
         for index, row in self.obs.dropna().iterrows():
             start = mdates.date2num(row['Date'])
-            ax2l.add_patch(Rectangle((start, 0), width=1, height=ymax_ax2l, alpha=0.1, 
+            ax2l.add_patch(Rectangle((start, 0), width=1, height=ymax_ax2l, alpha=0.1, facecolor='blue',
                          label='_obs_data', zorder=0))
 
         ax2l.axvline(dt.datetime(2022, 12, 31), color='salmon')  # Present day line
@@ -855,7 +852,7 @@ class MatildaSummary:
         # Scenario legend
         scenario_legend = ax3l.legend(['SSP2 Scenario', '_ci1', 'SSP5 Scenario', '_ci2'],
                         loc="lower right", bbox_to_anchor=(1, -0.8), ncol=2,
-                        frameon=True)
+                        frameon=True,fontsize = 8)
 
         # ----- Add text annotations -----
         style = dict(size=8, color='black')
@@ -878,15 +875,19 @@ class MatildaSummary:
         for ax in axs:
             ax.margins(x=0)
             ax.set_xlim([dt.datetime(2000, 1, 1), None])
+            ax.grid(visible=False)
+            ax.tick_params(axis='y', right=False, labelright=False)
+            
+        ax.tick_params(axis='x', which='both', bottom=True, top=False, labelbottom=True)
 
         for ax in [ax1l, ax2l]:
             ax.grid(axis='y', color='lightgrey', linestyle='--', dashes=(5, 5))
 
-        ax3l.set_xlabel("")
+        ax3l.set_xlabel("Year", fontsize = 12)
         plt.suptitle(f"MATILDA Summary", fontweight='bold', fontsize=16)
         figure.tight_layout()
 
-        # Save figure if path is provided
+        # Save figure if path is provided   
         if save_path:
             figure.savefig(save_path, dpi=300)
             print(f"Figure saved to {save_path}")
