@@ -3,3 +3,6 @@ output/*
 matilda_edu_CLI.py
 /CLI/
 output_download.zip
+.DS_Store
+__pycache__/
+*.pyc
