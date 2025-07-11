@@ -143,7 +143,7 @@ from jupyter_server import serverapp
 from tools.plots import matilda_dash
 
 # retrieve server information to find out whether it's running locally or on mybinder.org server
-adjust_jupyter_config()
+#adjust_jupyter_config()
 
 app1 = Dash(__name__)
 matilda_dash(app1,dic=matilda_scenarios, fig_count=4, display_mode='inLine')
@@ -220,7 +220,6 @@ else:
 from tools.plots import MatildaSummary
 
 summary = MatildaSummary(dir_input, dir_output, settings)
-summary.load_data()
 
 summary.plot_summary(save_path=f"{dir_output}/figures/summary_ensemble.png");
 
