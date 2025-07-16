@@ -14,6 +14,7 @@ from tools.indicators import indicator_vars, custom_df_indicators
 import warnings
 import seaborn as sns
 import datetime as dt
+from datetime import timedelta
 import matplotlib.dates as mdates
 from matplotlib.patches import Rectangle
 import matplotlib as mpl
@@ -288,7 +289,7 @@ def cmip_plot_ensemble(cmip, target, precip=False, intv_sum='ME', intv_mean='YE'
     figure, axis = plt.subplots(figsize=figsize, constrained_layout=True)
 
     # Define color palette
-    colors = ['darkorange', 'orange', 'darkblue', 'dodgerblue']
+    colors = ['#E25822', 'goldenrod', 'darkblue', 'dodgerblue']
     # create a new dictionary with the same keys but new values from the list
     col_dict = {key: value for key, value in zip(cmip.keys(), colors)}
     
@@ -812,16 +813,17 @@ class MatildaSummary:
                        ax=ax2l, rolling=rolling, cutoff='2000-12-31', ylabel_pad=5)
 
         self.annote_final_val_lines(ax2l, 'mm', min_dist=100)
-
+        
         # Add observation data rectangles
+        first = True
         for index, row in self.obs.dropna().iterrows():
-            start = mdates.date2num(row['Date'])
-            ax2l.add_patch(Rectangle((start, 0), width=1, height=ymax_ax2l, alpha=0.1, facecolor='blue',
-                         label='_obs_data', zorder=0))
+            #start = mdates.date2num(row['Date'])
+            label = "Runoff observation period" if first else None
+            start = row['Date']
+            ax2l.axvspan(start, start + timedelta(days=1), color=(1.0, 0.9311, 0.8219), alpha=1, zorder=0)
+            first = False  
 
         ax2l.axvline(self.df_era5.index[-1], color='salmon')  # Line to separate historical and projection periods
-
-        self.df_era5.index
 
         # ----- Temperature (bottom panel) -----
         print("Plotting temperature...")
