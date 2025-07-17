@@ -173,8 +173,8 @@ ssp_pr_dict = {'SSP2_raw': ssp2_pr_raw, 'SSP2_adjusted': ssp2_pr, 'SSP5_raw': ss
 
 era5 = read_era5l(era5_file)
 
-cmip_plot_combined(data=ssp_tas_dict, target=era5, title='10y Rolling Mean of Daily Air Temperature', target_label='ERA5-Land', smooth_window=10, show=True, fig_path=f"{dir_figures}NB3_CMIP6_Temp.png")
-cmip_plot_combined(data=ssp_pr_dict, target=era5, title='10y Rolling Mean of Annual Precipitation', precip=True, target_label='ERA5-Land', agg_level='annual', smooth_window=10, show=True, fig_path=f"{dir_figures}NB3_CMIP6_Prec.png")
+cmip_plot_combined(data=ssp_tas_dict, target=era5, target_label='ERA5-Land', smooth_window=10, show=True, fig_path=f"{dir_figures}NB3_CMIP6_Temp.png")
+cmip_plot_combined(data=ssp_pr_dict, target=era5, precip=True, target_label='ERA5-Land', agg_level='annual', smooth_window=10, show=True, fig_path=f"{dir_figures}NB3_CMIP6_Prec.png")
 
 # %% [markdown]
 # Apparently, some models have striking curves indicating unrealistic outliers or sudden jumps in the data. To clearly identify faulty time series, one option is to choose a qualitative approach by identifying the models using an interactive `plotly` plot. Here we can zoom and select/deselect curves as we like, to identify model names.
@@ -242,8 +242,8 @@ ssp_tas_dict = drop_model(filter.filtered_models, ssp_tas_dict)
 ssp_pr_dict = drop_model(filter.filtered_models, ssp_pr_dict)
 
 
-cmip_plot_combined(data=ssp_tas_dict, target=era5, title='10y Mean of Air Temperature', target_label='ERA5-Land', show=True, fig_path=f"{dir_figures}NB3_CMIP6_Temp_filtered.png")
-cmip_plot_combined(data=ssp_pr_dict, target=era5, title='10y Mean of Monthly Precipitation', precip=True, target_label='ERA5-Land', show=True, agg_level='annual', smooth_window=10, fig_path=f"{dir_figures}NB3_CMIP6_Prec_filtered.png")
+cmip_plot_combined(data=ssp_tas_dict, target=era5, target_label='ERA5-Land', show=True, fig_path=f"{dir_figures}NB3_CMIP6_Temp_filtered.png")
+cmip_plot_combined(data=ssp_pr_dict, target=era5, precip=True, target_label='ERA5-Land', show=True, agg_level='annual', smooth_window=10, fig_path=f"{dir_figures}NB3_CMIP6_Prec_filtered.png")
 
 # %% [markdown]
 # ### Ensemble mean plots
@@ -254,8 +254,8 @@ cmip_plot_combined(data=ssp_pr_dict, target=era5, title='10y Mean of Monthly Pre
 # %%
 from tools.plots import cmip_plot_ensemble
 
-cmip_plot_ensemble(ssp_tas_dict, era5['temp'], intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Temp.png')
-cmip_plot_ensemble(ssp_pr_dict, era5['prec'], precip=True, intv_sum='ME', intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Prec.png')
+cmip_plot_ensemble(ssp_tas_dict, era5['temp'], intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Temp.pdf')
+cmip_plot_ensemble(ssp_pr_dict, era5['prec'], precip=True, intv_sum='ME', intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Prec.pdf')
 
 # %% [markdown]
 # We can see that the SDM adjusts the range and mean of the target data while preserving the distribution and trend of the original data. However, the inter-model variance is slightly reduced for temperature and notably increased for precipitation.
