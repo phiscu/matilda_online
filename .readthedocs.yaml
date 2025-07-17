@@ -11,8 +11,5 @@ python:
       path: .
     - requirements: requirements.txt
 
-conda:
-  environment: environment.yml
-
 sphinx:
   configuration: docs/conf.py
