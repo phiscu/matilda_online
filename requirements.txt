@@ -15,4 +15,4 @@ myst-parser
 sphinx-book-theme
 jupyter-sphinx
 nbsphinx
-
+ipykernel
