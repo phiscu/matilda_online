@@ -1,0 +1,322 @@
+*   [33mc4bb85f[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #18 from phiscu/plot_touchup
+[31m|[m[32m\[m  
+[31m|[m * [33ma09cf20[m[33m ([m[1;31morigin/plot_touchup[m[33m, [m[1;32mplot_touchup[m[33m)[m Adapted colors; fixed obs shading
+[31m|[m * [33ma4ef0d5[m Fixed titles in ensemble plots
+[31m|[m[31m/[m  
+*   [33m924c1ab[m[33m ([m[1;32mmain[m[33m)[m Merge pull request #17 from phiscu/plot_fixes
+[33m|[m[34m\[m  
+[33m|[m * [33m6ddd7a0[m[33m ([m[1;31morigin/plot_fixes[m[33m, [m[1;32mplot_fixes[m[33m)[m Refreshed NB5 and 6
+[33m|[m * [33m431049d[m Positioning of 'today line' in summary plot
+* [34m|[m [33m6099500[m Merge pull request #16 from phiscu/manual
+[35m|[m[34m\[m[34m|[m 
+[35m|[m * [33m715c485[m[33m ([m[1;31morigin/manual[m[33m, [m[1;32mmanual[m[33m)[m Remove unwanted binary files causing merge conflicts. again...
+[35m|[m * [33m3957501[m Remove system/cache files from version control
+[35m|[m * [33m1bf73c5[m Add ignore rules for system/cache files
+[35m|[m[35m/[m  
+*   [33m45c80c5[m Merge pull request #15 from phiscu/font
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m31f6d2a[m[33m ([m[1;31morigin/font[m[33m)[m formated fronts
+[1;31m|[m * [33m2ed9284[m formated fronts
+[1;31m|[m * [33mf3c65aa[m added cmu
+[1;31m|[m[1;31m/[m  
+[1;31m|[m * [33m34072de[m[33m ([m[1;36mHEAD -> [m[1;32mmanual_restored[m[33m)[m improved manual
+[1;31m|[m * [33m0493954[m init rtd
+[1;31m|[m[1;31m/[m  
+* [33mfedd811[m ORCID for Mia
+* [33m2fe6428[m Added DOI badge to README.md
+* [33mcc7e6cb[m Update CITATION.cff
+* [33m04b3495[m Add CITATION.cff file
+* [33m2c18517[m[33m ([m[1;33mtag: v1.0.0[m[33m)[m Update README.md
+* [33me8b4494[m Update LICENSE
+* [33mf13da63[m Deleted redundant files
+*   [33m0bf21ce[m Merge pull request #14 from phiscu/init_release
+[1;34m|[m[1;35m\[m  
+[1;34m|[m *   [33ma9ef22b[m Merge branch 'main' into init_release
+[1;34m|[m [1;36m|[m[1;34m\[m  
+[1;34m|[m [1;36m|[m[1;34m/[m  
+[1;34m|[m[1;34m/[m[1;36m|[m   
+* [1;36m|[m [33m7c6e451[m Update README.md
+* [1;36m|[m   [33mdf505dc[m Merge pull request #12 from phiscu/workflow_update
+[32m|[m[33m\[m [1;36m\[m  
+[32m|[m * [1;36m|[m [33md0d7a42[m updated environment.yml for GEE Xarray download
+[32m|[m * [1;36m|[m [33mfd980fa[m overcome GEE size limitations by using Xarray
+[32m|[m [33m|[m * [33m3a097af[m[33m ([m[1;31morigin/init_release[m[33m, [m[1;32minit_release[m[33m)[m Revised NB6
+[32m|[m [33m|[m * [33mb29cb43[m Revised NB5
+[32m|[m [33m|[m * [33m12674e9[m Link to next NB for NB4. Really
+[32m|[m [33m|[m * [33m8dc2bb3[m Link to next NB for NB4
+[32m|[m [33m|[m * [33meec1d5e[m Added ip option to NB4
+[32m|[m [33m|[m * [33m4970716[m Revised NB4
+[32m|[m [33m|[m * [33m4f14b2f[m Renamed DATE_RANGE argument
+[32m|[m [33m|[m * [33mbc6a901[m Renamed DATE_RANGE argument
+[32m|[m [33m|[m * [33ma64a8fe[m Revised NB3; moved functions around in tool scripts
+[32m|[m [33m|[m * [33m9fb6211[m Suppress warnings in NB1-3
+[32m|[m [33m|[m * [33ma72ed58[m Link to next NB in NB2
+[32m|[m [33m|[m * [33mdbc1994[m Zip option to config; revised NB2
+[32m|[m [33m|[m * [33m4fd5edc[m Revised NB1
+[32m|[m [33m|[m * [33m90cacd4[m Sync NB1
+[32m|[m [33m|[m * [33me6cba01[m Fixed flowchart display
+[32m|[m [33m|[m * [33m1277d8f[m Added gridplots, revised NB 6 and deleted NB 7
+[32m|[m [33m|[m * [33m05226df[m Syncing NB6 and 7 updates to pure_python
+[32m|[m [33m|[m * [33m6173a9f[m Bug fix CMIP-Download: excluded faulty model
+[32m|[m [33m|[m * [33m4653e7f[m added comments
+[32m|[m [33m|[m * [33me8b48b9[m added rgi files
+[32m|[m [33m|[m * [33m898fb28[m merged notebook 6 + 7
+[32m|[m [33m|[m * [33m4ce5a11[m merged notebook 6 + 7
+[32m|[m [33m|[m * [33m84b2200[m Jupytext sync for RGI fix and metaplot class commits
+[32m|[m [33m|[m * [33mc528873[m added metaplot
+[32m|[m [33m|[m * [33maedc424[m added metaplot
+[32m|[m [33m|[m * [33m9e43fb1[m Fix RGI download in Notebook1
+[32m|[m [33m|[m * [33ma094fb2[m Reimplemented discrete bias adjustement and overwriting CMIP with ERA5; finalized meta figure
+[32m|[m [33m|[m * [33md630e21[m RFS to CFR in NB4
+[32m|[m [33m|[m * [33m2a98831[m Link fix in Readme
+[32m|[m [33m|[m * [33mc484e42[m Cloud project really to config; adapted NB1, 2, and 3
+[32m|[m [33m|[m * [33m6b92223[m Added cloud project to config, adapted NB1
+[32m|[m [33m|[m * [33mcd7920a[m Updated plots in NB3 and added accessory scripts
+[32m|[m [33m|[m * [33mda71648[m New geemap version in environment.yml
+[32m|[m [33m|[m * [33m6f2cbde[m ee.initialize() issue and first plot in NB3 fixed
+[32m|[m [33m|[m * [33m985762e[m Drafted calibration steps 2-4 in NB4
+[32m|[m [33m|[m *   [33m2ad9547[m Merge remote-tracking branch 'origin/init_release' into init_release
+[32m|[m [33m|[m [34m|[m[35m\[m  
+[32m|[m [33m|[m [34m|[m * [33mb7ba750[m Adapted image file name for Windows compatibility
+[32m|[m [33m|[m * [35m|[m [33m3c6c4d6[m updated NB0: new option for config.ini (GEE download)
+[32m|[m [33m|[m * [35m|[m [33m6a3a82a[m updated NB1: xarray download via config.ini
+[32m|[m [33m|[m [35m|[m[35m/[m  
+[32m|[m [33m|[m * [33m8385812[m First calibration step in NB4
+[32m|[m [33m|[m * [33mb1721d0[m First calibration step in NB4
+[32m|[m [33m|[m * [33m412e493[m Tests in NB 6 and 7
+[32m|[m [33m|[m[33m/[m  
+[32m|[m * [33mee8bb96[m[33m ([m[1;32mworkflow_update[m[33m)[m Minor bug fix in NB4
+[32m|[m * [33m96bd437[m Added SWE to Notebook 4 and updated half of it
+[32m|[m * [33m50167c7[m Minor fix in Introduction NB
+[32m|[m * [33m9cf5211[m Fixed server selection for Dash boards in pure python
+[32m|[m * [33m7ce6853[m Added file format and num_cores to config; updated default parameter set; updated files to new pandas version
+[32m|[m * [33m5260ea8[m Finalized Intro; updated NB1
+[32m|[m * [33maf7251f[m Added authorization guide to Intro NB
+[32m|[m * [33m7391b98[m Updated Introduction, drafted Readme, added license
+[32m|[m * [33m1f2479e[m Bug fix after media repository update
+[32m|[m * [33mda490ed[m Bug fix after media repository update
+[32m|[m * [33mb35cfca[m Excluded CLI routine from tracking for release
+[32m|[m[32m/[m  
+*   [33m7d3cbe3[m Merge pull request #11 from phiscu/release_prep
+[36m|[m[1;31m\[m  
+[36m|[m * [33m7afb19f[m[33m ([m[1;32mrelease_prep[m[33m)[m added channels
+[36m|[m * [33m81bb9b9[m updated env (w/o channel) changed project name
+[36m|[m * [33m8bd1be8[m updated env (w/o xarray)
+[36m|[m * [33m5976caa[m gitkeep figures folder NB3: save figures
+[36m|[m * [33m968baaa[m NB3: scienceplot
+[36m|[m * [33m030d045[m NB3: save figures in output
+[36m|[m * [33m6059a14[m config scienceplots save figures in output
+[36m|[m * [33m2dd1df9[m .geojson cleanup scienceplots
+[36m|[m * [33m6be1d84[m fine-tuning: run dash in binder
+[36m|[m * [33m661919f[m config to run dash in binder
+[36m|[m * [33maa5d7c2[m config to run dash in binder
+[36m|[m * [33m2c653a7[m updated environment.yml
+[36m|[m * [33m7aa95d4[m add climate indices to download zip fighting with dash
+[36m|[m * [33m62f33ef[m changed to python=3.11 dash adjustment NB6 climate indices
+[36m|[m * [33m8d67206[m bugfix environment.yml
+[36m|[m * [33ma1729ae[m rework NB#5 updated environment.yml
+[36m|[m * [33m9c02395[m rework NB# 3+4 - check new package versions - download output
+[36m|[m * [33m30e6621[m rework NB# 1-3 - download output - fix deprecated warnings
+[36m|[m * [33mb1728f7[m added jupytext to environment.yml
+[36m|[m * [33m96a479c[m NB2: download option added (check for commit hook)
+[36m|[m * [33m64d9b61[m updated environment.yml and NB1 (pure python)
+[36m|[m * [33mdf9a8de[m updated environment.yml and no binder startup script
+[36m|[m * [33m6fa3559[m updated environment.yml and no binder startup script
+[36m|[m[36m/[m  
+*   [33m94c5a0f[m Finalized Metaplot
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33m0aa104c[m add output folder repo
+[1;32m|[m * [33m215f376[m clear outputs when launching binder
+[1;32m|[m * [33m9b669c7[m Make start.sh executable
+[1;32m|[m * [33m4f886c6[m clear outputs when launching binder
+[1;32m|[m * [33mbae4d6b[m clear outputs when launching binder
+[1;32m|[m * [33m32b712f[m clear outputs when launching binder
+[1;32m|[m *   [33m4ac35af[m Merge pull request #10 from phiscu/bias_adjustment_update
+[1;32m|[m [1;34m|[m[1;35m\[m  
+[1;32m|[m [1;34m|[m * [33mf310126[m[33m ([m[1;32mbias_adjustment_update[m[33m)[m Edited CLI workflow
+[1;32m|[m [1;34m|[m * [33m0213f70[m Paper updates
+[1;32m|[m [1;34m|[m *   [33m4f00b39[m Merge branch 'main' of https://github.com/phiscu/matilda_edu into bias_adjustment_update
+[1;32m|[m [1;34m|[m [1;36m|[m[1;34m\[m  
+[1;32m|[m [1;34m|[m [1;36m|[m[1;34m/[m  
+[1;32m|[m [1;34m|[m[1;34m/[m[1;36m|[m   
+[1;32m|[m * [1;36m|[m [33m1b30975[m meta plot update
+[1;32m|[m [31m|[m * [33m5972e38[m Extended glacier stats output
+[1;32m|[m [31m|[m * [33m2b1f26f[m Added float conversion write_yaml
+[1;32m|[m [31m|[m * [33m95b66d9[m Bias adjustment in discrete blocks; calibration period repleced with ERA5L
+[1;32m|[m [31m|[m[31m/[m  
+* [31m/[m [33m8880bdf[m Adapted modeling period to 2000-2100
+[31m|[m[31m/[m  
+* [33m77312bc[m Fixed total snow amount in meta plot
+* [33m92efc84[m Added Issyk-Kul gauges to config
+* [33m072b736[m Auto-scaling axes, annotations, and legends for meta_plot
+* [33m1551735[m Added pickle option to meta_plot
+* [33m18bb34a[m Processing steps in CLI mode can be selected manually
+*   [33m8e68c62[m Restore CLI draft and resolve conflict
+[32m|[m[33m\[m  
+[32m|[m * [33m70d614d[m meta plot update
+* [33m|[m [33m5c3ef40[m Restore CLI draft
+* [33m|[m [33m84d7294[m Added NB4 to CLI routine; changed subprocess appraoch
+* [33m|[m [33m731c297[m Added NB3 to CLI routine draft
+* [33m|[m [33m4c662f0[m Added NB2 to CLI routine draft
+* [33m|[m [33me76abe5[m Bug fix: tas referenced twice in NB3; drafted CLI worfflow for NB1
+* [33m|[m [33m97ce92e[m Delete uploaded files for Keki
+[33m|[m[33m/[m  
+* [33m97e7c37[m meta plot udpate
+* [33m4b6cff6[m meta plot
+* [33m39d6bc2[m Add files via upload
+* [33m543e8e6[m Add files via upload
+* [33m0634eca[m Delete SSP2
+* [33m62bef52[m Add files via upload
+* [33mb55d135[m Create .gitkeep
+[33m|[m * [33mb5f1763[m[33m ([m[1;31morigin/no_output[m[33m)[m Update environment.yml - binder test
+[33m|[m * [33mb65f552[m Updated environment and notebooks: - ERA5 csv bugfix - scrollable output - info boxes
+[33m|[m[33m/[m  
+[33m|[m * [33m4e1ec7c[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on main: 94558b6 Update Notebook4_MATILDA.py - mean_mb variable
+[33m|[m[33m/[m[36m|[m 
+[33m|[m * [33mdea9149[m index on main: 94558b6 Update Notebook4_MATILDA.py - mean_mb variable
+[33m|[m[33m/[m  
+* [33m94558b6[m Update Notebook4_MATILDA.py - mean_mb variable
+* [33mba4c1db[m Update Notebook4_MATILDA.ipynb - mean_mb variable
+* [33mf8815ed[m Formatted Notebook 7
+*   [33m51aab3f[m Merge branch 'main' of https://github.com/phiscu/matilda_edu
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m986cd60[m Update environment.yml
+* [1;32m|[m [33m249ab7c[m Formatted NB 5 and 6
+* [1;32m|[m [33mda00663[m Formatted NB 5 and 6
+[1;32m|[m[1;32m/[m  
+* [33m70a2c2e[m Reduced cmip6 dict size
+* [33mf9d0b9d[m Overwrite local changes
+*   [33m96de8c5[m Merge pull request #9 from phiscu/notebook_formatting
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33m8562027[m[33m ([m[1;32mnotebook_formatting[m[33m)[m Adjusted paths and added parquet in NB 3, 5 and 5
+* [1;34m|[m [33m36ce064[m Update environment.yml
+* [1;34m|[m [33m4149c41[m Merge pull request #8 from phiscu/notebook_formatting
+[1;35m|[m[1;34m\[m[1;34m|[m 
+[1;35m|[m * [33m790aed3[m Resolved conflicts
+[1;35m|[m[1;35m/[m[32m|[m 
+[1;35m|[m * [33m944009a[m Updated environment and notebooks: - ERA5 csv bugfix - scrollable output - info boxes
+* [32m|[m [33mb5776da[m Updated Notebooks 4, 5 and 6; fixed ERA5 bug
+* [32m|[m [33m133345d[m Updated environment.yml
+* [32m|[m [33m4b9e952[m Merge pull request #7 from phiscu/notebook_formatting
+[33m|[m[32m\[m[32m|[m 
+[33m|[m *   [33m44ae303[m Resolved conflicts
+[33m|[m [35m|[m[33m\[m  
+[33m|[m [35m|[m[33m/[m  
+[33m|[m[33m/[m[35m|[m   
+* [35m|[m [33m53ceb1e[m Contetn list in Introduction
+* [35m|[m [33mbb31fa8[m Update README.md
+* [35m|[m [33m1b223bb[m Update binder link to point on Introduction
+* [35m|[m [33m18de3bd[m Added Introduction, formatted Notebook6, included JupyterDash in environment
+[36m|[m * [33mb2e4f8a[m Revised Notebook2, few updates in Notebook1
+[36m|[m * [33mccb959f[m Revised Notebook 1
+[36m|[m * [33mcd3b7d7[m Media server data stored in config.ini
+[36m|[m * [33md3dd1b0[m Revision of Notebook1: - renamed - adding markdown - adding prints - adding sources/references
+[36m|[m * [33m99e7a6b[m Revision of Notebook1: - minor bugfixes - refactoring of variables - adding markdown - adding prints
+[36m|[m[36m/[m  
+* [33mb53a4b5[m Updated environment.yml
+* [33m0bc2c09[m Added Notebooks 5 and 6
+* [33m7e04b7a[m Added FAST; Finished MATILDA nb formatting
+* [33m9682aa7[m Formatted MATILDA Notebook
+* [33m33f407f[m Added helper function script; formatting of MATILDA nb
+* [33mb1ccbd5[m Added global mass balance data to workflow
+* [33ma2e4656[m Finished CMIP6 notebook
+* [33mcd69979[m Updated and formatted CMIP6 notebook
+* [33m567216d[m Added 2022 to ERA5 download request; added bias_adjustment to requirements
+* [33mf7724c5[m Minor adjustments in CMIP6 routine
+* [33mceffabf[m Removed old CMIP6 routine
+*   [33m0f87eed[m Merge pull request #6 from phiscu/jupytext
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m132945b[m[33m ([m[1;32mjupytext[m[33m)[m Delete .ipynb_checkpoints directory
+[1;31m|[m * [33m836dea3[m More test edits: restored file, removed lines, replaced paired py file
+[1;31m|[m * [33mada9001[m Test commits: rename rest, rename script folder
+[1;31m|[m * [33m56c092e[m Test commits: rename NB
+[1;31m|[m * [33mdae2699[m New test edits: hot fixes for CRS warning, removed hide input cell tags
+[1;31m|[m * [33m42f277d[m More test edits or the pre-commit hook, removed MD files
+[1;31m|[m * [33mf3332dd[m Added pre-commit hook to sync all nb pairs
+[1;31m|[m * [33m3d14764[m Added jupytext workflow with default paired python and mystMD files
+[1;31m|[m[1;31m/[m  
+*   [33m2920bdc[m Merge branch 'main' of https://github.com/phiscu/matilda_edu
+[1;33m|[m[1;34m\[m  
+[1;33m|[m *   [33mf10ad22[m Merge pull request #5 from phiscu/notebook_tuning
+[1;33m|[m [1;35m|[m[1;36m\[m  
+[1;33m|[m [1;35m|[m * [33m55661c9[m adding UTM to environment.yml
+[1;33m|[m [1;35m|[m * [33m08a5d92[m reset notebook at end; remove parallel tasks for ERA5
+[1;33m|[m [1;35m|[m * [33meb5ed02[m reset notebook at end; remove parallel tasks for ERA5
+[1;33m|[m [1;35m|[m *   [33md77577b[m Merge remote-tracking branch 'origin/notebook_tuning' into notebook_tuning
+[1;33m|[m [1;35m|[m [31m|[m[32m\[m  
+[1;33m|[m [1;35m|[m [31m|[m * [33mc8c1080[m Update MATILDA installation command
+[1;33m|[m [1;35m|[m * [32m|[m [33ma1de8b1[m UTM projection for area calculation
+[1;33m|[m [1;35m|[m [32m|[m[32m/[m  
+[1;33m|[m [1;35m|[m * [33m94b7d07[m resourcespace.py for media server API access; deleted zip file
+[1;33m|[m [1;35m|[m * [33me5995da[m download ice_thickness/DEM from HU media server
+[1;33m|[m [1;35m|[m * [33m8800380[m ERA5 in parallel tasks
+[1;33m|[m [1;35m|[m * [33mfbb8409[m updated environment.yml; kernel shutdown; disable map
+[1;33m|[m [1;35m|[m[1;35m/[m  
+* [1;35m/[m [33m09e78a4[m Annoying Jupyter cell stats
+[1;35m|[m[1;35m/[m  
+* [33md264ede[m Updated CMIP6 routine to multiprocessing downloads; fixed glacier profile and ERA5L nan and table header bugs; minor bug fixes
+* [33m7d3cad6[m Added example runoff obs; fixed glacier profile in settings.yml bug; added new example for a calibrated MATILDA run
+* [33m8571e66[m Switched to MERIT DEM; adapted glacier profile to fit formal MATILDA requirements
+*   [33m9b4d1d1[m Merge pull request #2 from phiscu/matilda_settings_file
+[33m|[m[34m\[m  
+[33m|[m * [33mcc5baa2[m[33m ([m[1;32mmatilda_settings_file[m[33m)[m Resolved conflicts for merge
+[33m|[m * [33m37417e1[m Setup draft for MATILDA notebook
+* [34m|[m   [33m0d7a5b3[m Merge remote-tracking branch 'origin/main'
+[35m|[m[36m\[m [34m\[m  
+[35m|[m * [34m|[m [33m9686dff[m Delete glacier_profile.csv
+* [36m|[m [34m|[m [33m56320d1[m keep output folder; config.ini adjusted
+[36m|[m[36m/[m [34m/[m  
+* [34m|[m [33m0f551b1[m CMIP6 notebook; Forcing_data.ipynb DEM download link; notebooks cleared
+* [34m|[m [33mb1a12f9[m delete venv; updated notebooks (ele_cat, area determination)
+* [34m|[m   [33m275b80c[m Merge remote-tracking branch 'origin/main'
+[1;31m|[m[1;32m\[m [34m\[m  
+[1;31m|[m * [34m|[m [33m3164936[m Merge pull request #1 from phiscu/matilda_settings_file
+[1;31m|[m [1;33m|[m[34m\[m[34m|[m 
+[1;31m|[m [1;33m|[m * [33m6ce89c2[m Remaining changes before merge
+[1;31m|[m [1;33m|[m * [33mff880cf[m Variables necessary for MATILDA are stored in settings.yml
+[1;31m|[m [1;33m|[m[1;33m/[m  
+* [1;33m/[m [33m5fb3ea4[m .idea files for whatever reason
+[1;33m|[m[1;33m/[m  
+* [33m4d0417f[m notebook for CMIP6 data acquisition
+* [33m40944dd[m updated Forcing_data.ipynb: added CMIP6 data processing
+* [33ma2f9bdd[m config.ini used in forcing data notebook updated environment.yml
+* [33mcc1a5d8[m new notebook for forcing data (ERA5L)
+* [33md145a82[m config.ini added
+* [33mdf7dae7[m updated glacier profile: elevation zones of entire catchment
+* [33m0faece6[m Creation of glacier profile CSV from DEM/thickness tif files
+* [33m1c2fef8[m reduce catchment area by glaciers outside catchment; geopackage instead shp files
+* [33m866a823[m filter intersecting RGI glacier by overlay percentage
+* [33m979a9a4[m Update README.md
+* [33m05e4200[m add empty output folder
+* [33m28f0751[m rename notebook
+* [33m49771ee[m spatial join from RGI zip file
+*   [33mbaa8d39[m Merge remote-tracking branch 'origin/main'
+[1;35m|[m[1;36m\[m  
+[1;35m|[m * [33mfc62c28[m Update README.md
+[1;35m|[m * [33m8ede278[m Update README.md
+* [1;36m|[m [33m645b799[m GLIMS data + RGI tif files
+[1;36m|[m[1;36m/[m  
+* [33m4fdf565[m ALOS added; area calculation
+* [33m8cdc5f3[m ALOS added; area calculation
+* [33mc2432e3[m restore lost code
+* [33m155bc8b[m select of DEM in parameters; manual box selection
+* [33mfb37a9d[m auto box; MERIT support
+* [33m311399c[m yml updated
+* [33mf1ca736[m yml updated
+* [33mf347493[m environment added
+*   [33m8a0fe14[m Merge remote-tracking branch 'origin/main'
+[31m|[m[32m\[m  
+[31m|[m * [33m9225504[m Update requirements.txt
+* [32m|[m [33mf9050e7[m added python-3.8 runtime
+[32m|[m[32m/[m  
+*   [33m3790549[m Merge remote-tracking branch 'origin/main'
+[33m|[m[34m\[m  
+[33m|[m * [33m0e92d21[m Update requirements.txt
+[33m|[m * [33mb100c3c[m Update requirements.txt
+* [34m|[m [33ma13a119[m Conda venv Catchment delineation
+[34m|[m[34m/[m  
+* [33m63c3927[m GEE export for SRTM
+* [33m83008a9[m updated notebook
+* [33m1cd95ce[m updated notebook
+* [33m72b227b[m venv for jupyter notebook
+* [33mf40346c[m Initial commit

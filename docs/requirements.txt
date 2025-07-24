@@ -1,0 +1,7 @@
+sphinx
+sphinx-book-theme
+myst-parser
+jupyter-sphinx
+nbsphinx
+ipykernel
+

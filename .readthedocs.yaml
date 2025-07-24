@@ -8,11 +8,7 @@ build:
 python:
   install:
     - requirements: docs/requirements.txt
-  extra_requirements:
-    - docs
-
-conda:
-  environment: environment.yml
 
 sphinx:
   configuration: docs/conf.py
+
