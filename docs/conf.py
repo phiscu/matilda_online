@@ -49,12 +49,3 @@ source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
-
-def suppress_core_module_docstring(app):
-    import matilda.core
-    import matilda.mspot_glacier
-    matilda.core.__doc__ = None
-    matilda.mspot_glacier.__doc__ = None
-
-def setup(app):
-    app.connect("builder-inited", suppress_core_module_docstring)
