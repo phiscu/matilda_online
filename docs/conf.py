@@ -40,10 +40,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
 html_logo = "_static/matilda_cupcake.png"
-html_theme_options = {
-    'logo_only': True,
-    'display_version': False,
-}
+# html_theme_options = {
+#     'logo_only': True,
+#     'display_version': False,
+# }
 
 source_suffix = {
     '.rst': 'restructuredtext',
