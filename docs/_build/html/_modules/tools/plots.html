@@ -1,74 +1,274 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tools.plots &mdash; Matilda ONLINE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tools.plots &#8212; Matilda ONLINE 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../../_static/js/theme.js"></script>
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/tools/plots';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            Matilda ONLINE
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Tools Module</a></li>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/matilda_cupcake.png" class="logo__image only-light" alt="Matilda ONLINE 1.0.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/matilda_cupcake.png" class="logo__image only-dark" alt="Matilda ONLINE 1.0.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Getting started</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">Tools Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../helpers.html">tools.helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../indicators.html">tools.indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../geetools.html">tools.geetools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plots.html">tools.plots</a></li>
+</ul>
+</details></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Matilda ONLINE</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">tools.plots</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for tools.plots</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
@@ -81,59 +281,69 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tools.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">parquet_to_dict</span><span class="p">,</span> <span class="n">read_yaml</span><span class="p">,</span> <span class="n">pickle_to_dict</span><span class="p">,</span> <span class="n">get_si</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tools.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">parquet_to_dict</span><span class="p">,</span> <span class="n">read_yaml</span><span class="p">,</span> <span class="n">pickle_to_dict</span><span class="p">,</span> <span class="n">get_si</span><span class="p">,</span> <span class="n">matilda_vars</span><span class="p">,</span> <span class="n">confidence_interval</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tools.indicators</span><span class="w"> </span><span class="kn">import</span> <span class="n">indicator_vars</span><span class="p">,</span> <span class="n">custom_df_indicators</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.dates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mdates</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rectangle</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dash</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dash</span><span class="p">,</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jupyter_server</span><span class="w"> </span><span class="kn">import</span> <span class="n">serverapp</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">plotly.io</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.font_manager</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="c1">## Global style parameters</span>
+<span class="c1"># Use Seaborn white style</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
 <span class="c1"># Use Seaborn white style</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
-<span class="c1"># Use LaTeX for rendering text</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.usetex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>     <span class="c1"># overwrites several font settings</span>
+<span class="c1"># Fonts</span>
+<span class="n">this_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">font_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">this_dir</span><span class="p">,</span> <span class="s2">&quot;cmu.0&quot;</span><span class="p">,</span> <span class="s2">&quot;cmunrm.ttf&quot;</span><span class="p">)</span>
 
-<span class="c1"># Set consistent font type, size, and weight</span>
-<span class="c1">#plt.rcParams[&#39;font.size&#39;] = 14</span>
-<span class="c1">#plt.rcParams[&#39;font.family&#39;] = &#39;serif&#39;</span>
-<span class="c1">#plt.rcParams[&#39;font.weight&#39;] = &#39;bold&#39;</span>
+<span class="c1"># 2. Font laden, wenn vorhanden</span>
+<span class="n">font_prop</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">font_path</span><span class="p">):</span>
+        <span class="n">fm</span><span class="o">.</span><span class="n">fontManager</span><span class="o">.</span><span class="n">addfont</span><span class="p">(</span><span class="n">font_path</span><span class="p">)</span>
+        <span class="n">font_prop</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">font_path</span><span class="p">)</span>
+        <span class="n">font_name</span> <span class="o">=</span> <span class="n">font_prop</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Font not found at: </span><span class="si">{</span><span class="n">font_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Font loading failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="c1"># Set figure and subplot title size and weight</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">24</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;heavy&#39;</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">18</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.usetex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span> 
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_name</span> 
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;heavy&#39;</span>
 
-<span class="c1"># Set consistent grid style</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
-
-<span class="c1"># Set axis style</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span><span class="o">=</span> <span class="mi">15</span>
-<span class="c1">#plt.rcParams[&#39;axes.linewidth&#39;] = 1.0</span>
-
-<span class="c1"># get style for matplotlib plots</span>
-<span class="c1"># plt_style = ast.literal_eval(config[&#39;CONFIG&#39;][&#39;PLOT_STYLE&#39;])</span>
-
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-    <span class="s2">&quot;text.usetex&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="s2">&quot;font.family&quot;</span><span class="p">:</span> <span class="s2">&quot;serif&quot;</span><span class="p">,</span>            <span class="c1"># or &#39;sans-serif&#39;, &#39;monospace&#39;, etc.</span>
-    <span class="s2">&quot;font.serif&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Computer Modern&quot;</span><span class="p">],</span> <span class="c1"># default LaTeX serif font</span>
-<span class="p">})</span>
+<span class="c1"># Grid lines</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
 
 
+<span class="c1">## Definitions</span>
 
 <div class="viewcode-block" id="df2long">
-<a class="viewcode-back" href="../../modules.html#tools.plots.df2long">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.df2long">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">df2long</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">intv_sum</span><span class="o">=</span><span class="s1">&#39;ME&#39;</span><span class="p">,</span> <span class="n">intv_mean</span><span class="o">=</span><span class="s1">&#39;YE&#39;</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Resamples dataframes and converts them into long format to be passed to seaborn.lineplot().&quot;&quot;&quot;</span>
 
@@ -150,7 +360,7 @@
 
 
 <div class="viewcode-block" id="cmip_plot">
-<a class="viewcode-back" href="../../modules.html#tools.plots.cmip_plot">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.cmip_plot">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cmip_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smooth_window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">agg_level</span><span class="o">=</span><span class="s1">&#39;monthly&#39;</span><span class="p">,</span>
               <span class="n">target_label</span><span class="o">=</span><span class="s1">&#39;Target&#39;</span><span class="p">,</span> <span class="n">show_target_label</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Plots climate model and target data using moving window smoothing.&quot;&quot;&quot;</span>
@@ -209,8 +419,8 @@
 
 
 <div class="viewcode-block" id="cmip_plot_combined">
-<a class="viewcode-back" href="../../modules.html#tools.plots.cmip_plot_combined">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">cmip_plot_combined</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">agg_level</span><span class="o">=</span><span class="s1">&#39;monthly&#39;</span><span class="p">,</span> <span class="n">smooth_window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<a class="viewcode-back" href="../../plots.html#tools.plots.cmip_plot_combined">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cmip_plot_combined</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">agg_level</span><span class="o">=</span><span class="s1">&#39;monthly&#39;</span><span class="p">,</span> <span class="n">smooth_window</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                        <span class="n">target_label</span><span class="o">=</span><span class="s1">&#39;Target&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Combines multiple subplots of climate data in different scenarios before and after bias adjustment.</span>
 <span class="sd">    Uses moving window smoothing in years instead of days.&quot;&quot;&quot;</span>
@@ -221,20 +431,18 @@
     <span class="n">p_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="n">target</span><span class="p">,</span> <span class="s1">&#39;smooth_window&#39;</span><span class="p">:</span> <span class="n">smooth_window</span><span class="p">,</span> <span class="s1">&#39;target_label&#39;</span><span class="p">:</span> <span class="n">target_label</span><span class="p">,</span>
                 <span class="s1">&#39;precip&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;agg_level&#39;</span><span class="p">:</span> <span class="n">agg_level</span><span class="p">}</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">precip</span><span class="p">:</span>
-        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP2_raw&#39;</span><span class="p">],</span> <span class="n">show_target_label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP2 raw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
-        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP2_adjusted&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP2 adjusted&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
-        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_raw&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP5 raw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
-        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_adjusted&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP5 adjusted&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-            <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">smooth_window</span><span class="si">}</span><span class="s1"> Year Rolling Mean of </span><span class="si">{</span><span class="n">agg_level</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> Precipitation&#39;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">precip</span><span class="p">:</span>
         <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP2_raw&#39;</span><span class="p">],</span> <span class="n">show_target_label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP2 raw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">p_kwargs</span><span class="p">)</span>
         <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP2_adjusted&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP2 adjusted&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">p_kwargs</span><span class="p">)</span>
         <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_raw&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP5 raw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">p_kwargs</span><span class="p">)</span>
         <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_adjusted&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP5 adjusted&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">p_kwargs</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">title</span><span class="p">:</span>
-            <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">smooth_window</span><span class="si">}</span><span class="s1"> Year Rolling Mean of Air Temperature&#39;</span><span class="p">)</span>
+        <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">smooth_window</span><span class="si">}</span><span class="s1"> Year Rolling Mean of </span><span class="si">{</span><span class="n">agg_level</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> Precipitation&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP2_raw&#39;</span><span class="p">],</span> <span class="n">show_target_label</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP2 raw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
+        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP2_adjusted&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP2 adjusted&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
+        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_raw&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP5 raw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
+        <span class="n">cmip_plot</span><span class="p">(</span><span class="n">axis</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_adjusted&#39;</span><span class="p">],</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;SSP5 adjusted&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">t_kwargs</span><span class="p">)</span>
+        <span class="n">figure</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">smooth_window</span><span class="si">}</span><span class="s1"> Year Rolling Mean of Air Temperature&#39;</span><span class="p">)</span>
 
     <span class="n">figure</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;SSP5_adjusted&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;expand&quot;</span><span class="p">)</span>
     <span class="n">figure</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
@@ -249,7 +457,7 @@
             
 
 <div class="viewcode-block" id="vplots">
-<a class="viewcode-back" href="../../modules.html#tools.plots.vplots">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.vplots">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">vplots</span><span class="p">(</span><span class="n">before</span><span class="p">,</span> <span class="n">after</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">target_label</span><span class="o">=</span><span class="s1">&#39;Target&#39;</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates violin plots of the kernel density estimation for all models before and after bias adjustment.&quot;&quot;&quot;</span>
 
@@ -351,7 +559,7 @@
         
 
 <div class="viewcode-block" id="cmip_plot_ensemble">
-<a class="viewcode-back" href="../../modules.html#tools.plots.cmip_plot_ensemble">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.cmip_plot_ensemble">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cmip_plot_ensemble</span><span class="p">(</span><span class="n">cmip</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">intv_sum</span><span class="o">=</span><span class="s1">&#39;ME&#39;</span><span class="p">,</span> <span class="n">intv_mean</span><span class="o">=</span><span class="s1">&#39;YE&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the multi-model mean of climate scenarios including the 90% confidence interval.</span>
@@ -378,7 +586,7 @@
     <span class="n">figure</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Define color palette</span>
-    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;darkblue&#39;</span><span class="p">,</span> <span class="s1">&#39;dodgerblue&#39;</span><span class="p">]</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#E25822&#39;</span><span class="p">,</span> <span class="s1">&#39;goldenrod&#39;</span><span class="p">,</span> <span class="s1">&#39;darkblue&#39;</span><span class="p">,</span> <span class="s1">&#39;dodgerblue&#39;</span><span class="p">]</span>
     <span class="c1"># create a new dictionary with the same keys but new values from the list</span>
     <span class="n">col_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cmip</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">colors</span><span class="p">)}</span>
     
@@ -426,7 +634,7 @@
 
 
 <div class="viewcode-block" id="prob_plot">
-<a class="viewcode-back" href="../../modules.html#tools.plots.prob_plot">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.prob_plot">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">prob_plot</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">corrected</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Temperature [K]&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines probability plots of climate model data before and after bias adjustment</span>
@@ -481,7 +689,7 @@
 
 
 <div class="viewcode-block" id="pp_matrix">
-<a class="viewcode-back" href="../../modules.html#tools.plots.pp_matrix">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.pp_matrix">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pp_matrix</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">corrected</span><span class="p">,</span> <span class="n">scenario</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Arranges the prob_plots of all CMIP6 models in a matrix and adds the R² score.</span>
@@ -572,6 +780,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp2</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">melt_diff</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_loaded</span> <span class="o">=</span> <span class="kc">False</span>
+
 
     <span class="k">def</span><span class="w"> </span><span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load all necessary data for plotting&quot;&quot;&quot;</span>
@@ -603,6 +813,9 @@
         
         <span class="c1"># Prepare data for plotting</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">prepare_data_for_plot</span><span class="p">()</span>
+        
+        <span class="c1"># Set data flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_loaded</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">adjust_startdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_dict</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Adjust start date for dictionaries of dataframes&quot;&quot;&quot;</span>
@@ -628,7 +841,6 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">prepare_data_for_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare all necessary data for plotting&quot;&quot;&quot;</span>
-        <span class="c1"># Extract results from MATILDA scenarios</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runoff</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SSP2&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_matilda_result_all_models</span><span class="p">(</span><span class="s1">&#39;SSP2&#39;</span><span class="p">,</span> <span class="s1">&#39;total_runoff&#39;</span><span class="p">),</span>
                       <span class="s1">&#39;SSP5&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_matilda_result_all_models</span><span class="p">(</span><span class="s1">&#39;SSP5&#39;</span><span class="p">,</span> <span class="s1">&#39;total_runoff&#39;</span><span class="p">)}</span>
 
@@ -760,13 +972,16 @@
             <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">df_pred</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;TIMESTAMP&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">val_name</span><span class="p">,</span>
                          <span class="n">color</span><span class="o">=</span><span class="n">target_color</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">ls_dict</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="n">ylabel_pad</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="n">ylabel_pad</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ylim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">target_color</span><span class="p">)</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_ticks_position</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelright</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">ensemble_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_scenarios</span><span class="p">,</span> <span class="n">val_name</span><span class="p">,</span> <span class="n">rolling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">intv_sum</span><span class="o">=</span><span class="s1">&#39;YE&#39;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate ensemble maximum with confidence interval&quot;&quot;&quot;</span>
@@ -795,6 +1010,10 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_summary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rolling</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the main summary plot with all components&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating MATILDA summary plot...&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loaded</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Loading data. Call .load_data() explicitly if you want to modify the data before plotting.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
         
         <span class="c1"># Set up the figure with gridspec</span>
         <span class="n">gridspec</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -814,7 +1033,7 @@
                 <span class="n">ydata</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">get_ydata</span><span class="p">()</span>
                 <span class="n">last_val</span> <span class="o">=</span> <span class="n">ydata</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">perc_val</span> <span class="o">=</span> <span class="n">last_val</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;</span><span class="si">{:.0f}</span><span class="s2"> km² (</span><span class="si">{:.0f}</span><span class="s2">\%)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">last_val</span><span class="p">,</span> <span class="n">perc_val</span><span class="p">)</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:.0f}</span><span class="s2"> km² (</span><span class="si">{:.0f}</span><span class="s2">%)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">last_val</span><span class="p">,</span> <span class="n">perc_val</span><span class="p">)</span>
                 <span class="n">ax0l</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label</span><span class="p">,</span>
                             <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">last_val</span><span class="p">),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">55</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">ydata</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">last_val</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)),</span>
                             <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
@@ -833,9 +1052,9 @@
         <span class="c1"># Create stacked plots for both scenarios</span>
         <span class="n">col</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#eaeaea&quot;</span><span class="p">,</span> <span class="s2">&quot;#d1e3ff&quot;</span><span class="p">]</span>  <span class="c1"># Colors for snow and ice melt</span>
         <span class="n">ax1l</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="p">[</span><span class="s1">&#39;ssp5_avg_snow&#39;</span><span class="p">],</span> 
-                   <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="p">[</span><span class="s1">&#39;ssp5_avg_ice&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="p">[</span><span class="s1">&#39;ssp5_avg_ice&#39;</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="n">col</span><span class="p">,</span><span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
         <span class="n">ax1l</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp2</span><span class="p">[</span><span class="s1">&#39;ssp2_avg_snow&#39;</span><span class="p">]</span><span class="o">*-</span><span class="mi">1</span><span class="p">,</span> 
-                   <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp2</span><span class="p">[</span><span class="s1">&#39;ssp2_avg_ice&#39;</span><span class="p">]</span><span class="o">*-</span><span class="mi">1</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp2</span><span class="p">[</span><span class="s1">&#39;ssp2_avg_ice&#39;</span><span class="p">]</span><span class="o">*-</span><span class="mi">1</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
 
         <span class="n">ax1l</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>  <span class="c1"># Zero line</span>
 
@@ -850,9 +1069,9 @@
         <span class="n">ymax_ax1l_lower</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="o">-</span><span class="n">ymax_ax1l</span><span class="o">*</span><span class="mf">1.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         
         <span class="n">ax1l</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax_ax1l_lower</span><span class="p">,</span> <span class="n">ymax_ax1l_upper</span><span class="p">)</span>
-        <span class="n">ax1l</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Melt (mm/a)&#39;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">ax1l</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Melt (mm/a)&#39;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
 
-        <span class="c1"># Annotate final values</span>
+        <span class="c1"># Annotate final valuess</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="p">[</span><span class="s1">&#39;ssp5_avg_snow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">annotate_final_val</span><span class="p">(</span><span class="n">ax1l</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ymax_ax1l</span><span class="o">*</span><span class="mf">0.3</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="s1">&#39;mm&#39;</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="p">[</span><span class="s1">&#39;ssp5_avg_ice&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">melt_ssp5</span><span class="p">[</span><span class="s1">&#39;ssp5_avg_snow&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -875,7 +1094,7 @@
                           <span class="n">rolling</span><span class="o">=</span><span class="n">rolling</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="s1">&#39;2000-12-31&#39;</span><span class="p">),</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">ensemble_max</span><span class="p">(</span><span class="n">param_scenarios</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">precipitation</span><span class="p">,</span> <span class="n">val_name</span><span class="o">=</span><span class="s1">&#39;prec&#39;</span><span class="p">,</span> 
                           <span class="n">rolling</span><span class="o">=</span><span class="n">rolling</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="s1">&#39;2000-12-31&#39;</span><span class="p">))</span>
-        <span class="n">ymax_ax2l</span> <span class="o">=</span> <span class="n">ymax_ax2l</span> <span class="o">*</span> <span class="mf">1.1</span>  <span class="c1"># Some space for the legend</span>
+        <span class="n">ymax_ax2l</span> <span class="o">=</span> <span class="n">ymax_ax2l</span> <span class="o">*</span> <span class="mf">1.3</span> 
 
         <span class="c1"># Plot runoff with observations</span>
         <span class="k">if</span> <span class="n">rolling</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -898,14 +1117,17 @@
                        <span class="n">ax</span><span class="o">=</span><span class="n">ax2l</span><span class="p">,</span> <span class="n">rolling</span><span class="o">=</span><span class="n">rolling</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="s1">&#39;2000-12-31&#39;</span><span class="p">,</span> <span class="n">ylabel_pad</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">annote_final_val_lines</span><span class="p">(</span><span class="n">ax2l</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="n">min_dist</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
+        
         <span class="c1"># Add observation data rectangles</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obs</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-            <span class="n">start</span> <span class="o">=</span> <span class="n">mdates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">])</span>
-            <span class="n">ax2l</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">ymax_ax2l</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> 
-                         <span class="n">label</span><span class="o">=</span><span class="s1">&#39;_obs_data&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="c1">#start = mdates.date2num(row[&#39;Date&#39;])</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Runoff observation period&quot;</span> <span class="k">if</span> <span class="n">first</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span>
+            <span class="n">ax2l</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">start</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.9311</span><span class="p">,</span> <span class="mf">0.8219</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>  
 
-        <span class="n">ax2l</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">)</span>  <span class="c1"># Present day line</span>
+        <span class="n">ax2l</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_era5</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">)</span>  <span class="c1"># Line to separate historical and projection periods</span>
 
         <span class="c1"># ----- Temperature (bottom panel) -----</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plotting temperature...&quot;</span><span class="p">)</span>
@@ -927,7 +1149,7 @@
         <span class="n">ax3l</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">ax3l</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;0 °C&quot;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
 
-        <span class="n">ax3l</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">)</span>  <span class="c1"># Present day line</span>
+        <span class="n">ax3l</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df_era5</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">)</span>  <span class="c1"># Present day line</span>
 
         <span class="c1"># ----- Create legends -----</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating legends...&quot;</span><span class="p">)</span>
@@ -948,7 +1170,7 @@
         <span class="c1"># Scenario legend</span>
         <span class="n">scenario_legend</span> <span class="o">=</span> <span class="n">ax3l</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;SSP2 Scenario&#39;</span><span class="p">,</span> <span class="s1">&#39;_ci1&#39;</span><span class="p">,</span> <span class="s1">&#39;SSP5 Scenario&#39;</span><span class="p">,</span> <span class="s1">&#39;_ci2&#39;</span><span class="p">],</span>
                         <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                        <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">frameon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">fontsize</span> <span class="o">=</span> <span class="mi">8</span><span class="p">)</span>
 
         <span class="c1"># ----- Add text annotations -----</span>
         <span class="n">style</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
@@ -971,15 +1193,19 @@
         <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="p">:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">margins</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="kc">None</span><span class="p">])</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelright</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ax1l</span><span class="p">,</span> <span class="n">ax2l</span><span class="p">]:</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">dashes</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
-        <span class="n">ax3l</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">ax3l</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Year&quot;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MATILDA Summary&quot;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
         <span class="n">figure</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
-        <span class="c1"># Save figure if path is provided</span>
+        <span class="c1"># Save figure if path is provided   </span>
         <span class="k">if</span> <span class="n">save_path</span><span class="p">:</span>
             <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Figure saved to </span><span class="si">{</span><span class="n">save_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -989,7 +1215,7 @@
         <span class="k">return</span> <span class="n">figure</span>
 
 <div class="viewcode-block" id="custom_df_matilda">
-<a class="viewcode-back" href="../../modules.html#tools.plots.custom_df_matilda">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.custom_df_matilda">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">custom_df_matilda</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">scenario</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">resample_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a dictionary of model outputs and returns a combined dataframe of a specific variable for a given scenario.</span>
@@ -1106,12 +1332,8 @@
 
 
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">tools.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">matilda_vars</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tools.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">confidence_interval</span>
-
 <div class="viewcode-block" id="plot_ci_matilda">
-<a class="viewcode-back" href="../../modules.html#tools.plots.plot_ci_matilda">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.plot_ci_matilda">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_ci_matilda</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">resample_freq</span><span class="o">=</span><span class="s1">&#39;YE&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.</span>
@@ -1276,7 +1498,7 @@
 
 
 <div class="viewcode-block" id="plot_ci_indicators">
-<a class="viewcode-back" href="../../modules.html#tools.plots.plot_ci_indicators">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.plot_ci_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_ci_indicators</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.</span>
@@ -1469,7 +1691,7 @@
 
 
 <div class="viewcode-block" id="ensemble_mean">
-<a class="viewcode-back" href="../../modules.html#tools.plots.ensemble_mean">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.ensemble_mean">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ensemble_mean</span><span class="p">(</span><span class="n">matilda_scenarios</span><span class="p">,</span> <span class="n">result_name</span><span class="p">,</span> <span class="n">dict_name</span><span class="o">=</span><span class="s2">&quot;model_output&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the ensemble mean for a specific variable across all models in the scenarios.</span>
@@ -1510,7 +1732,7 @@
 
 
 <div class="viewcode-block" id="plot_annual_cycles">
-<a class="viewcode-back" href="../../modules.html#tools.plots.plot_annual_cycles">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.plot_annual_cycles">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_annual_cycles</span><span class="p">(</span><span class="n">matilda_scenarios</span><span class="p">,</span> <span class="n">scenarios</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;SSP2&quot;</span><span class="p">,</span> <span class="s2">&quot;SSP5&quot;</span><span class="p">),</span> <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a 2-column by 4-row plot of annual cycles for the given variables,</span>
@@ -1598,7 +1820,7 @@
 
 
 <div class="viewcode-block" id="plot_sensitivity_bars">
-<a class="viewcode-back" href="../../modules.html#tools.plots.plot_sensitivity_bars">[docs]</a>
+<a class="viewcode-back" href="../../plots.html#tools.plots.plot_sensitivity_bars">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_sensitivity_bars</span><span class="p">(</span><span class="o">*</span><span class="n">dfs</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bar_width</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">bar_gap</span><span class="o">=</span><span class="mf">0.6</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots a horizontal bar chart showing the total sensitivity index for each parameter in a MATILDA model.</span>
@@ -1645,31 +1867,70 @@
 
 </pre></div>
 
-           </div>
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Alexander Georgi, Phillip Schuster, Mia Janzen
+</p>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
   </div>
+  
+  <div class="footer-item">
+    
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <p class="copyright">
+    
+      © Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.
+      <br/>
+    
+  </p>
 
-</footer>
-        </div>
-      </div>
-    </section>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
 
-</body>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>

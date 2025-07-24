@@ -29,8 +29,9 @@
 
           
           
-          <a href="../../index.html" class="icon icon-home">
-            Matilda ONLINE
+          <a href="../../index.html">
+            
+              <img src="../../_static/matilda_cupcake.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -40,9 +41,13 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Tools Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Getting started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Tools Modules</a></li>
 </ul>
 
         </div>
@@ -81,7 +86,7 @@
 
 
 <div class="viewcode-block" id="prec_minmax">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.prec_minmax">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.prec_minmax">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">prec_minmax</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the months of extreme precipitation for each year.</span>
@@ -112,7 +117,7 @@
 
 <span class="c1"># Day of the Year with maximum flow</span>
 <div class="viewcode-block" id="peak_doy">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.peak_doy">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.peak_doy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">peak_doy</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">smoothing_window_peakdoy</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the day of the calendar year with the peak value for each hydrological year.</span>
@@ -158,7 +163,7 @@
 
 <span class="c1"># Melting season</span>
 <div class="viewcode-block" id="melting_season">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.melting_season">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.melting_season">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">melting_season</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">smoothing_window_meltseas</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">min_weeks</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the start, end, and length of the melting season for each calendar year based on the daily</span>
@@ -221,7 +226,7 @@
 
 <span class="c1"># Aridity</span>
 <div class="viewcode-block" id="aridity">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.aridity">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.aridity">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">aridity</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hist_starty</span><span class="o">=</span><span class="mi">1986</span><span class="p">,</span> <span class="n">hist_endy</span><span class="o">=</span><span class="mi">2015</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates aridity indexes from precipitation, and potential and actual evaporation respectively. Aridity is defined</span>
@@ -259,8 +264,8 @@
     <span class="n">hist_pot</span> <span class="o">=</span> <span class="n">aridity_pot</span><span class="p">[(</span><span class="n">aridity_pot</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">hist_starty</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">aridity_pot</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">hist_endy</span><span class="p">)]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">hist_act</span> <span class="o">=</span> <span class="n">aridity_act</span><span class="p">[(</span><span class="n">aridity_act</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;=</span> <span class="n">hist_starty</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">aridity_act</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;=</span> <span class="n">hist_endy</span><span class="p">)]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="c1"># Calculate rolling mean with a 30y period</span>
-    <span class="n">aridity_pot_rolling</span> <span class="o">=</span> <span class="n">aridity_pot</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">aridity_act_rolling</span> <span class="o">=</span> <span class="n">aridity_act</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">aridity_pot_rolling</span> <span class="o">=</span> <span class="n">aridity_pot</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">aridity_act_rolling</span> <span class="o">=</span> <span class="n">aridity_act</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="c1"># Calculate the relative change in the aridity indexes</span>
     <span class="n">pot_rel</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">aridity_pot_rolling</span> <span class="o">-</span> <span class="n">hist_pot</span><span class="p">)</span> <span class="o">/</span> <span class="n">hist_pot</span>
     <span class="n">act_rel</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">aridity_act_rolling</span> <span class="o">-</span> <span class="n">hist_act</span><span class="p">)</span> <span class="o">/</span> <span class="n">hist_act</span>
@@ -276,7 +281,7 @@
 
 <span class="c1"># Dry spells</span>
 <div class="viewcode-block" id="dry_spells">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.dry_spells">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.dry_spells">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dry_spells</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">dry_spell_length</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the total length of dry spells in days per year. A dry spell is defined as a period for which the rolling</span>
@@ -317,7 +322,7 @@
 
 <span class="c1"># Hydrological signatures</span>
 <div class="viewcode-block" id="get_qhf">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.get_qhf">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.get_qhf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_qhf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">global_median</span><span class="p">,</span> <span class="n">measurements_per_day</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Variation of spotpy.hydrology.signatures.get_qhf() that allows definition of a global</span>
@@ -339,7 +344,7 @@
 
 
 <div class="viewcode-block" id="get_qlf">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.get_qlf">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.get_qlf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_qlf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">global_mean</span><span class="p">,</span> <span class="n">measurements_per_day</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Variation of spotpy.hydrology.signatures.get_qlf() that allows comparison of</span>
@@ -362,7 +367,7 @@
 
 
 <div class="viewcode-block" id="hydrological_signatures">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.hydrological_signatures">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.hydrological_signatures">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydrological_signatures</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate hydrological signatures for a given input dataframe.</span>
@@ -421,7 +426,7 @@
 
 <span class="c1"># Drought indicators</span>
 <div class="viewcode-block" id="drought_indicators">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.drought_indicators">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.drought_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">drought_indicators</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s1">&#39;ME&#39;</span><span class="p">,</span> <span class="n">dist</span><span class="o">=</span><span class="s1">&#39;gamma&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the climatic water balance, SPI (Standardized Precipitation Index), and</span>
@@ -527,7 +532,7 @@
 <span class="c1"># Wrapper function</span>
 
 <div class="viewcode-block" id="cc_indicators">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.cc_indicators">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.cc_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cc_indicators</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply a list of climate change indicator functions to output DataFrame of MATILDA and concatenate</span>
@@ -598,7 +603,7 @@
 
 
 <div class="viewcode-block" id="calculate_indicators">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.calculate_indicators">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.calculate_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_indicators</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate climate change indicators for all scenarios and models.</span>
@@ -634,7 +639,7 @@
 
 
 <div class="viewcode-block" id="custom_df_indicators">
-<a class="viewcode-back" href="../../modules.html#tools.indicators.custom_df_indicators">[docs]</a>
+<a class="viewcode-back" href="../../indicators.html#tools.indicators.custom_df_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">custom_df_indicators</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">scenario</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a dictionary of climate change indicators and returns a combined dataframe of a specific variable for</span>

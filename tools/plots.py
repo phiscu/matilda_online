@@ -24,6 +24,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import os
 
 ## Global style parameters
 # Use Seaborn white style
@@ -33,10 +34,19 @@ sns.set_style("white")
 sns.set_style("white")
 
 # Fonts
-font_path = "tools/cmu.0/cmunrm.ttf"
-font_prop = fm.FontProperties(fname=font_path)
-fm.fontManager.addfont(font_path)
-font_name = font_prop.get_name() 
+this_dir = os.path.abspath(os.path.dirname(__file__))
+font_path = os.path.join(this_dir, "cmu.0", "cmunrm.ttf")
+
+font_prop = None
+try:
+    if os.path.exists(font_path):
+        fm.fontManager.addfont(font_path)
+        font_prop = fm.FontProperties(fname=font_path)
+        font_name = font_prop.get_name()
+    else:
+        print(f"Font not found at: {font_path}")
+except Exception as e:
+    print(f"Font loading failed: {e}")
 
 mpl.rcParams['text.usetex'] = False
 mpl.rcParams['mathtext.fontset'] = 'cm' 

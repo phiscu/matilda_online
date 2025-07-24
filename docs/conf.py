@@ -23,6 +23,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
+    'myst_parser',
     'nbsphinx',
     'sphinx.ext.mathjax'
 ]
@@ -37,9 +38,23 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_book_theme'
-# html_static_path = ['_static']
+html_static_path = ['_static']
+html_logo = "_static/matilda_cupcake.png"
+html_theme_options = {
+    'logo_only': True,
+    'display_version': False,
+}
 
 source_suffix = {
     '.rst': 'restructuredtext',
     '.md': 'markdown',
 }
+
+def suppress_core_module_docstring(app):
+    import matilda.core
+    import matilda.mspot_glacier
+    matilda.core.__doc__ = None
+    matilda.mspot_glacier.__doc__ = None
+
+def setup(app):
+    app.connect("builder-inited", suppress_core_module_docstring)
