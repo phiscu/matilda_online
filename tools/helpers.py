@@ -403,6 +403,7 @@ def drop_model(col_names, dict_or_df):
     """
     Drop columns with given names from either a dictionary of dataframes
     or a single dataframe.
+
     Parameters
     ----------
     col_names : list of str
@@ -410,9 +411,10 @@ def drop_model(col_names, dict_or_df):
     dict_or_df : dict of pandas.DataFrame or pandas.DataFrame
         If a dict of dataframes, all dataframes in the dict will be edited.
         If a single dataframe, only that dataframe will be edited.
+
     Returns
     -------
-    dict_of_dfs : dict of pandas.DataFrame or pandas.DataFrame
+    dict of pandas.DataFrame or pandas.DataFrame
         The updated dictionary of dataframes or dataframe with dropped columns.
     """
     if isinstance(dict_or_df, dict):
@@ -496,13 +498,18 @@ def adjust_bias(predictand, predictor, method='normal_mapping'):
 def confidence_interval(df):
     """
     Calculate the mean and 95% confidence interval for each row in a dataframe.
-    Parameters:
-    -----------
-        df (pandas.DataFrame): The input dataframe.
-    Returns:
-    --------
-        pandas.DataFrame: A dataframe with the mean and confidence intervals for each row.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The input dataframe.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A dataframe with the mean and confidence intervals for each row.
     """
+    
     mean = df.mean(axis=1)
     std = df.std(axis=1)
     count = df.count(axis=1)
@@ -558,6 +565,7 @@ def replace_values(target_df, source_df, source_column):
 def get_si(fast_results: str, to_csv: bool = False) -> pd.DataFrame:
     """
     Computes the sensitivity indices of a given FAST simulation results file.
+
     Parameters
     ----------
     fast_results : str
@@ -566,12 +574,14 @@ def get_si(fast_results: str, to_csv: bool = False) -> pd.DataFrame:
         If True, the sensitivity indices are saved to a CSV file with the same
         name as fast_results, but with '_sensitivity_indices.csv' appended to
         the end (default is False).
+
     Returns
     -------
     pd.DataFrame
         A pandas DataFrame containing the sensitivity indices and parameter
         names.
     """
+    
     if fast_results.endswith(".csv"):
         fast_results = fast_results[:-4]  # strip .csv
     results = spotpy.analyser.load_csv_results(fast_results)
@@ -590,25 +600,28 @@ def get_si(fast_results: str, to_csv: bool = False) -> pd.DataFrame:
 def create_scenario_dict(tas: dict, pr: dict, scenario_nums: list) -> dict:
     """
     Create a nested dictionary of scenarios and models from two dictionaries of pandas DataFrames.
+
     Parameters
     ----------
     tas : dict
-        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns
-        representing different climate model mean daily temperature (K) time series.
+        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has
+        columns representing different climate model mean daily temperature (K) time series.
     pr : dict
-        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns
-        representing different climate models mean daily precipitation (mm/day) time series.
+        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has
+        columns representing different climate model mean daily precipitation (mm/day) time series.
     scenario_nums : list
         A list of integers representing the scenario numbers to include in the resulting dictionary.
+
     Returns
     -------
     dict
-        A nested dictionary where the top-level keys are scenario names (e.g. 'SSP2', 'SSP5') and the values are
-        dictionaries containing climate models as keys and the corresponding pandas DataFrames as values.
-        The DataFrames have three columns: 'TIMESTAMP', 'T2', and 'RRR', where 'TIMESTAMP'
-        represents the time step, 'T2' represents the mean daily temperature (K), and 'RRR' represents the mean
+        A nested dictionary where the top-level keys are scenario names (e.g. 'SSP2', 'SSP5') and
+        the values are dictionaries containing climate models as keys and the corresponding pandas
+        DataFrames as values. The DataFrames have three columns: 'TIMESTAMP', 'T2', and 'RRR', where
+        'TIMESTAMP' represents the time step, 'T2' the mean daily temperature (K), and 'RRR' the mean
         daily precipitation (mm/day).
     """
+    
     scenarios = {}
     for s in scenario_nums:
         s = 'SSP' + str(s)

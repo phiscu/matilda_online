@@ -270,8 +270,7 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for tools.plots</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scienceplots</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -284,60 +283,52 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">tools.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">parquet_to_dict</span><span class="p">,</span> <span class="n">read_yaml</span><span class="p">,</span> <span class="n">pickle_to_dict</span><span class="p">,</span> <span class="n">get_si</span><span class="p">,</span> <span class="n">matilda_vars</span><span class="p">,</span> <span class="n">confidence_interval</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">tools.indicators</span><span class="w"> </span><span class="kn">import</span> <span class="n">indicator_vars</span><span class="p">,</span> <span class="n">custom_df_indicators</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.dates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mdates</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rectangle</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dash</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dash</span><span class="p">,</span> <span class="n">dcc</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Output</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jupyter_server</span><span class="w"> </span><span class="kn">import</span> <span class="n">serverapp</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">plotly.graph_objects</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">go</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">plotly.io</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pio</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.font_manager</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fm</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="c1">## Global style parameters</span>
-<span class="c1"># Use Seaborn white style</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
-
-<span class="c1"># Use Seaborn white style</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
-
-<span class="c1"># Fonts</span>
-<span class="n">this_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-<span class="n">font_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">this_dir</span><span class="p">,</span> <span class="s2">&quot;cmu.0&quot;</span><span class="p">,</span> <span class="s2">&quot;cmunrm.ttf&quot;</span><span class="p">)</span>
-
-<span class="n">font_prop</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.font_manager</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fm</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+    <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
+
+    <span class="n">this_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+    <span class="n">font_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">this_dir</span><span class="p">,</span> <span class="s2">&quot;cmu.0&quot;</span><span class="p">,</span> <span class="s2">&quot;cmunrm.ttf&quot;</span><span class="p">)</span>
+
+    <span class="n">font_name</span> <span class="o">=</span> <span class="s2">&quot;Arial&quot;</span>  <span class="c1"># Fallback</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">font_path</span><span class="p">):</span>
         <span class="n">fm</span><span class="o">.</span><span class="n">fontManager</span><span class="o">.</span><span class="n">addfont</span><span class="p">(</span><span class="n">font_path</span><span class="p">)</span>
         <span class="n">font_prop</span> <span class="o">=</span> <span class="n">fm</span><span class="o">.</span><span class="n">FontProperties</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="n">font_path</span><span class="p">)</span>
         <span class="n">font_name</span> <span class="o">=</span> <span class="n">font_prop</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Font not found at: </span><span class="si">{</span><span class="n">font_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.usetex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_name</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;heavy&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+
 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Font loading failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;text.usetex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;mathtext.fontset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;cm&#39;</span> 
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">font_name</span> 
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.weight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.labelsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titlesize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">22</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.titleweight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;heavy&#39;</span>
-
-<span class="c1"># Grid lines</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.grid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linestyle&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;--&#39;</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.color&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>
-<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;grid.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
-
+    <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Plot style setup skipped due to error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="c1">## Definitions</span>
 
@@ -562,23 +553,26 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">cmip_plot_ensemble</span><span class="p">(</span><span class="n">cmip</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">precip</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">intv_sum</span><span class="o">=</span><span class="s1">&#39;ME&#39;</span><span class="p">,</span> <span class="n">intv_mean</span><span class="o">=</span><span class="s1">&#39;YE&#39;</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots the multi-model mean of climate scenarios including the 90% confidence interval.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    cmip: dict</span>
-<span class="sd">        A dictionary with keys representing the different CMIP6 models and scenarios as pandas dataframes</span>
+<span class="sd">    cmip : dict</span>
+<span class="sd">        A dictionary with keys representing the different CMIP6 models and scenarios as pandas DataFrames</span>
 <span class="sd">        containing data of temperature and/or precipitation.</span>
-<span class="sd">    target: pandas.DataFrame</span>
-<span class="sd">        Dataframe containing the historical reanalysis data.</span>
-<span class="sd">    precip: bool</span>
+<span class="sd">    target : pandas.DataFrame</span>
+<span class="sd">        DataFrame containing the historical reanalysis data.</span>
+<span class="sd">    precip : bool, optional</span>
 <span class="sd">        If True, plot the mean precipitation. If False, plot the mean temperature. Default is False.</span>
-<span class="sd">    intv_sum: str</span>
+<span class="sd">    intv_sum : str, optional</span>
 <span class="sd">        Interval for precipitation sums. Default is monthly (&#39;ME&#39;).</span>
-<span class="sd">    intv_mean: str</span>
+<span class="sd">    intv_mean : str, optional</span>
 <span class="sd">        Interval for the mean of temperature data or precipitation sums. Default is annual (&#39;YE&#39;).</span>
-<span class="sd">    figsize: tuple</span>
-<span class="sd">        Figure size for the plot. Default is (8,6).</span>
-<span class="sd">    show: bool</span>
+<span class="sd">    figsize : tuple, optional</span>
+<span class="sd">        Figure size for the plot. Default is (8, 6).</span>
+<span class="sd">    show : bool, optional</span>
 <span class="sd">        If True, show the resulting plot. If False, do not show it. Default is True.</span>
+<span class="sd">    fig_path : str or None, optional</span>
+<span class="sd">        Path to save the plot. If None, the plot is not saved.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
@@ -1218,14 +1212,15 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">custom_df_matilda</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">scenario</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">resample_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a dictionary of model outputs and returns a combined dataframe of a specific variable for a given scenario.</span>
+
 <span class="sd">    Parameters</span>
-<span class="sd">    -------</span>
+<span class="sd">    ----------</span>
 <span class="sd">    dic : dict</span>
 <span class="sd">        A nested dictionary of model outputs.</span>
 <span class="sd">        The outer keys are scenario names and the inner keys are model names.</span>
 <span class="sd">        The corresponding values are dictionaries containing two keys:</span>
-<span class="sd">        &#39;model_output&#39; (DataFrame): containing model outputs for a given scenario and model</span>
-<span class="sd">        &#39;glacier_rescaling&#39; (DataFrame): containing glacier properties for a given scenario and model</span>
+<span class="sd">        - &#39;model_output&#39; (DataFrame): containing model outputs for a given scenario and model</span>
+<span class="sd">        - &#39;glacier_rescaling&#39; (DataFrame): containing glacier properties for a given scenario and model</span>
 <span class="sd">    scenario : str</span>
 <span class="sd">        The name of the scenario to select from the dictionary.</span>
 <span class="sd">    var : str</span>
@@ -1234,24 +1229,29 @@ document.write(`
 <span class="sd">        The frequency of the resulting time series data.</span>
 <span class="sd">        Defaults to None (i.e. no resampling).</span>
 <span class="sd">        If provided, should be in pandas resample frequency string format.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
 <span class="sd">        A DataFrame containing the combined data of the specified variable for the selected scenario</span>
 <span class="sd">        and models. The DataFrame is indexed by the time steps of the original models.</span>
 <span class="sd">        The columns are the names of the models in the selected scenario.</span>
+
 <span class="sd">    Raises</span>
-<span class="sd">    -------</span>
+<span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">        If the provided  var  string is not one of the following: [&#39;avg_temp_catchment&#39;, &#39;avg_temp_glaciers&#39;,</span>
-<span class="sd">        &#39;evap_off_glaciers&#39;, &#39;prec_off_glaciers&#39;, &#39;prec_on_glaciers&#39;, &#39;rain_off_glaciers&#39;, &#39;snow_off_glaciers&#39;,</span>
-<span class="sd">        &#39;rain_on_glaciers&#39;, &#39;snow_on_glaciers&#39;, &#39;snowpack_off_glaciers&#39;, &#39;soil_moisture&#39;, &#39;upper_groundwater&#39;,</span>
-<span class="sd">        &#39;lower_groundwater&#39;, &#39;melt_off_glaciers&#39;, &#39;melt_on_glaciers&#39;, &#39;ice_melt_on_glaciers&#39;, &#39;snow_melt_on_glaciers&#39;,</span>
-<span class="sd">        &#39;refreezing_ice&#39;, &#39;refreezing_snow&#39;, &#39;total_refreezing&#39;, &#39;SMB&#39;, &#39;actual_evaporation&#39;, &#39;total_precipitation&#39;,</span>
-<span class="sd">        &#39;total_melt&#39;, &#39;runoff_without_glaciers&#39;, &#39;runoff_from_glaciers&#39;, &#39;runoff_ratio&#39;, &#39;total_runoff&#39;, &#39;glacier_area&#39;,</span>
-<span class="sd">        &#39;glacier_elev&#39;, &#39;smb_water_year&#39;, &#39;smb_scaled&#39;, &#39;smb_scaled_capped&#39;, &#39;smb_scaled_capped_cum&#39;, &#39;surplus&#39;,</span>
+<span class="sd">        If the provided `var` string is not one of the following:</span>
+<span class="sd">        [&#39;avg_temp_catchment&#39;, &#39;avg_temp_glaciers&#39;, &#39;evap_off_glaciers&#39;, &#39;prec_off_glaciers&#39;,</span>
+<span class="sd">        &#39;prec_on_glaciers&#39;, &#39;rain_off_glaciers&#39;, &#39;snow_off_glaciers&#39;, &#39;rain_on_glaciers&#39;,</span>
+<span class="sd">        &#39;snow_on_glaciers&#39;, &#39;snowpack_off_glaciers&#39;, &#39;soil_moisture&#39;, &#39;upper_groundwater&#39;,</span>
+<span class="sd">        &#39;lower_groundwater&#39;, &#39;melt_off_glaciers&#39;, &#39;melt_on_glaciers&#39;, &#39;ice_melt_on_glaciers&#39;,</span>
+<span class="sd">        &#39;snow_melt_on_glaciers&#39;, &#39;refreezing_ice&#39;, &#39;refreezing_snow&#39;, &#39;total_refreezing&#39;, &#39;SMB&#39;,</span>
+<span class="sd">        &#39;actual_evaporation&#39;, &#39;total_precipitation&#39;, &#39;total_melt&#39;, &#39;runoff_without_glaciers&#39;,</span>
+<span class="sd">        &#39;runoff_from_glaciers&#39;, &#39;runoff_ratio&#39;, &#39;total_runoff&#39;, &#39;glacier_area&#39;, &#39;glacier_elev&#39;,</span>
+<span class="sd">        &#39;smb_water_year&#39;, &#39;smb_scaled&#39;, &#39;smb_scaled_capped&#39;, &#39;smb_scaled_capped_cum&#39;, &#39;surplus&#39;,</span>
 <span class="sd">        &#39;glacier_melt_perc&#39;, &#39;glacier_mass_mmwe&#39;, &#39;glacier_vol_m3&#39;, &#39;glacier_vol_perc&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">out1_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;avg_temp_catchment&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;avg_temp_glaciers&#39;</span><span class="p">,</span>
                  <span class="s1">&#39;evap_off_glaciers&#39;</span><span class="p">,</span>
@@ -1335,21 +1335,24 @@ document.write(`
 <a class="viewcode-back" href="../../plots.html#tools.plots.plot_ci_matilda">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_ci_matilda</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">resample_freq</span><span class="o">=</span><span class="s1">&#39;YE&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.</span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
-<span class="sd">    var: str</span>
+<span class="sd">    Plot the multi-model mean and confidence intervals of a given variable for two different scenarios.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
 <span class="sd">        The variable to plot.</span>
-<span class="sd">    dic: dict, optional (default=matilda_scenarios)</span>
-<span class="sd">        A dictionary containing the scenarios as keys and the dataframes as values.</span>
-<span class="sd">    resample_freq: str, optional (default=&#39;YE&#39;)</span>
-<span class="sd">        The resampling frequency to apply to the data.</span>
-<span class="sd">    show: bool, optional (default=False)</span>
-<span class="sd">        Whether to show the resulting plot or not.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
+<span class="sd">    dic : dict, optional</span>
+<span class="sd">        A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.</span>
+<span class="sd">    resample_freq : str, optional</span>
+<span class="sd">        The resampling frequency to apply to the data. Default is &#39;YE&#39;.</span>
+<span class="sd">    show : bool, optional</span>
+<span class="sd">        Whether to show the resulting plot or not. Default is False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    go.Figure</span>
-<span class="sd">        A plotly figure object containing the mean and confidence intervals for the given variable in the two selected scenarios.</span>
+<span class="sd">        A plotly figure object containing the mean and confidence intervals for the given variable</span>
+<span class="sd">        in the two selected scenarios.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1500,21 +1503,24 @@ document.write(`
 <a class="viewcode-back" href="../../plots.html#tools.plots.plot_ci_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_ci_indicators</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">plot_type</span><span class="o">=</span><span class="s1">&#39;line&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.</span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
-<span class="sd">    var: str</span>
+<span class="sd">    Plot the multi-model mean and confidence intervals of a given variable for two different scenarios.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
 <span class="sd">        The variable to plot.</span>
-<span class="sd">    dic: dict, optional (default=matilda_scenarios)</span>
-<span class="sd">        A dictionary containing the scenarios as keys and the dataframes as values.</span>
-<span class="sd">    plot_type: str, optional (default=&#39;line&#39;)</span>
-<span class="sd">        Whether the plot should be a line or a bar plot.</span>
-<span class="sd">    show: bool, optional (default=False)</span>
-<span class="sd">        Whether to show the resulting plot or not.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
+<span class="sd">    dic : dict, optional</span>
+<span class="sd">        A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.</span>
+<span class="sd">    plot_type : str, optional</span>
+<span class="sd">        Whether the plot should be a line or a bar plot. Default is &#39;line&#39;.</span>
+<span class="sd">    show : bool, optional</span>
+<span class="sd">        Whether to show the resulting plot or not. Default is False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    go.Figure</span>
-<span class="sd">        A plotly figure object containing the mean and confidence intervals for the given variable in the two selected scenarios.</span>
+<span class="sd">        A plotly figure object containing the mean and confidence intervals for the given variable</span>
+<span class="sd">        in the two selected scenarios.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

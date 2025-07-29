@@ -17,6 +17,8 @@ release = '1.0.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 extensions = [
     'myst_parser',        
@@ -32,6 +34,14 @@ myst_enable_extensions = ["dollarmath"]
 
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+autodoc_mock_imports = [
+    'matplotlib','HydroErr', 'hydroeval', 'numpy', 'pandas',
+    'plotly', 'scipy', 'xarray', 'DateTime', 'pyyaml',
+    'spotpy', 'SciencePlots','fastparquet','seaborn','bias_correction',
+    'scienceplots','matilda','probscale','climate_indices','dash','jupyter_server',
+    'retry','ee','tqdm'
+]
 
 
 # -- Options for HTML output -------------------------------------------------

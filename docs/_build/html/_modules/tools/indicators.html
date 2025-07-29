@@ -1,79 +1,274 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tools.indicators &mdash; Matilda ONLINE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tools.indicators &#8212; Matilda ONLINE 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../../_static/js/theme.js"></script>
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/tools/indicators';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="../../index.html">
-            
-              <img src="../../_static/matilda_cupcake.png" class="logo" alt="Logo"/>
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/matilda_cupcake.png" class="logo__image only-light" alt="Matilda ONLINE 1.0.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/matilda_cupcake.png" class="logo__image only-dark" alt="Matilda ONLINE 1.0.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">Getting started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Tools Modules</a></li>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">Tools Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../helpers.html">tools.helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../indicators.html">tools.indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../geetools.html">tools.geetools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plots.html">tools.plots</a></li>
+</ul>
+</details></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Matilda ONLINE</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">tools.indicators</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for tools.indicators</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tools.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">hydrologicalize</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">spotpy.hydrology.signatures</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sig</span>
@@ -121,13 +316,14 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">peak_doy</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">smoothing_window_peakdoy</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the day of the calendar year with the peak value for each hydrological year.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas.DataFrame</span>
 <span class="sd">        A DataFrame of daily data with a datetime index.</span>
 <span class="sd">    smoothing_window_peakdoy : int, optional</span>
-<span class="sd">        The window size of the rolling mean used for smoothing the data.</span>
-<span class="sd">        Default is 7.</span>
+<span class="sd">        The window size of the rolling mean used for smoothing the data. Default is 7.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
@@ -230,9 +426,10 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">aridity</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">hist_starty</span><span class="o">=</span><span class="mi">1986</span><span class="p">,</span> <span class="n">hist_endy</span><span class="o">=</span><span class="mi">2015</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates aridity indexes from precipitation, and potential and actual evaporation respectively. Aridity is defined</span>
-<span class="sd">    as mean annual ratio of potential/actual evapotranspiration and precipitation. The indexes are defined as the</span>
-<span class="sd">    relative change of a 30 years period compared to a given historical period. Uses hydrological years (Oct - Sep).</span>
+<span class="sd">    as the mean annual ratio of potential/actual evapotranspiration and precipitation. The indexes are defined as the</span>
+<span class="sd">    relative change of a 30-year period compared to a given historical period. Uses hydrological years (Oct–Sep).</span>
 <span class="sd">    Inspired by climateinformation.org (https://doi.org/10.5194/egusphere-egu23-16216).</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas.DataFrame</span>
@@ -241,14 +438,17 @@
 <span class="sd">        Start year of the historical period in YYYY format. Default is 1986.</span>
 <span class="sd">    hist_endy : int, optional</span>
 <span class="sd">        End year of the historical period in YYYY format. Default is 2015.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
 <span class="sd">        DataFrame containing the relative change in aridity over time.</span>
+
 <span class="sd">        Columns:</span>
-<span class="sd">            - &#39;actual_aridity&#39;: Relative change in actual aridity.</span>
-<span class="sd">            - &#39;potential_aridity&#39;: Relative change in potential aridity.</span>
+<span class="sd">        - &#39;actual_aridity&#39;: Relative change in actual aridity.</span>
+<span class="sd">        - &#39;potential_aridity&#39;: Relative change in potential aridity.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="c1"># Use water years</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">hydrologicalize</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
     <span class="c1"># Potential evapotranspiration (PET)</span>
@@ -286,6 +486,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the total length of dry spells in days per year. A dry spell is defined as a period for which the rolling</span>
 <span class="sd">    mean of evaporation in a given window exceeds precipitation. Uses hydrological years (Oct - Sep).</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas.DataFrame</span>
@@ -293,6 +494,7 @@
 <span class="sd">        precipitation data, respectively.</span>
 <span class="sd">    dry_spell_length : int, optional</span>
 <span class="sd">        Length of the rolling window in days. Default is 30.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
@@ -371,22 +573,24 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">hydrological_signatures</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate hydrological signatures for a given input dataframe.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas.DataFrame</span>
 <span class="sd">        Input DataFrame containing a column &#39;total_runoff&#39; and a DatetimeIndex.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
 <span class="sd">        A DataFrame containing the calculated hydrological signatures for each year in the input dataframe.</span>
 <span class="sd">        The columns of the output dataframe are as follows:</span>
-<span class="sd">         - &#39;q5&#39;: the 5th percentile of total runoff for each year</span>
+<span class="sd">        - &#39;q5&#39;: the 5th percentile of total runoff for each year</span>
 <span class="sd">        - &#39;q50&#39;: the 50th percentile of total runoff for each year</span>
 <span class="sd">        - &#39;q95&#39;: the 95th percentile of total runoff for each year</span>
-<span class="sd">        - &#39;qlf_freq&#39;: the frequency of low flow events (defined as Q &lt; 2*Qmean_global) for each year, in yr^⁻1</span>
-<span class="sd">        - &#39;qlf_dur&#39;: the mean duration of low flow events (defined as Q &lt; 2*Qmean_global) for each year, in days</span>
-<span class="sd">        - &#39;qhf_freq&#39;: the frequency of high flow events (defined as Q &gt; 9*Q50_global) for each year, in yr^⁻1</span>
-<span class="sd">        - &#39;qhf_dur&#39;: the mean duration of high flow events (defined as Q &gt; 9*Q50_global) for each year, in days</span>
+<span class="sd">        - &#39;qlf_freq&#39;: the frequency of low flow events (Q &lt; 2 × Qmean_global) for each year, in yr⁻¹</span>
+<span class="sd">        - &#39;qlf_dur&#39;: the mean duration of low flow events (Q &lt; 2 × Qmean_global) for each year, in days</span>
+<span class="sd">        - &#39;qhf_freq&#39;: the frequency of high flow events (Q &gt; 9 × Q50_global) for each year, in yr⁻¹</span>
+<span class="sd">        - &#39;qhf_dur&#39;: the mean duration of high flow events (Q &gt; 9 × Q50_global) for each year, in days</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Create lists of quantile functions to apply and column names</span>
     <span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="n">sig</span><span class="o">.</span><span class="n">get_q5</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">get_q50</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">get_q95</span><span class="p">]</span>
@@ -431,35 +635,44 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the climatic water balance, SPI (Standardized Precipitation Index), and</span>
 <span class="sd">    SPEI (Standardized Precipitation Evapotranspiration Index) for 1, 3, 6, 12, and 24 months.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas.DataFrame</span>
-<span class="sd">         Input DataFrame containing columns &#39;prec_off_glaciers&#39; and &#39;evap_off_glaciers&#39;.</span>
+<span class="sd">        Input DataFrame containing columns &#39;prec_off_glaciers&#39; and &#39;evap_off_glaciers&#39;.</span>
 <span class="sd">    freq : str, optional</span>
-<span class="sd">         Resampling frequency for precipitation and evaporation data. Default is &#39;M&#39; for monthly.</span>
+<span class="sd">        Resampling frequency for precipitation and evaporation data. Default is &#39;M&#39; for monthly.</span>
 <span class="sd">    dist : str, optional</span>
-<span class="sd">         Distribution for SPI and SPEI calculation. Either Pearson-Type III (&#39;pearson&#39;) or</span>
-<span class="sd">         Gamma distribution (&#39;gamma&#39;). Default is &#39;gamma&#39;.</span>
+<span class="sd">        Distribution for SPI and SPEI calculation. Either Pearson-Type III (&#39;pearson&#39;) or</span>
+<span class="sd">        Gamma distribution (&#39;gamma&#39;). Default is &#39;gamma&#39;.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
-<span class="sd">         DataFrame containing the calculated indicators: &#39;clim_water_balance&#39;, &#39;spi&#39;, and &#39;spei&#39;.</span>
-<span class="sd">         Index is based on the resampled frequency of the input DataFrame.</span>
+<span class="sd">        DataFrame containing the calculated indicators: &#39;clim_water_balance&#39;, &#39;spi&#39;, and &#39;spei&#39;.</span>
+<span class="sd">        Index is based on the resampled frequency of the input DataFrame.</span>
+
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
-<span class="sd">         If &#39;freq&#39; is not &#39;D&#39; or &#39;ME&#39;.</span>
-<span class="sd">         If &#39;dist&#39; is not &#39;pearson&#39; or &#39;gamma&#39;.</span>
+<span class="sd">        If &#39;freq&#39; is not &#39;D&#39; or &#39;ME&#39;.</span>
+<span class="sd">        If &#39;dist&#39; is not &#39;pearson&#39; or &#39;gamma&#39;.</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    SPI (Standardized Precipitation Index) and SPEI (Standardized Precipitation Evapotranspiration Index)</span>
 <span class="sd">    are drought indicators that are used to quantify drought severity and duration.</span>
+
 <span class="sd">    &#39;clim_water_balance&#39; is the difference between total precipitation and total evapotranspiration.</span>
-<span class="sd">    If &#39;freq&#39; is &#39;D&#39;, the input data is transformed from Gregorian to a 366-day format for SPI and SPEI calculation,</span>
-<span class="sd">    and then transformed back to Gregorian format for output.</span>
+
+<span class="sd">    If &#39;freq&#39; is &#39;D&#39;, the input data is transformed from Gregorian to a 366-day format for SPI and SPEI</span>
+<span class="sd">    calculation, and then transformed back to Gregorian format for output.</span>
+
 <span class="sd">    The default distribution for SPI and SPEI calculation is Gamma.</span>
+
 <span class="sd">    The calibration period for SPI and SPEI calculation is from 1981 to 2020.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="c1"># Check if frequency is valid</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">!=</span> <span class="s1">&#39;D&#39;</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">!=</span> <span class="s1">&#39;ME&#39;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid value for &#39;freq&#39;. Choose either &#39;D&#39; or &#39;ME&#39;.&quot;</span><span class="p">)</span>
@@ -530,31 +743,35 @@
 
 
 <span class="c1"># Wrapper function</span>
-
 <div class="viewcode-block" id="cc_indicators">
 <a class="viewcode-back" href="../../indicators.html#tools.indicators.cc_indicators">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cc_indicators</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Apply a list of climate change indicator functions to output DataFrame of MATILDA and concatenate</span>
-<span class="sd">    the output columns into a single DataFrame.</span>
+<span class="sd">    Apply a list of climate change indicator functions to the output DataFrame of MATILDA</span>
+<span class="sd">    and concatenate the output columns into a single DataFrame.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    df : pandas.DataFrame</span>
 <span class="sd">        Input DataFrame.</span>
 <span class="sd">    **kwargs : optional</span>
-<span class="sd">        Optional arguments to be passed to the functions in the list. Possible arguments are &#39;smoothing_window_peakdoy&#39;,</span>
-<span class="sd">        &#39;smoothing_window_meltseas&#39;, &#39;min_weeks&#39;, and &#39;dry_spell_length&#39;.</span>
+<span class="sd">        Optional arguments to be passed to the functions in the list. Possible arguments are</span>
+<span class="sd">        &#39;smoothing_window_peakdoy&#39;, &#39;smoothing_window_meltseas&#39;, &#39;min_weeks&#39;, and</span>
+<span class="sd">        &#39;dry_spell_length&#39;.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pandas.DataFrame</span>
 <span class="sd">        DataFrame containing the output columns of all functions applied to the input DataFrame.</span>
+
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    The list of functions to apply is hard-coded into the function and cannot be modified from outside.</span>
-<span class="sd">     The optional arguments are passed to the respective functions only if they are relevant for the respective</span>
-<span class="sd">     function.</span>
-<span class="sd">     If no optional arguments are passed, the function is applied to the input DataFrame with default arguments.</span>
+<span class="sd">    The optional arguments are passed to the respective functions only if they are relevant.</span>
+<span class="sd">    If no optional arguments are passed, the function is applied to the input DataFrame with default arguments.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
+    
     <span class="c1"># List of all functions to apply</span>
     <span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="n">prec_minmax</span><span class="p">,</span> <span class="n">peak_doy</span><span class="p">,</span> <span class="n">melting_season</span><span class="p">,</span> <span class="n">aridity</span><span class="p">,</span> <span class="n">dry_spells</span><span class="p">,</span> <span class="n">hydrological_signatures</span><span class="p">,</span> <span class="n">drought_indicators</span><span class="p">]</span>
     <span class="c1"># Empty result dataframe</span>
@@ -692,31 +909,70 @@
 
 </pre></div>
 
-           </div>
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Alexander Georgi, Phillip Schuster, Mia Janzen
+</p>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
   </div>
+  
+  <div class="footer-item">
+    
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <p class="copyright">
+    
+      © Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.
+      <br/>
+    
+  </p>
 
-</footer>
-        </div>
-      </div>
-    </section>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
 
-</body>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>

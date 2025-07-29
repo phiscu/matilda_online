@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -37,7 +37,7 @@
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=f9c1cefe"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -357,20 +357,19 @@ Uses moving window smoothing in years instead of days.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plots.cmip_plot_ensemble">
 <span class="sig-prename descclassname"><span class="pre">tools.plots.</span></span><span class="sig-name descname"><span class="pre">cmip_plot_ensemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intv_sum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ME'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intv_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'YE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/plots.html#cmip_plot_ensemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.plots.cmip_plot_ensemble" title="Link to this definition">#</a></dt>
-<dd><p>Plots the multi-model mean of climate scenarios including the 90% confidence interval.
-:param cmip: A dictionary with keys representing the different CMIP6 models and scenarios as pandas dataframes</p>
-<blockquote>
-<div><p>containing data of temperature and/or precipitation.</p>
-</div></blockquote>
+<dd><p>Plots the multi-model mean of climate scenarios including the 90% confidence interval.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>target</strong> (<em>pandas.DataFrame</em>) – Dataframe containing the historical reanalysis data.</p></li>
-<li><p><strong>precip</strong> (<em>bool</em>) – If True, plot the mean precipitation. If False, plot the mean temperature. Default is False.</p></li>
-<li><p><strong>intv_sum</strong> (<em>str</em>) – Interval for precipitation sums. Default is monthly (‘ME’).</p></li>
-<li><p><strong>intv_mean</strong> (<em>str</em>) – Interval for the mean of temperature data or precipitation sums. Default is annual (‘YE’).</p></li>
-<li><p><strong>figsize</strong> (<em>tuple</em>) – Figure size for the plot. Default is (8,6).</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If True, show the resulting plot. If False, do not show it. Default is True.</p></li>
+<li><p><strong>cmip</strong> (<em>dict</em>) – A dictionary with keys representing the different CMIP6 models and scenarios as pandas DataFrames
+containing data of temperature and/or precipitation.</p></li>
+<li><p><strong>target</strong> (<em>pandas.DataFrame</em>) – DataFrame containing the historical reanalysis data.</p></li>
+<li><p><strong>precip</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, plot the mean precipitation. If False, plot the mean temperature. Default is False.</p></li>
+<li><p><strong>intv_sum</strong> (<em>str</em><em>, </em><em>optional</em>) – Interval for precipitation sums. Default is monthly (‘ME’).</p></li>
+<li><p><strong>intv_mean</strong> (<em>str</em><em>, </em><em>optional</em>) – Interval for the mean of temperature data or precipitation sums. Default is annual (‘YE’).</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Figure size for the plot. Default is (8, 6).</p></li>
+<li><p><strong>show</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show the resulting plot. If False, do not show it. Default is True.</p></li>
+<li><p><strong>fig_path</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Path to save the plot. If None, the plot is not saved.</p></li>
 </ul>
 </dd>
 </dl>
@@ -379,17 +378,15 @@ Uses moving window smoothing in years instead of days.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plots.custom_df_matilda">
 <span class="sig-prename descclassname"><span class="pre">tools.plots.</span></span><span class="sig-name descname"><span class="pre">custom_df_matilda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenario</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/plots.html#custom_df_matilda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.plots.custom_df_matilda" title="Link to this definition">#</a></dt>
-<dd><p>Takes a dictionary of model outputs and returns a combined dataframe of a specific variable for a given scenario.
-:param dic: A nested dictionary of model outputs.</p>
-<blockquote>
-<div><p>The outer keys are scenario names and the inner keys are model names.
-The corresponding values are dictionaries containing two keys:
-‘model_output’ (DataFrame): containing model outputs for a given scenario and model
-‘glacier_rescaling’ (DataFrame): containing glacier properties for a given scenario and model</p>
-</div></blockquote>
+<dd><p>Takes a dictionary of model outputs and returns a combined dataframe of a specific variable for a given scenario.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>dic</strong> (<em>dict</em>) – A nested dictionary of model outputs.
+The outer keys are scenario names and the inner keys are model names.
+The corresponding values are dictionaries containing two keys:
+- ‘model_output’ (DataFrame): containing model outputs for a given scenario and model
+- ‘glacier_rescaling’ (DataFrame): containing glacier properties for a given scenario and model</p></li>
 <li><p><strong>scenario</strong> (<em>str</em>) – The name of the scenario to select from the dictionary.</p></li>
 <li><p><strong>var</strong> (<em>str</em>) – The name of the variable to extract from the model output DataFrame.</p></li>
 <li><p><strong>resample_freq</strong> (<em>str</em><em>, </em><em>optional</em>) – The frequency of the resulting time series data.
@@ -406,13 +403,15 @@ The columns are the names of the models in the selected scenario.</p>
 <dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>ValueError</strong> – If the provided  var  string is not one of the following: [‘avg_temp_catchment’, ‘avg_temp_glaciers’,
-    ‘evap_off_glaciers’, ‘prec_off_glaciers’, ‘prec_on_glaciers’, ‘rain_off_glaciers’, ‘snow_off_glaciers’,
-    ‘rain_on_glaciers’, ‘snow_on_glaciers’, ‘snowpack_off_glaciers’, ‘soil_moisture’, ‘upper_groundwater’,
-    ‘lower_groundwater’, ‘melt_off_glaciers’, ‘melt_on_glaciers’, ‘ice_melt_on_glaciers’, ‘snow_melt_on_glaciers’,
-    ‘refreezing_ice’, ‘refreezing_snow’, ‘total_refreezing’, ‘SMB’, ‘actual_evaporation’, ‘total_precipitation’,
-    ‘total_melt’, ‘runoff_without_glaciers’, ‘runoff_from_glaciers’, ‘runoff_ratio’, ‘total_runoff’, ‘glacier_area’,
-    ‘glacier_elev’, ‘smb_water_year’, ‘smb_scaled’, ‘smb_scaled_capped’, ‘smb_scaled_capped_cum’, ‘surplus’,
+<dd class="field-even"><p><strong>ValueError</strong> – If the provided <cite>var</cite> string is not one of the following:
+    [‘avg_temp_catchment’, ‘avg_temp_glaciers’, ‘evap_off_glaciers’, ‘prec_off_glaciers’,
+    ‘prec_on_glaciers’, ‘rain_off_glaciers’, ‘snow_off_glaciers’, ‘rain_on_glaciers’,
+    ‘snow_on_glaciers’, ‘snowpack_off_glaciers’, ‘soil_moisture’, ‘upper_groundwater’,
+    ‘lower_groundwater’, ‘melt_off_glaciers’, ‘melt_on_glaciers’, ‘ice_melt_on_glaciers’,
+    ‘snow_melt_on_glaciers’, ‘refreezing_ice’, ‘refreezing_snow’, ‘total_refreezing’, ‘SMB’,
+    ‘actual_evaporation’, ‘total_precipitation’, ‘total_melt’, ‘runoff_without_glaciers’,
+    ‘runoff_from_glaciers’, ‘runoff_ratio’, ‘total_runoff’, ‘glacier_area’, ‘glacier_elev’,
+    ‘smb_water_year’, ‘smb_scaled’, ‘smb_scaled_capped’, ‘smb_scaled_capped_cum’, ‘surplus’,
     ‘glacier_melt_perc’, ‘glacier_mass_mmwe’, ‘glacier_vol_m3’, ‘glacier_vol_perc’]</p>
 </dd>
 </dl>
@@ -472,55 +471,47 @@ comparing two scenarios side by side.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plots.plot_ci_indicators">
 <span class="sig-prename descclassname"><span class="pre">tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_ci_indicators</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'line'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/plots.html#plot_ci_indicators"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.plots.plot_ci_indicators" title="Link to this definition">#</a></dt>
-<dd><p>A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.
-Parameters:
-———–
-var: str</p>
-<blockquote>
-<div><p>The variable to plot.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>dic: dict, optional (default=matilda_scenarios)</dt><dd><p>A dictionary containing the scenarios as keys and the dataframes as values.</p>
+<dd><p>Plot the multi-model mean and confidence intervals of a given variable for two different scenarios.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – The variable to plot.</p></li>
+<li><p><strong>dic</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.</p></li>
+<li><p><strong>plot_type</strong> (<em>str</em><em>, </em><em>optional</em>) – Whether the plot should be a line or a bar plot. Default is ‘line’.</p></li>
+<li><p><strong>show</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show the resulting plot or not. Default is False.</p></li>
+</ul>
 </dd>
-<dt>plot_type: str, optional (default=’line’)</dt><dd><p>Whether the plot should be a line or a bar plot.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure object containing the mean and confidence intervals for the given variable
+in the two selected scenarios.</p>
 </dd>
-<dt>show: bool, optional (default=False)</dt><dd><p>Whether to show the resulting plot or not.</p>
-</dd>
-</dl>
-<section id="returns">
-<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt>go.Figure</dt><dd><p>A plotly figure object containing the mean and confidence intervals for the given variable in the two selected scenarios.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>go.Figure</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.plots.plot_ci_matilda">
 <span class="sig-prename descclassname"><span class="pre">tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_ci_matilda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resample_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'YE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/plots.html#plot_ci_matilda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.plots.plot_ci_matilda" title="Link to this definition">#</a></dt>
-<dd><p>A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.
-Parameters:
-———–
-var: str</p>
-<blockquote>
-<div><p>The variable to plot.</p>
-</div></blockquote>
-<dl class="simple">
-<dt>dic: dict, optional (default=matilda_scenarios)</dt><dd><p>A dictionary containing the scenarios as keys and the dataframes as values.</p>
+<dd><p>Plot the multi-model mean and confidence intervals of a given variable for two different scenarios.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – The variable to plot.</p></li>
+<li><p><strong>dic</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.</p></li>
+<li><p><strong>resample_freq</strong> (<em>str</em><em>, </em><em>optional</em>) – The resampling frequency to apply to the data. Default is ‘YE’.</p></li>
+<li><p><strong>show</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to show the resulting plot or not. Default is False.</p></li>
+</ul>
 </dd>
-<dt>resample_freq: str, optional (default=’YE’)</dt><dd><p>The resampling frequency to apply to the data.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly figure object containing the mean and confidence intervals for the given variable
+in the two selected scenarios.</p>
 </dd>
-<dt>show: bool, optional (default=False)</dt><dd><p>Whether to show the resulting plot or not.</p>
-</dd>
-</dl>
-<section id="id1">
-<h2>Returns:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt>go.Figure</dt><dd><p>A plotly figure object containing the mean and confidence intervals for the given variable in the two selected scenarios.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>go.Figure</p>
 </dd>
 </dl>
-</section>
 </dd></dl>
 
 <dl class="py function">

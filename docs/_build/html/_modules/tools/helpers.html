@@ -1,74 +1,274 @@
 
-
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" data-content_root="../../">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tools.helpers &mdash; Matilda ONLINE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tools.helpers &#8212; Matilda ONLINE 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=8d563738"></script>
-      <script src="../../_static/doctools.js?v=9bcbadda"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../../_static/js/theme.js"></script>
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/tools/helpers';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-</head>
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
-          
-          
-          <a href="../../index.html" class="icon icon-home">
-            Matilda ONLINE
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Tools Module</a></li>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/matilda_cupcake.png" class="logo__image only-light" alt="Matilda ONLINE 1.0.0 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/matilda_cupcake.png" class="logo__image only-dark" alt="Matilda ONLINE 1.0.0 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../README.html">Getting started</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">Tools Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../helpers.html">tools.helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../indicators.html">tools.indicators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../geetools.html">tools.geetools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plots.html">tools.plots</a></li>
+</ul>
+</details></li>
 </ul>
 
-        </div>
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
       </div>
-    </nav>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">Matilda ONLINE</a>
-      </nav>
+<div class="sbt-scroll-pixel-helper"></div>
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">tools.helpers</li>
-      <li class="wy-breadcrumbs-aside">
-      </li>
-  </ul>
-  <hr/>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <h1>Source code for tools.helpers</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
@@ -88,7 +288,7 @@
 
 
 <div class="viewcode-block" id="read_yaml">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.read_yaml">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.read_yaml">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_yaml</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a YAML file and return the contents as a dictionary.</span>
@@ -108,7 +308,7 @@
 
 
 <div class="viewcode-block" id="write_yaml">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.write_yaml">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.write_yaml">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">write_yaml</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write a dictionary to a YAML file.</span>
@@ -142,7 +342,7 @@
 
 
 <div class="viewcode-block" id="update_yaml">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.update_yaml">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.update_yaml">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">update_yaml</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">new_items</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update a YAML file with the contents of a dictionary.</span>
@@ -163,7 +363,7 @@
 
 
 <div class="viewcode-block" id="pickle_to_dict">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.pickle_to_dict">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.pickle_to_dict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">pickle_to_dict</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads a dictionary from a pickle file at a specified file path.</span>
@@ -183,7 +383,7 @@
 
 
 <div class="viewcode-block" id="dict_to_pickle">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.dict_to_pickle">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.dict_to_pickle">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dict_to_pickle</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">target_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Saves a dictionary to a pickle file at the specified target path.</span>
@@ -208,7 +408,7 @@
 
 
 <div class="viewcode-block" id="drop_keys">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.drop_keys">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.drop_keys">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">drop_keys</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">keys_to_drop</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes specified keys from a dictionary.</span>
 <span class="sd">    Parameters</span>
@@ -231,7 +431,7 @@
 
 
 <div class="viewcode-block" id="parquet_to_dict">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.parquet_to_dict">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.parquet_to_dict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parquet_to_dict</span><span class="p">(</span><span class="n">directory_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Recursively loads dataframes from the parquet files in the specified directory and returns a dictionary.</span>
@@ -264,7 +464,7 @@
 
 
 <div class="viewcode-block" id="dict_to_parquet">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.dict_to_parquet">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.dict_to_parquet">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dict_to_parquet</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">directory_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Recursively stores the dataframes in the input dictionary as parquet files in the specified directory.</span>
@@ -335,7 +535,7 @@
 
 
 <div class="viewcode-block" id="water_year">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.water_year">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.water_year">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">water_year</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the water year for each date in the index of the input DataFrame.</span>
@@ -355,7 +555,7 @@
 
 
 <div class="viewcode-block" id="crop2wy">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.crop2wy">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.crop2wy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">crop2wy</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Crops a DataFrame to include only the rows that fall within a complete water year.</span>
@@ -377,7 +577,7 @@
 
 
 <div class="viewcode-block" id="hydrologicalize">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.hydrologicalize">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.hydrologicalize">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydrologicalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin_of_water_year</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds a &#39;water_year&#39; column to a DataFrame and crops it to include only complete water years.</span>
@@ -505,11 +705,12 @@
 
 
 <div class="viewcode-block" id="drop_model">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.drop_model">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.drop_model">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">drop_model</span><span class="p">(</span><span class="n">col_names</span><span class="p">,</span> <span class="n">dict_or_df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Drop columns with given names from either a dictionary of dataframes</span>
 <span class="sd">    or a single dataframe.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    col_names : list of str</span>
@@ -517,9 +718,10 @@
 <span class="sd">    dict_or_df : dict of pandas.DataFrame or pandas.DataFrame</span>
 <span class="sd">        If a dict of dataframes, all dataframes in the dict will be edited.</span>
 <span class="sd">        If a single dataframe, only that dataframe will be edited.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    dict_of_dfs : dict of pandas.DataFrame or pandas.DataFrame</span>
+<span class="sd">    dict of pandas.DataFrame or pandas.DataFrame</span>
 <span class="sd">        The updated dictionary of dataframes or dataframe with dropped columns.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dict_or_df</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -538,7 +740,7 @@
 
 
 <div class="viewcode-block" id="read_era5l">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.read_era5l">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.read_era5l">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_era5l</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads ERA5-Land data, drops redundant columns, and adds DatetimeIndex.</span>
 <span class="sd">    Resamples the dataframe to reduce the DatetimeIndex to daily resolution.&quot;&quot;&quot;</span>
@@ -551,7 +753,7 @@
     
 
 <div class="viewcode-block" id="adjust_bias">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.adjust_bias">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.adjust_bias">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">adjust_bias</span><span class="p">(</span><span class="n">predictand</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;normal_mapping&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies bias correction to discrete periods individually.&quot;&quot;&quot;</span>
     <span class="c1"># Read predictor data</span>
@@ -608,17 +810,22 @@
 
 
 <div class="viewcode-block" id="confidence_interval">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.confidence_interval">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.confidence_interval">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">confidence_interval</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the mean and 95% confidence interval for each row in a dataframe.</span>
-<span class="sd">    Parameters:</span>
-<span class="sd">    -----------</span>
-<span class="sd">        df (pandas.DataFrame): The input dataframe.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">    --------</span>
-<span class="sd">        pandas.DataFrame: A dataframe with the mean and confidence intervals for each row.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : pandas.DataFrame</span>
+<span class="sd">        The input dataframe.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        A dataframe with the mean and confidence intervals for each row.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">mean</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">std</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">count</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -631,7 +838,7 @@
 
 
 <div class="viewcode-block" id="dict_filter">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.dict_filter">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.dict_filter">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dict_filter</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a dict with all elements of the input dict that contain a filter string in their keys.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">filter_string</span> <span class="ow">in</span> <span class="n">key</span><span class="p">}</span></div>
@@ -639,7 +846,7 @@
 
 
 <div class="viewcode-block" id="replace_values">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.replace_values">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.replace_values">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">replace_values</span><span class="p">(</span><span class="n">target_df</span><span class="p">,</span> <span class="n">source_df</span><span class="p">,</span> <span class="n">source_column</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Replaces values in the overlapping period in the target dataframe with values</span>
@@ -679,10 +886,11 @@
 
 
 <div class="viewcode-block" id="get_si">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.get_si">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.get_si">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_si</span><span class="p">(</span><span class="n">fast_results</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_csv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the sensitivity indices of a given FAST simulation results file.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fast_results : str</span>
@@ -691,12 +899,14 @@
 <span class="sd">        If True, the sensitivity indices are saved to a CSV file with the same</span>
 <span class="sd">        name as fast_results, but with &#39;_sensitivity_indices.csv&#39; appended to</span>
 <span class="sd">        the end (default is False).</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    pd.DataFrame</span>
 <span class="sd">        A pandas DataFrame containing the sensitivity indices and parameter</span>
 <span class="sd">        names.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="k">if</span> <span class="n">fast_results</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">):</span>
         <span class="n">fast_results</span> <span class="o">=</span> <span class="n">fast_results</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>  <span class="c1"># strip .csv</span>
     <span class="n">results</span> <span class="o">=</span> <span class="n">spotpy</span><span class="o">.</span><span class="n">analyser</span><span class="o">.</span><span class="n">load_csv_results</span><span class="p">(</span><span class="n">fast_results</span><span class="p">)</span>
@@ -714,29 +924,32 @@
 
 
 <div class="viewcode-block" id="create_scenario_dict">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.create_scenario_dict">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.create_scenario_dict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_scenario_dict</span><span class="p">(</span><span class="n">tas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">scenario_nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a nested dictionary of scenarios and models from two dictionaries of pandas DataFrames.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    tas : dict</span>
-<span class="sd">        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns</span>
-<span class="sd">        representing different climate model mean daily temperature (K) time series.</span>
+<span class="sd">        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has</span>
+<span class="sd">        columns representing different climate model mean daily temperature (K) time series.</span>
 <span class="sd">    pr : dict</span>
-<span class="sd">        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns</span>
-<span class="sd">        representing different climate models mean daily precipitation (mm/day) time series.</span>
+<span class="sd">        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has</span>
+<span class="sd">        columns representing different climate model mean daily precipitation (mm/day) time series.</span>
 <span class="sd">    scenario_nums : list</span>
 <span class="sd">        A list of integers representing the scenario numbers to include in the resulting dictionary.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    dict</span>
-<span class="sd">        A nested dictionary where the top-level keys are scenario names (e.g. &#39;SSP2&#39;, &#39;SSP5&#39;) and the values are</span>
-<span class="sd">        dictionaries containing climate models as keys and the corresponding pandas DataFrames as values.</span>
-<span class="sd">        The DataFrames have three columns: &#39;TIMESTAMP&#39;, &#39;T2&#39;, and &#39;RRR&#39;, where &#39;TIMESTAMP&#39;</span>
-<span class="sd">        represents the time step, &#39;T2&#39; represents the mean daily temperature (K), and &#39;RRR&#39; represents the mean</span>
+<span class="sd">        A nested dictionary where the top-level keys are scenario names (e.g. &#39;SSP2&#39;, &#39;SSP5&#39;) and</span>
+<span class="sd">        the values are dictionaries containing climate models as keys and the corresponding pandas</span>
+<span class="sd">        DataFrames as values. The DataFrames have three columns: &#39;TIMESTAMP&#39;, &#39;T2&#39;, and &#39;RRR&#39;, where</span>
+<span class="sd">        &#39;TIMESTAMP&#39; represents the time step, &#39;T2&#39; the mean daily temperature (K), and &#39;RRR&#39; the mean</span>
 <span class="sd">        daily precipitation (mm/day).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
     <span class="n">scenarios</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scenario_nums</span><span class="p">:</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;SSP&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -752,7 +965,7 @@
 
 
 <div class="viewcode-block" id="MatildaBulkProcessor">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.MatildaBulkProcessor">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MatildaBulkProcessor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to run multiple MATILDA simulations for different input scenarios and models in single or multi-processing</span>
@@ -795,7 +1008,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matilda_parameters</span> <span class="o">=</span> <span class="n">matilda_parameters</span>
 
 <div class="viewcode-block" id="MatildaBulkProcessor.matilda_headless">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.MatildaBulkProcessor.matilda_headless">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor.matilda_headless">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">matilda_headless</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">matilda_settings</span><span class="p">,</span> <span class="n">matilda_parameters</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -822,7 +1035,7 @@
 
 
 <div class="viewcode-block" id="MatildaBulkProcessor.run_single_process">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.MatildaBulkProcessor.run_single_process">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor.run_single_process">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_single_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Runs the MATILDA simulations for the scenarios and models in single-processing mode and returns a dictionary</span>
@@ -851,7 +1064,7 @@
 
 
 <div class="viewcode-block" id="MatildaBulkProcessor.run_multi_process">
-<a class="viewcode-back" href="../../modules.html#tools.helpers.MatildaBulkProcessor.run_multi_process">[docs]</a>
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor.run_multi_process">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_multi_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_cores</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Runs the MATILDA simulations for the scenarios and models in multi-processing mode and returns a dictionary</span>
@@ -882,31 +1095,70 @@
 
 </pre></div>
 
-           </div>
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
           </div>
-          <footer>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Alexander Georgi, Phillip Schuster, Mia Janzen
+</p>
 
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
   </div>
+  
+  <div class="footer-item">
+    
 
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  <p class="copyright">
+    
+      © Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.
+      <br/>
+    
+  </p>
 
-</footer>
-        </div>
-      </div>
-    </section>
   </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
 
-</body>
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
 </html>

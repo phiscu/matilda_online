@@ -28,7 +28,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -37,7 +37,7 @@
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=f9c1cefe"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -463,41 +463,39 @@ of results.
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.helpers.confidence_interval">
 <span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">confidence_interval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#confidence_interval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.confidence_interval" title="Link to this definition">#</a></dt>
-<dd><p>Calculate the mean and 95% confidence interval for each row in a dataframe.
-Parameters:
-———–</p>
-<blockquote>
-<div><p>df (pandas.DataFrame): The input dataframe.</p>
-</div></blockquote>
-<section id="returns">
-<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading">#</a></h2>
-<blockquote>
-<div><p>pandas.DataFrame: A dataframe with the mean and confidence intervals for each row.</p>
-</div></blockquote>
-</section>
+<dd><p>Calculate the mean and 95% confidence interval for each row in a dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – The input dataframe.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A dataframe with the mean and confidence intervals for each row.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.helpers.create_scenario_dict">
 <span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">create_scenario_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tas</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenario_nums</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/tools/helpers.html#create_scenario_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.create_scenario_dict" title="Link to this definition">#</a></dt>
-<dd><p>Create a nested dictionary of scenarios and models from two dictionaries of pandas DataFrames.
-:param tas: A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns</p>
-<blockquote>
-<div><p>representing different climate model mean daily temperature (K) time series.</p>
-</div></blockquote>
+<dd><p>Create a nested dictionary of scenarios and models from two dictionaries of pandas DataFrames.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pr</strong> (<em>dict</em>) – A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns
-representing different climate models mean daily precipitation (mm/day) time series.</p></li>
+<li><p><strong>tas</strong> (<em>dict</em>) – A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has
+columns representing different climate model mean daily temperature (K) time series.</p></li>
+<li><p><strong>pr</strong> (<em>dict</em>) – A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has
+columns representing different climate model mean daily precipitation (mm/day) time series.</p></li>
 <li><p><strong>scenario_nums</strong> (<em>list</em>) – A list of integers representing the scenario numbers to include in the resulting dictionary.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A nested dictionary where the top-level keys are scenario names (e.g. ‘SSP2’, ‘SSP5’) and the values are
-dictionaries containing climate models as keys and the corresponding pandas DataFrames as values.
-The DataFrames have three columns: ‘TIMESTAMP’, ‘T2’, and ‘RRR’, where ‘TIMESTAMP’
-represents the time step, ‘T2’ represents the mean daily temperature (K), and ‘RRR’ represents the mean
+<dd class="field-even"><p>A nested dictionary where the top-level keys are scenario names (e.g. ‘SSP2’, ‘SSP5’) and
+the values are dictionaries containing climate models as keys and the corresponding pandas
+DataFrames as values. The DataFrames have three columns: ‘TIMESTAMP’, ‘T2’, and ‘RRR’, where
+‘TIMESTAMP’ represents the time step, ‘T2’ the mean daily temperature (K), and ‘RRR’ the mean
 daily precipitation (mm/day).</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -581,41 +579,43 @@ Creates target directory if not existing.
 <dt class="sig sig-object py" id="tools.helpers.drop_model">
 <span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">drop_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_or_df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#drop_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.drop_model" title="Link to this definition">#</a></dt>
 <dd><p>Drop columns with given names from either a dictionary of dataframes
-or a single dataframe.
-:param col_names: The list of model names to drop.
-:type col_names: list of str
-:param dict_or_df: If a dict of dataframes, all dataframes in the dict will be edited.</p>
-<blockquote>
-<div><p>If a single dataframe, only that dataframe will be edited.</p>
-</div></blockquote>
+or a single dataframe.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>dict_of_dfs</strong> – The updated dictionary of dataframes or dataframe with dropped columns.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>col_names</strong> (<em>list</em><em> of </em><em>str</em>) – The list of model names to drop.</p></li>
+<li><p><strong>dict_or_df</strong> (<em>dict</em><em> of </em><em>pandas.DataFrame</em><em> or </em><em>pandas.DataFrame</em>) – If a dict of dataframes, all dataframes in the dict will be edited.
+If a single dataframe, only that dataframe will be edited.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>dict of pandas.DataFrame or pandas.DataFrame</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated dictionary of dataframes or dataframe with dropped columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of pandas.DataFrame or pandas.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="tools.helpers.get_si">
-<span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">get_si</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fast_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_csv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/tools/helpers.html#get_si"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.get_si" title="Link to this definition">#</a></dt>
-<dd><p>Computes the sensitivity indices of a given FAST simulation results file.
-:param fast_results: The path of the FAST simulation results file.
-:type fast_results: str
-:param to_csv: If True, the sensitivity indices are saved to a CSV file with the same</p>
-<blockquote>
-<div><p>name as fast_results, but with ‘_sensitivity_indices.csv’ appended to
-the end (default is False).</p>
-</div></blockquote>
+<span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">get_si</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fast_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_csv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.DataFrame</span></span></span><a class="reference internal" href="_modules/tools/helpers.html#get_si"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.get_si" title="Link to this definition">#</a></dt>
+<dd><p>Computes the sensitivity indices of a given FAST simulation results file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A pandas DataFrame containing the sensitivity indices and parameter
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fast_results</strong> (<em>str</em>) – The path of the FAST simulation results file.</p></li>
+<li><p><strong>to_csv</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the sensitivity indices are saved to a CSV file with the same
+name as fast_results, but with ‘_sensitivity_indices.csv’ appended to
+the end (default is False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pandas DataFrame containing the sensitivity indices and parameter
 names.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>pd.DataFrame</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>

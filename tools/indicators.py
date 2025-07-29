@@ -39,13 +39,14 @@ def prec_minmax(df):
 def peak_doy(df, smoothing_window_peakdoy=7):
     """
     Compute the day of the calendar year with the peak value for each hydrological year.
+
     Parameters
     ----------
     df : pandas.DataFrame
         A DataFrame of daily data with a datetime index.
     smoothing_window_peakdoy : int, optional
-        The window size of the rolling mean used for smoothing the data.
-        Default is 7.
+        The window size of the rolling mean used for smoothing the data. Default is 7.
+
     Returns
     -------
     pandas.DataFrame
@@ -142,9 +143,10 @@ def melting_season(df, smoothing_window_meltseas=14, min_weeks=10):
 def aridity(df, hist_starty=1986, hist_endy=2015):
     """
     Calculates aridity indexes from precipitation, and potential and actual evaporation respectively. Aridity is defined
-    as mean annual ratio of potential/actual evapotranspiration and precipitation. The indexes are defined as the
-    relative change of a 30 years period compared to a given historical period. Uses hydrological years (Oct - Sep).
+    as the mean annual ratio of potential/actual evapotranspiration and precipitation. The indexes are defined as the
+    relative change of a 30-year period compared to a given historical period. Uses hydrological years (Oct–Sep).
     Inspired by climateinformation.org (https://doi.org/10.5194/egusphere-egu23-16216).
+
     Parameters
     ----------
     df : pandas.DataFrame
@@ -153,14 +155,17 @@ def aridity(df, hist_starty=1986, hist_endy=2015):
         Start year of the historical period in YYYY format. Default is 1986.
     hist_endy : int, optional
         End year of the historical period in YYYY format. Default is 2015.
+
     Returns
     -------
     pandas.DataFrame
         DataFrame containing the relative change in aridity over time.
+
         Columns:
-            - 'actual_aridity': Relative change in actual aridity.
-            - 'potential_aridity': Relative change in potential aridity.
+        - 'actual_aridity': Relative change in actual aridity.
+        - 'potential_aridity': Relative change in potential aridity.
     """
+    
     # Use water years
     df = hydrologicalize(df)
     # Potential evapotranspiration (PET)
@@ -195,6 +200,7 @@ def dry_spells(df, dry_spell_length=5):
     """
     Compute the total length of dry spells in days per year. A dry spell is defined as a period for which the rolling
     mean of evaporation in a given window exceeds precipitation. Uses hydrological years (Oct - Sep).
+
     Parameters
     ----------
     df : pandas.DataFrame
@@ -202,6 +208,7 @@ def dry_spells(df, dry_spell_length=5):
         precipitation data, respectively.
     dry_spell_length : int, optional
         Length of the rolling window in days. Default is 30.
+
     Returns
     -------
     pandas.DataFrame
@@ -271,22 +278,24 @@ def get_qlf(data, global_mean, measurements_per_day=1):
 def hydrological_signatures(df):
     """
     Calculate hydrological signatures for a given input dataframe.
+
     Parameters
     ----------
     df : pandas.DataFrame
         Input DataFrame containing a column 'total_runoff' and a DatetimeIndex.
+
     Returns
     -------
     pandas.DataFrame
         A DataFrame containing the calculated hydrological signatures for each year in the input dataframe.
         The columns of the output dataframe are as follows:
-         - 'q5': the 5th percentile of total runoff for each year
+        - 'q5': the 5th percentile of total runoff for each year
         - 'q50': the 50th percentile of total runoff for each year
         - 'q95': the 95th percentile of total runoff for each year
-        - 'qlf_freq': the frequency of low flow events (defined as Q < 2*Qmean_global) for each year, in yr^⁻1
-        - 'qlf_dur': the mean duration of low flow events (defined as Q < 2*Qmean_global) for each year, in days
-        - 'qhf_freq': the frequency of high flow events (defined as Q > 9*Q50_global) for each year, in yr^⁻1
-        - 'qhf_dur': the mean duration of high flow events (defined as Q > 9*Q50_global) for each year, in days
+        - 'qlf_freq': the frequency of low flow events (Q < 2 × Qmean_global) for each year, in yr⁻¹
+        - 'qlf_dur': the mean duration of low flow events (Q < 2 × Qmean_global) for each year, in days
+        - 'qhf_freq': the frequency of high flow events (Q > 9 × Q50_global) for each year, in yr⁻¹
+        - 'qhf_dur': the mean duration of high flow events (Q > 9 × Q50_global) for each year, in days
     """
     # Create lists of quantile functions to apply and column names
     functions = [sig.get_q5, sig.get_q50, sig.get_q95]
@@ -328,35 +337,44 @@ def drought_indicators(df, freq='ME', dist='gamma'):
     """
     Calculate the climatic water balance, SPI (Standardized Precipitation Index), and
     SPEI (Standardized Precipitation Evapotranspiration Index) for 1, 3, 6, 12, and 24 months.
+
     Parameters
     ----------
     df : pandas.DataFrame
-         Input DataFrame containing columns 'prec_off_glaciers' and 'evap_off_glaciers'.
+        Input DataFrame containing columns 'prec_off_glaciers' and 'evap_off_glaciers'.
     freq : str, optional
-         Resampling frequency for precipitation and evaporation data. Default is 'M' for monthly.
+        Resampling frequency for precipitation and evaporation data. Default is 'M' for monthly.
     dist : str, optional
-         Distribution for SPI and SPEI calculation. Either Pearson-Type III ('pearson') or
-         Gamma distribution ('gamma'). Default is 'gamma'.
+        Distribution for SPI and SPEI calculation. Either Pearson-Type III ('pearson') or
+        Gamma distribution ('gamma'). Default is 'gamma'.
+
     Returns
     -------
     pandas.DataFrame
-         DataFrame containing the calculated indicators: 'clim_water_balance', 'spi', and 'spei'.
-         Index is based on the resampled frequency of the input DataFrame.
+        DataFrame containing the calculated indicators: 'clim_water_balance', 'spi', and 'spei'.
+        Index is based on the resampled frequency of the input DataFrame.
+
     Raises
     ------
     ValueError
-         If 'freq' is not 'D' or 'ME'.
-         If 'dist' is not 'pearson' or 'gamma'.
+        If 'freq' is not 'D' or 'ME'.
+        If 'dist' is not 'pearson' or 'gamma'.
+
     Notes
     -----
     SPI (Standardized Precipitation Index) and SPEI (Standardized Precipitation Evapotranspiration Index)
     are drought indicators that are used to quantify drought severity and duration.
+
     'clim_water_balance' is the difference between total precipitation and total evapotranspiration.
-    If 'freq' is 'D', the input data is transformed from Gregorian to a 366-day format for SPI and SPEI calculation,
-    and then transformed back to Gregorian format for output.
+
+    If 'freq' is 'D', the input data is transformed from Gregorian to a 366-day format for SPI and SPEI
+    calculation, and then transformed back to Gregorian format for output.
+
     The default distribution for SPI and SPEI calculation is Gamma.
+
     The calibration period for SPI and SPEI calculation is from 1981 to 2020.
     """
+    
     # Check if frequency is valid
     if freq != 'D' and freq != 'ME':
         raise ValueError("Invalid value for 'freq'. Choose either 'D' or 'ME'.")
@@ -426,29 +444,33 @@ def drought_indicators(df, freq='ME', dist='gamma'):
 
 
 # Wrapper function
-
 def cc_indicators(df, **kwargs):
     """
-    Apply a list of climate change indicator functions to output DataFrame of MATILDA and concatenate
-    the output columns into a single DataFrame.
+    Apply a list of climate change indicator functions to the output DataFrame of MATILDA
+    and concatenate the output columns into a single DataFrame.
+
     Parameters
     ----------
     df : pandas.DataFrame
         Input DataFrame.
     **kwargs : optional
-        Optional arguments to be passed to the functions in the list. Possible arguments are 'smoothing_window_peakdoy',
-        'smoothing_window_meltseas', 'min_weeks', and 'dry_spell_length'.
+        Optional arguments to be passed to the functions in the list. Possible arguments are
+        'smoothing_window_peakdoy', 'smoothing_window_meltseas', 'min_weeks', and
+        'dry_spell_length'.
+
     Returns
     -------
     pandas.DataFrame
         DataFrame containing the output columns of all functions applied to the input DataFrame.
+
     Notes
     -----
     The list of functions to apply is hard-coded into the function and cannot be modified from outside.
-     The optional arguments are passed to the respective functions only if they are relevant for the respective
-     function.
-     If no optional arguments are passed, the function is applied to the input DataFrame with default arguments.
+    The optional arguments are passed to the respective functions only if they are relevant.
+    If no optional arguments are passed, the function is applied to the input DataFrame with default arguments.
     """
+    
+    
     # List of all functions to apply
     functions = [prec_minmax, peak_doy, melting_season, aridity, dry_spells, hydrological_signatures, drought_indicators]
     # Empty result dataframe

@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import seaborn as sns
 import scienceplots
 import pandas as pd
@@ -12,60 +11,52 @@ import numpy as np
 from tools.helpers import parquet_to_dict, read_yaml, pickle_to_dict, get_si, matilda_vars, confidence_interval
 from tools.indicators import indicator_vars, custom_df_indicators
 import warnings
-import seaborn as sns
 import datetime as dt
 from datetime import timedelta
 import matplotlib.dates as mdates
 from matplotlib.patches import Rectangle
-import matplotlib as mpl
 from dash import Dash, dcc, html, Input, Output
 from jupyter_server import serverapp
 import plotly.graph_objects as go
 import plotly.io as pio
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
-import os
 
-## Global style parameters
-# Use Seaborn white style
-sns.set_style("white")
-
-# Use Seaborn white style
-sns.set_style("white")
-
-# Fonts
-this_dir = os.path.abspath(os.path.dirname(__file__))
-font_path = os.path.join(this_dir, "cmu.0", "cmunrm.ttf")
-
-font_prop = None
 try:
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+    import matplotlib.font_manager as fm
+    import os
+
+    sns.set_style("white")
+
+    this_dir = os.path.abspath(os.path.dirname(__file__))
+    font_path = os.path.join(this_dir, "cmu.0", "cmunrm.ttf")
+
+    font_name = "Arial"  # Fallback
     if os.path.exists(font_path):
         fm.fontManager.addfont(font_path)
         font_prop = fm.FontProperties(fname=font_path)
         font_name = font_prop.get_name()
-    else:
-        print(f"Font not found at: {font_path}")
+
+    mpl.rcParams['text.usetex'] = False
+    mpl.rcParams['mathtext.fontset'] = 'cm'
+    mpl.rcParams['font.family'] = font_name
+    mpl.rcParams['font.size'] = 14
+    mpl.rcParams['font.weight'] = 'bold'
+    mpl.rcParams['axes.labelsize'] = 14
+    plt.rcParams['legend.fontsize'] = 10
+    mpl.rcParams['axes.titlesize'] = 16
+    mpl.rcParams['axes.titleweight'] = 'bold'
+    mpl.rcParams['figure.titlesize'] = 22
+    mpl.rcParams['figure.titleweight'] = 'heavy'
+    mpl.rcParams['axes.grid'] = True
+    mpl.rcParams['grid.linestyle'] = '--'
+    mpl.rcParams['grid.color'] = 'gray'
+    mpl.rcParams['grid.linewidth'] = 0.5
+
 except Exception as e:
-    print(f"Font loading failed: {e}")
-
-mpl.rcParams['text.usetex'] = False
-mpl.rcParams['mathtext.fontset'] = 'cm' 
-mpl.rcParams['font.family'] = font_name 
-mpl.rcParams['font.size'] = 14
-mpl.rcParams['font.weight'] = 'bold'
-mpl.rcParams['axes.labelsize'] = 14
-plt.rcParams['legend.fontsize'] = 10
-mpl.rcParams['axes.titlesize'] = 16
-mpl.rcParams['axes.titleweight'] = 'bold'
-mpl.rcParams['figure.titlesize'] = 22
-mpl.rcParams['figure.titleweight'] = 'heavy'
-
-# Grid lines
-mpl.rcParams['axes.grid'] = True
-mpl.rcParams['grid.linestyle'] = '--'
-mpl.rcParams['grid.color'] = 'gray'
-mpl.rcParams['grid.linewidth'] = 0.5
-
+    import warnings
+    warnings.warn(f"Plot style setup skipped due to error: {e}")
 
 ## Definitions
 
@@ -276,23 +267,26 @@ def vplots(before, after, target, target_label='Target', precip=False, show=Fals
 def cmip_plot_ensemble(cmip, target, precip=False, intv_sum='ME', intv_mean='YE', figsize=(8, 6), show=True, fig_path=None):
     """
     Plots the multi-model mean of climate scenarios including the 90% confidence interval.
+
     Parameters
     ----------
-    cmip: dict
-        A dictionary with keys representing the different CMIP6 models and scenarios as pandas dataframes
+    cmip : dict
+        A dictionary with keys representing the different CMIP6 models and scenarios as pandas DataFrames
         containing data of temperature and/or precipitation.
-    target: pandas.DataFrame
-        Dataframe containing the historical reanalysis data.
-    precip: bool
+    target : pandas.DataFrame
+        DataFrame containing the historical reanalysis data.
+    precip : bool, optional
         If True, plot the mean precipitation. If False, plot the mean temperature. Default is False.
-    intv_sum: str
+    intv_sum : str, optional
         Interval for precipitation sums. Default is monthly ('ME').
-    intv_mean: str
+    intv_mean : str, optional
         Interval for the mean of temperature data or precipitation sums. Default is annual ('YE').
-    figsize: tuple
-        Figure size for the plot. Default is (8,6).
-    show: bool
+    figsize : tuple, optional
+        Figure size for the plot. Default is (8, 6).
+    show : bool, optional
         If True, show the resulting plot. If False, do not show it. Default is True.
+    fig_path : str or None, optional
+        Path to save the plot. If None, the plot is not saved.
     """
 
     warnings.filterwarnings(action='ignore')
@@ -923,14 +917,15 @@ class MatildaSummary:
 def custom_df_matilda(dic, scenario, var, resample_freq=None):
     """
     Takes a dictionary of model outputs and returns a combined dataframe of a specific variable for a given scenario.
+
     Parameters
-    -------
+    ----------
     dic : dict
         A nested dictionary of model outputs.
         The outer keys are scenario names and the inner keys are model names.
         The corresponding values are dictionaries containing two keys:
-        'model_output' (DataFrame): containing model outputs for a given scenario and model
-        'glacier_rescaling' (DataFrame): containing glacier properties for a given scenario and model
+        - 'model_output' (DataFrame): containing model outputs for a given scenario and model
+        - 'glacier_rescaling' (DataFrame): containing glacier properties for a given scenario and model
     scenario : str
         The name of the scenario to select from the dictionary.
     var : str
@@ -939,24 +934,29 @@ def custom_df_matilda(dic, scenario, var, resample_freq=None):
         The frequency of the resulting time series data.
         Defaults to None (i.e. no resampling).
         If provided, should be in pandas resample frequency string format.
+
     Returns
     -------
     pandas.DataFrame
         A DataFrame containing the combined data of the specified variable for the selected scenario
         and models. The DataFrame is indexed by the time steps of the original models.
         The columns are the names of the models in the selected scenario.
+
     Raises
-    -------
+    ------
     ValueError
-        If the provided  var  string is not one of the following: ['avg_temp_catchment', 'avg_temp_glaciers',
-        'evap_off_glaciers', 'prec_off_glaciers', 'prec_on_glaciers', 'rain_off_glaciers', 'snow_off_glaciers',
-        'rain_on_glaciers', 'snow_on_glaciers', 'snowpack_off_glaciers', 'soil_moisture', 'upper_groundwater',
-        'lower_groundwater', 'melt_off_glaciers', 'melt_on_glaciers', 'ice_melt_on_glaciers', 'snow_melt_on_glaciers',
-        'refreezing_ice', 'refreezing_snow', 'total_refreezing', 'SMB', 'actual_evaporation', 'total_precipitation',
-        'total_melt', 'runoff_without_glaciers', 'runoff_from_glaciers', 'runoff_ratio', 'total_runoff', 'glacier_area',
-        'glacier_elev', 'smb_water_year', 'smb_scaled', 'smb_scaled_capped', 'smb_scaled_capped_cum', 'surplus',
+        If the provided `var` string is not one of the following:
+        ['avg_temp_catchment', 'avg_temp_glaciers', 'evap_off_glaciers', 'prec_off_glaciers',
+        'prec_on_glaciers', 'rain_off_glaciers', 'snow_off_glaciers', 'rain_on_glaciers',
+        'snow_on_glaciers', 'snowpack_off_glaciers', 'soil_moisture', 'upper_groundwater',
+        'lower_groundwater', 'melt_off_glaciers', 'melt_on_glaciers', 'ice_melt_on_glaciers',
+        'snow_melt_on_glaciers', 'refreezing_ice', 'refreezing_snow', 'total_refreezing', 'SMB',
+        'actual_evaporation', 'total_precipitation', 'total_melt', 'runoff_without_glaciers',
+        'runoff_from_glaciers', 'runoff_ratio', 'total_runoff', 'glacier_area', 'glacier_elev',
+        'smb_water_year', 'smb_scaled', 'smb_scaled_capped', 'smb_scaled_capped_cum', 'surplus',
         'glacier_melt_perc', 'glacier_mass_mmwe', 'glacier_vol_m3', 'glacier_vol_perc']
     """
+    
     out1_cols = ['avg_temp_catchment',
                  'avg_temp_glaciers',
                  'evap_off_glaciers',
@@ -1037,21 +1037,24 @@ def custom_df_matilda(dic, scenario, var, resample_freq=None):
 
 def plot_ci_matilda(var, dic, resample_freq='YE', show=False):
     """
-    A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.
-    Parameters:
-    -----------
-    var: str
+    Plot the multi-model mean and confidence intervals of a given variable for two different scenarios.
+
+    Parameters
+    ----------
+    var : str
         The variable to plot.
-    dic: dict, optional (default=matilda_scenarios)
-        A dictionary containing the scenarios as keys and the dataframes as values.
-    resample_freq: str, optional (default='YE')
-        The resampling frequency to apply to the data.
-    show: bool, optional (default=False)
-        Whether to show the resulting plot or not.
-    Returns:
-    --------
+    dic : dict, optional
+        A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.
+    resample_freq : str, optional
+        The resampling frequency to apply to the data. Default is 'YE'.
+    show : bool, optional
+        Whether to show the resulting plot or not. Default is False.
+
+    Returns
+    -------
     go.Figure
-        A plotly figure object containing the mean and confidence intervals for the given variable in the two selected scenarios.
+        A plotly figure object containing the mean and confidence intervals for the given variable
+        in the two selected scenarios.
     """
 
     if var is None:
@@ -1199,21 +1202,24 @@ def matilda_dash(app,dic,fig_count=4,
 
 def plot_ci_indicators(var, dic, plot_type='line', show=False):
     """
-    A function to plot multi-model mean and confidence intervals of a given variable for two different scenarios.
-    Parameters:
-    -----------
-    var: str
+    Plot the multi-model mean and confidence intervals of a given variable for two different scenarios.
+
+    Parameters
+    ----------
+    var : str
         The variable to plot.
-    dic: dict, optional (default=matilda_scenarios)
-        A dictionary containing the scenarios as keys and the dataframes as values.
-    plot_type: str, optional (default='line')
-        Whether the plot should be a line or a bar plot.
-    show: bool, optional (default=False)
-        Whether to show the resulting plot or not.
-    Returns:
-    --------
+    dic : dict, optional
+        A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.
+    plot_type : str, optional
+        Whether the plot should be a line or a bar plot. Default is 'line'.
+    show : bool, optional
+        Whether to show the resulting plot or not. Default is False.
+
+    Returns
+    -------
     go.Figure
-        A plotly figure object containing the mean and confidence intervals for the given variable in the two selected scenarios.
+        A plotly figure object containing the mean and confidence intervals for the given variable
+        in the two selected scenarios.
     """
 
     if var is None:
