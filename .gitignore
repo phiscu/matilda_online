@@ -6,3 +6,5 @@ output_download.zip
 .DS_Store
 __pycache__/
 *.pyc
+deployment/
+catchment_dirs/
