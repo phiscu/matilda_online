@@ -7,7 +7,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.16.4
 #   kernelspec:
-#     display_name: matilda_edu
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -89,16 +89,10 @@ print(f'Coordinates of discharge point: Lat {y}, Lon {x}')
 #
 
 # %%
-import ee
+from tools.geetools import authenticate_and_initialize_ee
 
-# initialize GEE at the beginning of session
-try:
-    ee.Initialize(project=cloud_project)
-except Exception as e:
-    ee.Authenticate()  # authenticate when using GEE for the first time
-    ee.Initialize(project=cloud_project)
+authenticate_and_initialize_ee(cloud_project)
 
-print("Google Earth Engine Access initialized!")
 
 # %% [markdown]
 # ## Start GEE and download DEM

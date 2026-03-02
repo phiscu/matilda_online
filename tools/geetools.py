@@ -6,6 +6,59 @@ from retry import retry
 from tqdm import tqdm
 import ee
 
+def authenticate_and_initialize_ee(cloud_project, max_retries=2):
+    """
+    Authenticate and initialize Earth Engine.
+
+    - First tries existing credentials.
+    - If permissions are wrong, forces re-authentication.
+    - Raises RuntimeError if setup ultimately fails.
+    """
+    for attempt in range(max_retries):
+        try:
+            if attempt == 0:
+                print("\n--- Initial Earth Engine Setup Attempt ---")
+                print("Trying to use existing credentials (if any)...")
+                ee.Initialize(project=cloud_project)
+            else:
+                print(f"\n--- Attempt {attempt + 1}/{max_retries}: Re-authentication ---")
+                print("A browser window should open. Please select the Google Account")
+                print(f"that has access to your Earth Engine project ({cloud_project}).")
+                print("-----------------------------------")
+                ee.Reset()
+                ee.Authenticate(force=True)
+                ee.Initialize(project=cloud_project)
+
+            _ = ee.Image("CGIAR/SRTM90_V4").getInfo()
+            print(f"\n✅ Earth Engine successfully initialized with project: {cloud_project}")
+            return
+
+        except ee.EEException as e:
+            msg = str(e)
+            print(f"\n❌ Earth Engine setup failed (Attempt {attempt + 1})")
+            print(f"Error: {e}")
+
+            if "Caller does not have required permission" in msg and attempt < max_retries - 1:
+                print("\nTrying again with forced re-authentication...\n")
+                continue
+
+            if "Caller does not have required permission" in msg:
+                raise RuntimeError(
+                    f"Earth Engine permission error for project '{cloud_project}'. "
+                    "Make sure your account has the 'Earth Engine User' role and "
+                    "that Earth Engine is enabled for the project."
+                ) from e
+
+            raise RuntimeError(
+                f"Earth Engine initialization failed for project '{cloud_project}'."
+            ) from e
+
+        except Exception as e:
+            raise RuntimeError(
+                f"Unexpected error during Earth Engine setup: {e}"
+            ) from e
+
+
 class CMIPDownloader:
     """Class to download spatially averaged CMIP6 data for a given period, variable, and spatial subset."""
 
