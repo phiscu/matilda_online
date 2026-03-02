@@ -36,7 +36,7 @@ import geopandas as gpd
 import ee
 import geemap
 import numpy as np
-
+from tools.geetools import authenticate_and_initialize_ee
 
 # read local config.ini file
 config = configparser.ConfigParser()
@@ -58,11 +58,7 @@ compact_files = config.getboolean('CONFIG','COMPACT_FILES')
 cloud_project = config['CONFIG']['CLOUD_PROJECT']
 
 # initialize GEE
-try:
-    ee.Initialize(project=cloud_project)
-except Exception as e:
-    ee.Authenticate()
-    ee.Initialize(project=cloud_project)
+authenticate_and_initialize_ee(cloud_project)
 
 # %% [markdown]
 # Now we can send the catchment outline to GEE to use it as target polygon for aggregation.

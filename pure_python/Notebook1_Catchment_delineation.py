@@ -114,6 +114,7 @@ else:
 #
 
 # %%
+import ee
 if dem_config[0] == 'Image':
     image = ee.Image(dem_config[1]).select(dem_config[2])
 elif dem_config[0] == 'ImageCollection':
