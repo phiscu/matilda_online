@@ -1,62 +1,101 @@
 import pandas as pd
 import concurrent.futures
 import os
+import sys
 import requests
 from retry import retry
 from tqdm import tqdm
 import ee
 
-def authenticate_and_initialize_ee(cloud_project, max_retries=2):
+def authenticate_and_initialize_ee(cloud_project):
     """
-    Authenticate and initialize Earth Engine.
+    Robustly authenticates and initializes Earth Engine for local/notebook environments.
 
-    - First tries existing credentials.
-    - If permissions are wrong, forces re-authentication.
-    - Raises RuntimeError if setup ultimately fails.
+    It attempts to initialize Earth Engine:
+    1. Using existing credentials if available and valid for the project.
+    2. If a permission error occurs, it forces a new interactive browser-based
+       authentication suitable for notebooks.
+
+    Args:
+        cloud_project (str): The Google Cloud Project ID to use for Earth Engine.
+
+    Raises:
+        RuntimeError: If Earth Engine initialization ultimately fails after retries.
     """
-    for attempt in range(max_retries):
+    print(f"--- Attempting Earth Engine Setup for project: {cloud_project} ---")
+
+    # --- First Attempt: Try to initialize with any existing, valid credentials ---
+    try:
+        print("1. Trying to initialize with existing credentials...")
+        ee.Initialize(project=cloud_project)
+        # Verify with a simple API call to ensure permissions are correct
+        _ = ee.Image("CGIAR/SRTM90_V4").getInfo()
+        print(f"✅ Earth Engine successfully initialized with existing credentials for project: {cloud_project}")
+        return # Success, exit function
+
+    except ee.EEException as e:
+        msg = str(e)
+        if "Caller does not have required permission" in msg:
+            print(f"Initial attempt failed due to permission error: {e}")
+            print("This likely means existing credentials are for the wrong account/project, or lack permissions.")
+            print("Proceeding to force a new interactive authentication.")
+        else:
+            # Handle other EE exceptions (e.g., project not found, invalid API key etc.)
+            print(f"Initial attempt failed with an unexpected Earth Engine error: {e}")
+            print("Proceeding to force a new interactive authentication, as this might resolve it.")
+    except Exception as e:
+        print(f"Initial attempt failed with an unexpected general error: {e}")
+        print("Proceeding to force a new interactive authentication, as this might resolve it.")
+
+
+    # --- Second Attempt: Force a new interactive browser-based authentication ---
+    print("\n--- Forcing New Earth Engine Authentication ---")
+    print("A browser window should open (or instructions to copy/paste a URL).")
+    print("Please select the Google Account that has access to your Earth Engine project.")
+    print("-----------------------------------")
+    
+    try:
+        # Clear in-memory credentials just in case
+        ee.Reset() 
+        
+        # Explicitly use 'notebook' auth_mode for Jupyter environments or 'paste' as a fallback
         try:
-            if attempt == 0:
-                print("\n--- Initial Earth Engine Setup Attempt ---")
-                print("Trying to use existing credentials (if any)...")
-                ee.Initialize(project=cloud_project)
-            else:
-                print(f"\n--- Attempt {attempt + 1}/{max_retries}: Re-authentication ---")
-                print("A browser window should open. Please select the Google Account")
-                print(f"that has access to your Earth Engine project ({cloud_project}).")
-                print("-----------------------------------")
-                ee.Reset()
-                ee.Authenticate(force=True)
-                ee.Initialize(project=cloud_project)
+            print("Attempting authentication with auth_mode='notebook'...")
+            ee.Authenticate(force=True, auth_mode='notebook') 
+        except Exception as notebook_auth_error:
+            print(f"Auth_mode='notebook' failed or didn't prompt: {notebook_auth_error}")
+            print("Falling back to auth_mode='paste' (you may need to copy/paste a URL).")
+            ee.Authenticate(force=True, auth_mode='paste') # This will provide a URL if it can't open a browser
 
-            _ = ee.Image("CGIAR/SRTM90_V4").getInfo()
-            print(f"\n✅ Earth Engine successfully initialized with project: {cloud_project}")
-            return
+        print("\nAuthentication flow completed. Attempting re-initialization...")
+        ee.Initialize(project=cloud_project)
 
-        except ee.EEException as e:
-            msg = str(e)
-            print(f"\n❌ Earth Engine setup failed (Attempt {attempt + 1})")
-            print(f"Error: {e}")
+        # Verify with a simple API call again
+        _ = ee.Image("CGIAR/SRTM90_V4").getInfo()
+        print(f"✅ Earth Engine successfully initialized with new credentials for project: {cloud_project}")
+        return # Success, exit function
 
-            if "Caller does not have required permission" in msg and attempt < max_retries - 1:
-                print("\nTrying again with forced re-authentication...\n")
-                continue
-
-            if "Caller does not have required permission" in msg:
-                raise RuntimeError(
-                    f"Earth Engine permission error for project '{cloud_project}'. "
-                    "Make sure your account has the 'Earth Engine User' role and "
-                    "that Earth Engine is enabled for the project."
-                ) from e
-
+    except ee.EEException as e:
+        msg = str(e)
+        print(f"\n❌ Earth Engine setup FAILED even after forced authentication for project: {cloud_project}")
+        print(f"Final Error: {e}")
+        if "Caller does not have required permission" in msg:
             raise RuntimeError(
-                f"Earth Engine initialization failed for project '{cloud_project}'."
+                f"Earth Engine permission error for project '{cloud_project}' after forced authentication. "
+                "Please ensure: \n"
+                "  1. Earth Engine is ENABLED for this project (check Google Cloud Console).\n"
+                "  2. The Google Account you selected during authentication has the 'Earth Engine User' IAM role for this project.\n"
+                "  3. You selected the CORRECT Google Account during the browser login."
+            ) from e
+        else:
+            raise RuntimeError(
+                f"Earth Engine initialization failed with an unexpected error after forced authentication for project '{cloud_project}'."
             ) from e
 
-        except Exception as e:
-            raise RuntimeError(
-                f"Unexpected error during Earth Engine setup: {e}"
-            ) from e
+    except Exception as e:
+        raise RuntimeError(
+            f"An unexpected error occurred during Earth Engine setup after forced authentication: {e}"
+        ) from e
 
 
 class CMIPDownloader:
