@@ -85,6 +85,8 @@ print(f'Coordinates of discharge point: Lat {y}, Lon {x}')
 #     needs to be changed to your own. See the instructions in 
 #     <a href="Notebook0_Introduction.ipynb#signing-up-for-google-earth-engine-gee">Notebook 0</a>, step 5
 #     for details.
+#
+#     🚨 Troubleshooting: If you can log into your Google account but don't receive a verification code, try to open the link in a private tab.
 # </div>
 #
 
