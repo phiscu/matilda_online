@@ -1,6 +1,5 @@
 # environment.yml
 name: matilda_edu
-name: matilda_edu
 channels:
   - conda-forge
 dependencies:
