@@ -202,7 +202,7 @@ else:
 # %% [markdown]
 # Based on the downloaded DEM file, we can delineate the watershed using the <code>pysheds</code> library. The result will be a raster and displayed at the end of this section.
 #
-# The full documentation of the <code>pysheds</code> module can be found [here](https://mattbartos.com/pysheds/).
+# The full documentation of the <code>pysheds</code> module can be found [here](https://github.com/pysheds/pysheds).
 #
 # <div class="alert alert-block alert-info">
 # <b>Note:</b> The catchment delineation involves several steps with large array operations and can take a moment.</div>

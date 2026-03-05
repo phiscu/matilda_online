@@ -109,7 +109,11 @@
 # ## Authorize access for Google Earth Engine
 
 # %% [markdown]
-# The Notebooks that use GEE (1-3) include a cell for initialization and authentification like the one below. If it is the first time the GEE API is initialized, a hyperlink will be generated and (if your browser allows) opened in a pop-up window.
+# <div class="alert alert-block alert-info">
+#     <b>Note:</b> If you run into any problems regarding authorization, please try the procedure in a <b>private browser tab</b> before contacting us.
+# </div>
+#
+# The Notebooks that use GEE (1-3) include a cell for initialization and authentification similar to the one below. If it is the first time the GEE API is initialized, a hyperlink will be generated and (if your browser allows) opened in a pop-up window. *(If there is no pop-up, just copy-paste the url in a browser tab.)*
 #
 # ![auth_link](images/auth_link.png)
 #
