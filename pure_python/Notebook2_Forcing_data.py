@@ -65,12 +65,9 @@ plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
 
 # %%
 import ee
+from tools.geetools import authenticate_and_initialize_ee
 
-try:
-    ee.Initialize(project=cloud_project)
-except Exception as e:
-    ee.Authenticate()
-    ee.Initialize(project=cloud_project)
+authenticate_and_initialize_ee(cloud_project)
 
 # %% [markdown]
 # We can now load the catchment outline from the previous notebook and convert it to a `ee.FeatureCollection` to use it in GEE.

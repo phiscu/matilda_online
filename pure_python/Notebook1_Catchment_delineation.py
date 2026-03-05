@@ -7,7 +7,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.16.4
 #   kernelspec:
-#     display_name: matilda_edu
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -85,20 +85,16 @@ print(f'Coordinates of discharge point: Lat {y}, Lon {x}')
 #     needs to be changed to your own. See the instructions in 
 #     <a href="Notebook0_Introduction.ipynb#signing-up-for-google-earth-engine-gee">Notebook 0</a>, step 5
 #     for details.
+#
+#     🚨 Troubleshooting: If you can log into your Google account but don't receive a verification code, try to open the link in a private tab.
 # </div>
 #
 
 # %%
-import ee
+from tools.geetools import authenticate_and_initialize_ee
 
-# initialize GEE at the beginning of session
-try:
-    ee.Initialize(project=cloud_project)
-except Exception as e:
-    ee.Authenticate()  # authenticate when using GEE for the first time
-    ee.Initialize(project=cloud_project)
+authenticate_and_initialize_ee(cloud_project)
 
-print("Google Earth Engine Access initialized!")
 
 # %% [markdown]
 # ## Start GEE and download DEM
@@ -120,6 +116,7 @@ else:
 #
 
 # %%
+import ee
 if dem_config[0] == 'Image':
     image = ee.Image(dem_config[1]).select(dem_config[2])
 elif dem_config[0] == 'ImageCollection':
@@ -205,7 +202,7 @@ else:
 # %% [markdown]
 # Based on the downloaded DEM file, we can delineate the watershed using the <code>pysheds</code> library. The result will be a raster and displayed at the end of this section.
 #
-# The full documentation of the <code>pysheds</code> module can be found [here](https://mattbartos.com/pysheds/).
+# The full documentation of the <code>pysheds</code> module can be found [here](https://github.com/pysheds/pysheds).
 #
 # <div class="alert alert-block alert-info">
 # <b>Note:</b> The catchment delineation involves several steps with large array operations and can take a moment.</div>
