@@ -177,9 +177,8 @@ print('Target glacier mass balance for calibration: ' + str(mean_mb) + ' +-' + s
 # %% [markdown]
 # For snow cover estimates, we will use a dedicated **snow reanalysis** dataset from [Liu et. al. 2021](https://doi.org/10.5067/HNAUGJQXSCVU). Details on the data can be found in the dataset documentation and the associated [publication](https://doi.org/10.1029/2022GL100082).
 # Unfortunately, access to the dataset requires a (free) registration at **NASA's EarthData** portal, which prevents a seamless integration. Also, the dataset consists of large files and requires some pre-processing that **could not be done in a Jupyter Notebook**. However, we provide you with the `SWEETR` tool, a **fully automated workflow** that you can run on your local computer to download, process, and aggregate the data. Please refer to the dedicated [Github repository](https://github.com/phiscu/hma_snow) for further instructions.
-
-# %% [markdown]
-# <img src="images/mean_swe_example.png" alt="Mean_SWE" width="400">
+#
+# ![Mean_SWE](images/mean_swe_example.png)
 
 # %% [markdown]
 # When you run the `SWEETR` tool with your catchment outline, it returns cropped raster files as the one shown above and, more importantly, a **timeseries of catchment-wide daily mean SWE** from 1999 to 2016. Just replace the `input/swe.csv` file with your result. Now we can load the timeseries as a dataframe.
@@ -254,8 +253,7 @@ print(rounded_parameters)
 # %% [markdown]
 # Each parameter governs a different aspect of the water balance, and not all parameters influence every calibration variable. Therefore, we propose an **iterative process-based calibration** approach where we calibrate parameters in order of their importance using different algorithms, objective functions, and calibration variables. Details on the calibration strategy can be found in the model publication which is currently under review. Here, we only provide code examples with 10 samples per step for demonstration purposes. For ideal number of samples please refer to the associated publication.
 #
-# <img src="images/calibration_strategy.png" alt="calibration" width="300">
-#
+# ![calibration](images/calibration_strategy.png)
 
 # %% [markdown]
 # ### Step 1: Input correction

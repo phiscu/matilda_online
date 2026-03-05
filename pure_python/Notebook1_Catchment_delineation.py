@@ -910,8 +910,7 @@ display(pd.DataFrame(settings.items(), columns=['Parameter', 'Value']).set_index
 # <b>Note:</b>
 #  The output folder is zipped at the end of each notebook and can be downloaded (file <code>output_download.zip</code>). This is especially useful if you want to use the binder environment again, but don't want to start over from Notebook 1.</div>
 #
-# <img src="images/download_output.png" width=300>
-#
+# ![download](images/download_output.png)
 # %%
 import shutil
 
