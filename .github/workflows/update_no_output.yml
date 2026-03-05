@@ -1,0 +1,55 @@
+name: Update no_outputs branch
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  strip-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Jupyter tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install nbconvert nbformat
+
+      - name: Strip outputs from notebooks
+        run: |
+          find . -name "*.ipynb" -not -path "./.git/*" -print0 | while IFS= read -r -d '' nb; do
+            jupyter nbconvert --clear-output --inplace "$nb"
+          done
+
+      - name: Commit stripped notebooks to no_outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git switch --create no_outputs-temp
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "Strip notebook outputs from main @ ${GITHUB_SHA}"
+
+      - name: Push to no_outputs branch
+        run: |
+          git push origin no_outputs-temp:no_outputs --force
