@@ -28,6 +28,11 @@
 #
 #
 # The framework for Modeling water resources in glacierized catchments [MATILDA] (https://github.com/cryotools/matilda) has been developed for use in this workflow and is published as a Python package. It is based on the widely used [HBV hydrological model](https://www.cabdirect.org/cabdirect/abstract/19961904773), complemented by a temperature-index glacier melt model based on the code of [Seguinot (2019)](https://zenodo.org/record/3467639). Glacier evolution over time is simulated using a modified version of the &Delta;*h* approach following [Seibert et. al. (2018)](https://doi.org/10.5194/hess-22-2211-2018).
+#
+# <div class="alert alert-block alert-info">
+#     <b>Note:</b> Calibrating the model is computationally intensive and will be slow to run on a single CPU in teh online environment. For a comprehensive calibration that takes full advantage of the <a href="https://spotpy.readthedocs.io/en/latest/" target="_blank">spotpy</a> library, we recommend downloading the notebooks and running them on a local machine with multi-core processing capabilities. Additional options to reduce calibration time are described in this Notebbook.
+# </div>
+#
 
 # %% [markdown]
 # As before we start by loading configurations such as the calibration period and some helper functions to work with  `yaml` files.

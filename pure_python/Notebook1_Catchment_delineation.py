@@ -26,6 +26,11 @@
 #
 # 4. ...create a **glacier mass profile** based on elevation zones.
 #
+#
+# <div class="alert alert-block alert-warning">
+# <b>Important:</b> To run this notebook, the ID of a <b>Google Cloud project</b> you have permissions for, needs to be stored in your <code>config.ini</code> file. If you don't have an ID yet, return to Notebook 0 to get one.
+# </div>
+#
 
 # %% [markdown]
 # First of all, we will read some settings from the `config.ini` file:
