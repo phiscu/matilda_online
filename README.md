@@ -1,7 +1,5 @@
 # MATILDA-Online: Workflow for Modeling Water Resources in Glacierized Catchments
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phiscu/matilda_edu/main?labpath=Notebook0_Introduction.ipynb) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15712744.svg)](https://doi.org/10.5281/zenodo.15712744) [![Documentation Status](https://readthedocs.org/projects/matilda-online/badge/?version=latest)](https://matilda-online.readthedocs.io/en/latest/)
-
-
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phiscu/matilda_edu/no_outputs?urlpath=lab/tree/Notebook0_Introduction.ipynb) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15712744.svg)](https://doi.org/10.5281/zenodo.15712744) [![Documentation Status](https://readthedocs.org/projects/matilda-online/badge/?version=latest)](https://matilda-online.readthedocs.io/en/latest/)
 
 Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hydrological modeling framework. This repository hosts the extended MATILDA workflow in form of a Jupyter Book. Designed for researchers, practitioners, and students, this workflow guides users from data acquisition to the analysis of climate change impacts on glacierized catchments.
 
@@ -11,27 +9,89 @@ Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hy
 
 ## Installation
 
-You can run most of the workflow in an online environment hosted in mybinder.org. However, calibrating the model is computationally intensive and will be slow to run on a single CPU. For a comprehensive calibration, we recommend downloading the notebooks and running them on a local machine with multi-core processing capabilities.
+You can run most of the workflow in an online environment hosted on **mybinder.org**. However, model calibration is computationally intensive and can be slow in Binder because only limited computing resources are available. For more comprehensive calibration runs, we recommend downloading the notebooks and running them **locally** on a machine with multiple CPU cores.
 
-To run the MATILDA-Online workflow locally, follow these steps:
+MATILDA-Online is designed to be run in **JupyterLab**.
 
-1. Clone this repository to your local machine and navigate to its root folder:
-```
+### 1. Install the required tools
+
+Before you begin, make sure the following are installed on your computer:
+
+- **Git** ([Install Git for Windows](https://git-scm.com/download/win))
+- **Conda** (we recommend [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
+
+### 2. Clone the repository
+
+Open a terminal.
+
+- On **macOS / Linux**, use your default terminal.
+- On **Windows**, use **Anaconda Prompt** (*recommended*), **PowerShell**, or **Git Bash**.
+
+Then run:
+
+```bash
 git clone https://github.com/phiscu/matilda_online.git
 cd matilda_online
 ```
-2. Create and activate a Python environment using the provided environment.yml file. We recommend the use of conda:
-```
+
+### 3. Create the Python environment
+
+Create a new conda environment from the provided `environment.yml` file:
+
+```bash
 conda env create -f environment.yml -n matilda_online
+```
+
+This may take a few minutes the first time.
+
+### 4. Activate the environment
+
+Activate the new environment:
+
+```bash
 conda activate matilda_online
 ```
-3. Install Jupyter Notebook or Jupyter Lab if not already installed:
+
+If `conda activate` does not work in Windows PowerShell, open **Anaconda Prompt** and run the same command there.
+
+### 5. Install JupyterLab
+
+If JupyterLab is not already included in your environment, install it with:
+
+```bash
+conda install -c conda-forge jupyterlab
 ```
-conda -c conda-forge install jupyterlab
-```
-4. Launch the Jupyter Notebook interface:
-```
+
+### 6. Launch MATILDA-Online in JupyterLab
+
+From the root folder of the repository, start JupyterLab:
+
+```bash
 jupyter lab
+```
+
+JupyterLab should open automatically in your browser. If it does not, copy the local URL shown in the terminal and paste it into your browser.
+
+### 7. Open the notebooks
+
+In JupyterLab, navigate to the cloned `matilda_online` folder and open the notebooks in order, starting with the introduction notebook.
+
+---
+
+### Notes for Windows users
+
+- We recommend using **Anaconda Prompt** if you are unfamiliar with the command line.
+- If `git` is not recognized, make sure Git is installed and available in your system PATH.
+- If `jupyter lab` is not recognized, check that your conda environment is activated before launching it.
+
+---
+
+### Updating the environment
+
+If the `environment.yml` file changes in a future version of the repository, update the environment with:
+
+```bash
+conda env update -f environment.yml -n matilda_online --prune
 ```
 ---
 
