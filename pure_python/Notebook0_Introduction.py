@@ -36,7 +36,7 @@
 #
 # You can run the notebooks either **online** or on your **local** computer. *Note that the online environment has only limited computing capacities!*
 #
-# Choose one way to start:
+# Choose one way to start from the icons on the left:
 #
 # - **Launch online:** click the **rocket icon** (🚀) above and start the online environment called **Binder**.
 # - **Run locally:** click the **GitHub icon** (<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18">), open the repository, and follow the setup steps in the manual.
