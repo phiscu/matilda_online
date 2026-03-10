@@ -4,6 +4,8 @@ import pandas as pd
 import os
 import sys
 import numpy as np
+import zipfile
+import shutil
 import spotpy
 import contextlib
 from pathlib import Path
@@ -15,6 +17,46 @@ from multiprocessing import Pool
 from functools import partial
 
 
+def restore_output_archive(
+    zip_file="output_download.zip",
+    target_dir="output"
+):
+    """
+    Extract a ZIP archive into target_dir.
+    If target_dir already contains files, ask whether to replace its contents.
+    """
+    zip_path = Path(zip_file)
+    out_path = Path(target_dir)
+
+    if not zip_path.exists():
+        print(f"Archive not found: {zip_path}")
+        return
+
+    out_path.mkdir(exist_ok=True)
+
+    has_content = any(out_path.iterdir())
+    if has_content:
+        answer = input(
+            f"The folder '{out_path}' already contains files. "
+            "Replace its contents? [y/N]: "
+        ).strip().lower()
+
+        if answer not in {"y", "yes"}:
+            print("Operation cancelled. Existing files were kept.")
+            return
+
+        for item in out_path.iterdir():
+            if item.is_dir():
+                shutil.rmtree(item)
+            else:
+                item.unlink()
+
+    with zipfile.ZipFile(zip_path, "r") as z:
+        z.extractall(out_path)
+
+    print(f"Archive '{zip_path.name}' extracted to '{out_path}/'")
+    
+    
 def read_yaml(file_path):
     """
     Read a YAML file and return the contents as a dictionary.

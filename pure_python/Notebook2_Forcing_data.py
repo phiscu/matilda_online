@@ -37,6 +37,12 @@
 # - show/hide **interactive map** in notebooks
 
 # %%
+import zipfile
+
+with zipfile.ZipFile("output_download.zip", "r") as z:
+    z.extractall(".")
+
+# %%
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)     # Suppress Deprecation Warnings
 import pandas as pd
