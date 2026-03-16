@@ -28,14 +28,19 @@
 #
 #
 # <div class="alert alert-block alert-warning">
-# <b>Important:</b> To run this notebook, the ID of a <b>Google Cloud project</b> you have permissions for, needs to be stored in your <code>config.ini</code> file. If you don't have an ID yet, return to Notebook 1 to get one.
+# <b>Important:</b> This notebook can use two different backends for downloading the DEM:
+# <ul>
+#   <li><b><code>gee</code></b>: direct access to Google Earth Engine using your own Google Cloud project</li>
+#   <li><b><code>webservice</code></b>: download the DEM through the MATILDA web service without authenticating to GEE in the notebook</li>
+# </ul>
+# Select the backend in <code>config.ini</code> using <code>GEE_BACKEND</code>.
 # </div>
-#
 
 # %% [markdown]
 # First of all, we will read some settings from the `config.ini` file:
 #
-# - **cloud project** name for the GEE access
+# - selected **backend** for DEM download
+# - **cloud project** name for direct GEE access
 # - **input/output** folders for data imports and downloads
 # - **filenames** (DEM, GeoPackage)
 # - **coordinates** of the defined "pouring" point (Lat/Long)
@@ -44,7 +49,7 @@
 
 # %%
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning)     # Suppress Deprecation Warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 import os
 import pandas as pd
 import numpy as np
@@ -53,105 +58,109 @@ import ast
 import matplotlib.pyplot as plt
 import scienceplots
 
-# read local config.ini file
 config = configparser.ConfigParser()
 config.read('config.ini')
 
-# get file config from config.ini
-cloud_project = config['CONFIG']['CLOUD_PROJECT']
+gee_backend = config['CONFIG'].get('GEE_BACKEND', 'gee').strip().lower()
+cloud_project = config['CONFIG'].get('CLOUD_PROJECT', '').strip()
+
 output_folder = config['FILE_SETTINGS']['DIR_OUTPUT']
 figures_folder = config['FILE_SETTINGS']['DIR_FIGURES']
 filename = output_folder + config['FILE_SETTINGS']['DEM_FILENAME']
 output_gpkg = output_folder + config['FILE_SETTINGS']['GPKG_NAME']
 zip_output = config['CONFIG']['ZIP_OUTPUT']
 
-# create folder for output figures
 os.makedirs(figures_folder, exist_ok=True)
 
-# get used GEE DEM, coords and other settings
 dem_config = ast.literal_eval(config['CONFIG']['DEM'])
 y, x = ast.literal_eval(config['CONFIG']['COORDS'])
 show_map = config.getboolean('CONFIG', 'SHOW_MAP')
 
-# get style for matplotlib plots
 plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
 plt.style.use(plt_style)
 
-# print config data
-print(f'Google Cloud Project : {cloud_project}')
+print(f'GEE backend: {gee_backend}')
+if gee_backend == 'gee':
+    print(f'Google Cloud Project: {cloud_project}')
 print(f'DEM to download: {dem_config[3]}')
 print(f'Coordinates of discharge point: Lat {y}, Lon {x}')
+print(f'DEM output file: {filename}')
 
 # %% [markdown]
-# Now, the Google Earth Engine (GEE) access can be initialized. If this is the first time you run the notebook on this machine, you need to authenticate. When using <code>mybinder.org</code> you need to authenticate every time a new session has been launched. Follow the instructions on screen or see the guide in &rarr; [Notebook 0](Notebook0_Introduction.ipynb#Authorize-access-for-Google-Earth-Engine).
+# If the backend is set to <code>gee</code>, Google Earth Engine (GEE) access must be initialized. If this is the first time you run the notebook on this machine, you need to authenticate. When using <code>mybinder.org</code> you need to authenticate every time a new session has been launched.
 #
-# 🚨 *Troubleshooting: If you can log into your Google account but don't receive a verification code, try to open the link **in a private tab**.*
+# If the backend is set to <code>webservice</code>, this step is skipped and the DEM is requested directly from the MATILDA web service.
 
 # %%
 from tools.geetools import authenticate_and_initialize_ee
 
-authenticate_and_initialize_ee(cloud_project)
-
-
-# %% [markdown]
-# ## Start GEE and download DEM
-
-# %% [markdown]
-# Once we are set up, we can start working with the data. Let's start with the **base map**, if enabled in `config.ini`. The map can be used to follow the steps as more layers are added throughout the notebook.
-#
-# **Note**: *The map is drawn interactively and can only be displayed when you run the tool but not on the website.*
-
-# %%
-import geemap
-
-if show_map:
-    Map = geemap.Map()
-    display(Map)
+if gee_backend == 'gee':
+    authenticate_and_initialize_ee(cloud_project)
 else:
-    print("Map view disabled in config.ini")
+    print("Skipping GEE authentication because GEE_BACKEND='webservice'.")
+
 
 # %% [markdown]
-# Now we can download the DEM from the GEE catalog and add it as a new layer to the map. The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
+# ## Start DEM download
 #
+# Depending on the selected backend, the DEM is either:
+#
+# - downloaded directly from Google Earth Engine, or
+# - requested from the MATILDA web service.
+#
+# The interactive map is only available for the direct <code>gee</code> backend.
 
 # %%
-import ee
-if dem_config[0] == 'Image':
-    image = ee.Image(dem_config[1]).select(dem_config[2])
-elif dem_config[0] == 'ImageCollection':
-    image = ee.ImageCollection(dem_config[1]).select(dem_config[2]).mosaic()
-
-if show_map:
-    srtm_vis = {'bands': dem_config[2],
-                'min': 0,
-                'max': 6000,
-                'palette': ['000000', '478FCD', '86C58E', 'AFC35E', '8F7131', 'B78D4F', 'E2B8A6', 'FFFFFF']
-                }
-
-    Map.addLayer(image, srtm_vis, dem_config[3], True, 0.7)
+buffer_m = 40000
 
 # %% [markdown]
-# Next, we add the location of our discharge observations to the map and generate a **40km** buffer box. 
-#
-# <div class="alert alert-block alert-info">
-#     <b>Note:</b> Please check that the default box covers your research area. Alternatively, you can manually adjust the box by drawing a polygon using the tools in the sidebar. <b>If the selected box is too small, the catchment area will be cropped.</b></div>
+# If the backend is set to <code>gee</code> and map display is enabled in <code>config.ini</code>, we create an interactive map and add the DEM and the default analysis box. This map is not available for the <code>webservice</code> backend.
 
 # %%
-point = ee.Geometry.Point(x, y)
-box = point.buffer(40000).bounds()
+Map = None
 
-if show_map:
-    Map.addLayer(point, {'color': 'blue'}, 'Discharge Point')
-    Map.addLayer(box, {'color': 'grey'}, 'Catchment Area', True, 0.7)
-    Map.centerObject(box, zoom=9)
+if gee_backend == 'gee':
+    import geemap
+    import ee
+
+    if show_map:
+        Map = geemap.Map()
+        display(Map)
+    else:
+        print("Map view disabled in config.ini")
+
+    if dem_config[0] == 'Image':
+        image = ee.Image(dem_config[1]).select(dem_config[2])
+    elif dem_config[0] == 'ImageCollection':
+        image = ee.ImageCollection(dem_config[1]).select(dem_config[2]).mosaic()
+    else:
+        raise ValueError(f"Unsupported DEM type in config.ini: {dem_config[0]}")
+
+    point = ee.Geometry.Point(x, y)
+    box = point.buffer(buffer_m).bounds()
+
+    if show_map:
+        srtm_vis = {
+            'bands': dem_config[2],
+            'min': 0,
+            'max': 6000,
+            'palette': ['000000', '478FCD', '86C58E', 'AFC35E', '8F7131', 'B78D4F', 'E2B8A6', 'FFFFFF']
+        }
+
+        Map.addLayer(image, srtm_vis, dem_config[3], True, 0.7)
+        Map.addLayer(point, {'color': 'blue'}, 'Discharge Point')
+        Map.addLayer(box, {'color': 'grey'}, 'Catchment Area', True, 0.7)
+        Map.centerObject(box, zoom=9)
+else:
+    print("Webservice backend selected: skipping interactive GEE map.")
 
 # %% [markdown]
-# The gauging location (marker) and the box (polygon/rectangle) can also be added manually to the map above. If features have been drawn, they will overrule the configured discharge point and automatically created box.
+# When using the interactive GEE map, the gauging location and the box can also be drawn manually. If features have been drawn, they overrule the configured discharge point and automatically created box.
 #
 # <a id="rp01">**Restart Point #1**</a>
 
 # %%
-if show_map:
+if gee_backend == 'gee' and show_map and Map is not None:
     for feature in Map.draw_features:
         f_type = feature.getInfo()['geometry']['type']
         if f_type == 'Point':
@@ -162,38 +171,64 @@ if show_map:
             print("Manually drawn box will be considered")
 
 # %% [markdown]
-# Now we can export the DEM as a `.tif` file for the selected extent to the output folder. Depending on the size of the selected area, this might take a while for processing and downloading.
+# Now we can download the DEM from the GEE catalog and add it as a new layer to the map. The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
+#
+
+# %% [markdown]
+# Now we export the DEM as a <code>.tif</code> file for the selected extent to the output folder.
+#
+# - With the <code>gee</code> backend, the DEM is exported directly from Earth Engine.
+# - With the <code>webservice</code> backend, the DEM is downloaded from the MATILDA Cloud Run service and saved to the filename defined in <code>config.ini</code>.
+# The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
+#
+# The interactive map and manually drawn geometries are currently only supported for the direct <code>gee</code> backend.
 
 # %%
 import xarray as xr
+from tools.geetools import download_dem_webservice
 
 download_xr = config.getboolean('CONFIG', 'GEE_DOWNLOAD_XR')
 
-if download_xr:
-    # new method using Xarray (supports larger areas)
-    try:
-        print('Get GEE data as Xarray...')
-        ic = ee.ImageCollection(image)
-        ds = xr.open_dataset(
-            ic,
-            engine='ee',
-            projection=ic.first().select(0).projection(),
-            geometry=box
-        )
+if gee_backend == 'gee':
+    if download_xr:
+        try:
+            print('Get GEE data as Xarray...')
+            ic = ee.ImageCollection(image)
+            ds = xr.open_dataset(
+                ic,
+                engine='ee',
+                projection=ic.first().select(0).projection(),
+                geometry=box
+            )
 
-        print('Prepare Xarray for GeoTiff conversion...')
-        ds_t = ds.isel(time=0).drop_vars("time").transpose()
-        ds_t.rio.set_spatial_dims("lon", "lat", inplace=True)
+            print('Prepare Xarray for GeoTiff conversion...')
+            ds_t = ds.isel(time=0).drop_vars("time").transpose()
+            ds_t.rio.set_spatial_dims("lon", "lat", inplace=True)
 
-        print('Save DEM as GeoTiff...')
-        ds_t.rio.to_raster(filename)
-        print('DEM successfully saved at', filename)
-    except:
-        print('Error during Xarray routine. Try direct download from GEE...')
+            print('Save DEM as GeoTiff...')
+            ds_t.rio.to_raster(filename)
+            print('DEM successfully saved at', filename)
+        except Exception:
+            print('Error during Xarray routine. Try direct download from GEE...')
+            geemap.ee_export_image(image, filename=filename, scale=30, region=box, file_per_band=False)
+            print('DEM successfully saved at', filename)
+    else:
         geemap.ee_export_image(image, filename=filename, scale=30, region=box, file_per_band=False)
+        print('DEM successfully saved at', filename)
+
+elif gee_backend == 'webservice':
+    print('Request DEM from MATILDA web service...')
+    download_dem_webservice(
+        lat=y,
+        lon=x,
+        buffer_m=buffer_m,
+        asset_id=dem_config[1],
+        output_path=filename
+    )
+    print('DEM successfully saved at', filename)
+
 else:
-    # old method using GEE API to download .tif directly
-    geemap.ee_export_image(image, filename=filename, scale=30, region=box, file_per_band=False)
+    raise ValueError(f"Unsupported GEE_BACKEND: {gee_backend}")
 
 # %% [markdown]
 # ## Catchment deliniation
