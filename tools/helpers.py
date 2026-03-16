@@ -17,6 +17,39 @@ from multiprocessing import Pool
 from functools import partial
 
 
+def mean_elevation_from_raster(raster_path, geometry_gdf):
+    """
+    Calculate mean elevation from a raster within a polygon geometry.
+
+    Parameters
+    ----------
+    raster_path : str or Path
+        Path to the DEM raster.
+    geometry_gdf : geopandas.GeoDataFrame
+        Polygon geometry used to clip the raster.
+
+    Returns
+    -------
+    float
+        Mean elevation of valid raster cells within the polygon.
+    """
+    import rasterio
+    from rasterio.mask import mask
+    import numpy as np
+
+    with rasterio.open(raster_path) as src:
+        geometry_plot = geometry_gdf.to_crs(src.crs)
+        dem_clip, _ = mask(src, geometry_plot.geometry, crop=True)
+
+        dem_values = dem_clip[0].astype(float)
+        if src.nodata is not None:
+            dem_values[dem_values == src.nodata] = np.nan
+        else:
+            dem_values[dem_values == 0] = np.nan
+
+        return float(np.nanmean(dem_values))
+
+        
 def restore_output_archive(
     zip_file="output_download.zip",
     target_dir="output"

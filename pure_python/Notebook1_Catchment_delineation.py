@@ -16,358 +16,217 @@
 # # Catchment delineation
 
 # %% [markdown]
-# We start our workflow by downloading all the static data we need. In this notebook we will...
+# We start our workflow by delineating the catchment from the configured outlet point and downloading the static data we need. In this notebook we will...
 #
-# 1. ...download a **Digital Elevation Model** (DEM) for hydrologic applications,
+# 1. ...delineate the **catchment** and determine the **catchment area** using your reference position (e.g. the location of your gauging station) as the outlet point,
 #
-# 2. ...**delineate the catchment** and determine the **catchment area** using your reference position (e.g. the location of your gauging station) as the "pouring point",
+# 2. ...download a **Digital Elevation Model** (DEM) for hydrologic applications,
 #
 # 3. ...identify all glaciers within the catchment and download the **glacier outlines and ice thicknesses**,
 #
 # 4. ...create a **glacier mass profile** based on elevation zones.
 #
+# <div class="alert alert-block alert-info">
+# <b>Note:</b> Catchment delineation in this notebook uses the <b>MG Hydro / Global Watersheds API</b>. This is usually faster than delineating locally from a DEM and allows the DEM to be downloaded afterwards for the actual catchment extent.
+# </div>
 #
 # <div class="alert alert-block alert-warning">
-# <b>Important:</b> This notebook can use two different backends for downloading the DEM:
-# <ul>
-#   <li><b><code>gee</code></b>: direct access to Google Earth Engine using your own Google Cloud project</li>
-#   <li><b><code>webservice</code></b>: download the DEM through the MATILDA web service without authenticating to GEE in the notebook</li>
-# </ul>
-# Select the backend in <code>config.ini</code> using <code>GEE_BACKEND</code>.
+# <b>Troubleshooting:</b> Always inspect the delineated catchment visually. If the result looks implausible, first try <code>MGHYDRO_PRECISION = high</code> in <code>config.ini</code>. If that still does not work, use a high-resolution DEM and delineate locally as a fallback workflow outside this notebook.
 # </div>
 
 # %% [markdown]
-# First of all, we will read some settings from the `config.ini` file:
+# First, we read the required settings from the `config.ini` file:
 #
-# - selected **backend** for DEM download
-# - **cloud project** name for direct GEE access
-# - **input/output** folders for data imports and downloads
-# - **filenames** (DEM, GeoPackage)
-# - **coordinates** of the defined "pouring" point (Lat/Long)
-# - chosen **DEM** from GEE data catalog
-# - **show/hide GEE map** in notebooks
+# - input/output folders for downloads and figures
+# - filenames for DEM and catchment layers
+# - coordinates of the outlet point
+# - chosen DEM from the data catalog
+# - MG Hydro delineation settings
 
 # %%
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
+
 import os
-import pandas as pd
-import numpy as np
-import configparser
 import ast
+import configparser
 import matplotlib.pyplot as plt
 import scienceplots
+import geopandas as gpd
 
 config = configparser.ConfigParser()
 config.read('config.ini')
-
-gee_backend = config['CONFIG'].get('GEE_BACKEND', 'gee').strip().lower()
-cloud_project = config['CONFIG'].get('CLOUD_PROJECT', '').strip()
 
 output_folder = config['FILE_SETTINGS']['DIR_OUTPUT']
 figures_folder = config['FILE_SETTINGS']['DIR_FIGURES']
 filename = output_folder + config['FILE_SETTINGS']['DEM_FILENAME']
 output_gpkg = output_folder + config['FILE_SETTINGS']['GPKG_NAME']
+catchment_file = output_folder + config['FILE_SETTINGS']['CATCHMENT_FILENAME']
+rivers_file = output_folder + config['FILE_SETTINGS']['RIVERS_FILENAME']
 zip_output = config['CONFIG']['ZIP_OUTPUT']
-
-os.makedirs(figures_folder, exist_ok=True)
 
 dem_config = ast.literal_eval(config['CONFIG']['DEM'])
 y, x = ast.literal_eval(config['CONFIG']['COORDS'])
-show_map = config.getboolean('CONFIG', 'SHOW_MAP')
+
+catchment_backend = config['CONFIG'].get('CATCHMENT_BACKEND', 'mghydro').strip().lower()
+mghydro_precision = config['CONFIG'].get('MGHYDRO_PRECISION', 'high').strip().lower()
 
 plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
 plt.style.use(plt_style)
 
-print(f'GEE backend: {gee_backend}')
-if gee_backend == 'gee':
-    print(f'Google Cloud Project: {cloud_project}')
+os.makedirs(output_folder, exist_ok=True)
+os.makedirs(figures_folder, exist_ok=True)
+
+print(f'Catchment backend: {catchment_backend}')
+print(f'MG Hydro precision: {mghydro_precision}')
 print(f'DEM to download: {dem_config[3]}')
 print(f'Coordinates of discharge point: Lat {y}, Lon {x}')
-print(f'DEM output file: {filename}')
+print(f'Catchment output: {catchment_file}')
+print(f'Rivers output: {rivers_file}')
+print(f'DEM output: {filename}')
 
 # %% [markdown]
-# If the backend is set to <code>gee</code>, Google Earth Engine (GEE) access must be initialized. If this is the first time you run the notebook on this machine, you need to authenticate. When using <code>mybinder.org</code> you need to authenticate every time a new session has been launched.
+# ## Delineate catchment from the outlet point
 #
-# If the backend is set to <code>webservice</code>, this step is skipped and the DEM is requested directly from the MATILDA web service.
+# We use the configured outlet point to request a watershed boundary and the upstream river network from the MG Hydro API. Both are saved as GeoJSON files and plotted for a quick visual check.
 
 # %%
-from tools.geetools import authenticate_and_initialize_ee
+from tools.geetools import delineate_catchment_mghydro
 
-if gee_backend == 'gee':
-    authenticate_and_initialize_ee(cloud_project)
-else:
-    print("Skipping GEE authentication because GEE_BACKEND='webservice'.")
+if catchment_backend != 'mghydro':
+    raise ValueError(
+        f"This notebook currently supports only CATCHMENT_BACKEND='mghydro'. "
+        f"Found: {catchment_backend}"
+    )
 
+watershed_gdf, rivers_gdf = delineate_catchment_mghydro(
+    lat=y,
+    lon=x,
+    watershed_output_path=catchment_file,
+    rivers_output_path=rivers_file,
+    precision=mghydro_precision,
+    plot=True,
+)
 
 # %% [markdown]
-# ## Start DEM download
-#
-# Depending on the selected backend, the DEM is either:
-#
-# - downloaded directly from Google Earth Engine, or
-# - requested from the MATILDA web service.
-#
-# The interactive map is only available for the direct <code>gee</code> backend.
+# The delineated catchment is now stored locally and can be inspected like any other vector dataset. We also derive the catchment area and the bounding box, which will be useful for the following download steps.
 
 # %%
-buffer_m = 40000
+catchment_area_km2 = watershed_gdf.to_crs(watershed_gdf.estimate_utm_crs()).area.iloc[0] / 1e6
+xmin, ymin, xmax, ymax = watershed_gdf.total_bounds
+
+print(f'Catchment area: {catchment_area_km2:.2f} km²')
+print(f'Catchment bounds: xmin={xmin:.5f}, ymin={ymin:.5f}, xmax={xmax:.5f}, ymax={ymax:.5f}')
 
 # %% [markdown]
-# If the backend is set to <code>gee</code> and map display is enabled in <code>config.ini</code>, we create an interactive map and add the DEM and the default analysis box. This map is not available for the <code>webservice</code> backend.
+# ## Download the digital elevation model (DEM)
+#
+# Now that we have the catchment boundaries, we can send a precise request to the MATILDA web service to download a DEM. The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
 
 # %%
-Map = None
-
-if gee_backend == 'gee':
-    import geemap
-    import ee
-
-    if show_map:
-        Map = geemap.Map()
-        display(Map)
-    else:
-        print("Map view disabled in config.ini")
-
-    if dem_config[0] == 'Image':
-        image = ee.Image(dem_config[1]).select(dem_config[2])
-    elif dem_config[0] == 'ImageCollection':
-        image = ee.ImageCollection(dem_config[1]).select(dem_config[2]).mosaic()
-    else:
-        raise ValueError(f"Unsupported DEM type in config.ini: {dem_config[0]}")
-
-    point = ee.Geometry.Point(x, y)
-    box = point.buffer(buffer_m).bounds()
-
-    if show_map:
-        srtm_vis = {
-            'bands': dem_config[2],
-            'min': 0,
-            'max': 6000,
-            'palette': ['000000', '478FCD', '86C58E', 'AFC35E', '8F7131', 'B78D4F', 'E2B8A6', 'FFFFFF']
-        }
-
-        Map.addLayer(image, srtm_vis, dem_config[3], True, 0.7)
-        Map.addLayer(point, {'color': 'blue'}, 'Discharge Point')
-        Map.addLayer(box, {'color': 'grey'}, 'Catchment Area', True, 0.7)
-        Map.centerObject(box, zoom=9)
-else:
-    print("Webservice backend selected: skipping interactive GEE map.")
-
-# %% [markdown]
-# When using the interactive GEE map, the gauging location and the box can also be drawn manually. If features have been drawn, they overrule the configured discharge point and automatically created box.
-#
-# <a id="rp01">**Restart Point #1**</a>
-
-# %%
-if gee_backend == 'gee' and show_map and Map is not None:
-    for feature in Map.draw_features:
-        f_type = feature.getInfo()['geometry']['type']
-        if f_type == 'Point':
-            point = feature.geometry()
-            print("Manually set pouring point will be considered")
-        elif f_type == 'Polygon':
-            box = feature.geometry()
-            print("Manually drawn box will be considered")
-
-# %% [markdown]
-# Now we can download the DEM from the GEE catalog and add it as a new layer to the map. The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
-#
-
-# %% [markdown]
-# Now we export the DEM as a <code>.tif</code> file for the selected extent to the output folder.
-#
-# - With the <code>gee</code> backend, the DEM is exported directly from Earth Engine.
-# - With the <code>webservice</code> backend, the DEM is downloaded from the MATILDA Cloud Run service and saved to the filename defined in <code>config.ini</code>.
-# The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
-#
-# The interactive map and manually drawn geometries are currently only supported for the direct <code>gee</code> backend.
-
-# %%
-import xarray as xr
 from tools.geetools import download_dem_webservice
 
-download_xr = config.getboolean('CONFIG', 'GEE_DOWNLOAD_XR')
+download_dem_webservice(
+    geometry=watershed_gdf,
+    asset_id=dem_config[1],
+    output_path=filename
+)
 
-if gee_backend == 'gee':
-    if download_xr:
-        try:
-            print('Get GEE data as Xarray...')
-            ic = ee.ImageCollection(image)
-            ds = xr.open_dataset(
-                ic,
-                engine='ee',
-                projection=ic.first().select(0).projection(),
-                geometry=box
-            )
+# %% [markdown]
+# We will now plot the downloaded elevation model alongside the delineated catchment boundary, the upstream river network, and the outlet point.
+#
+# This visual check helps confirm that:
+#
+#  - the downloaded DEM covers the full catchment,
+#  - the watershed boundary is plausible,
+#  - the outlet point is correctly located, and
+#  - the river network matches the topographic setting.
 
-            print('Prepare Xarray for GeoTiff conversion...')
-            ds_t = ds.isel(time=0).drop_vars("time").transpose()
-            ds_t.rio.set_spatial_dims("lon", "lat", inplace=True)
+# %%
+import rasterio
+from rasterio.mask import mask
+from rasterio.plot import show
+from matplotlib.lines import Line2D
+import geopandas as gpd
+import numpy as np
 
-            print('Save DEM as GeoTiff...')
-            ds_t.rio.to_raster(filename)
-            print('DEM successfully saved at', filename)
-        except Exception:
-            print('Error during Xarray routine. Try direct download from GEE...')
-            geemap.ee_export_image(image, filename=filename, scale=30, region=box, file_per_band=False)
-            print('DEM successfully saved at', filename)
+fig, ax = plt.subplots(figsize=(10, 10))
+
+with rasterio.open(filename) as src:
+    watershed_plot = watershed_gdf.to_crs(src.crs)
+    rivers_plot = rivers_gdf.to_crs(src.crs)
+
+    outlet_gdf = gpd.GeoDataFrame(
+        geometry=gpd.points_from_xy([x], [y]),
+        crs="EPSG:4326"
+    ).to_crs(src.crs)
+
+    dem_clip, dem_transform = mask(src, watershed_plot.geometry, crop=True)
+
+    dem_plot = dem_clip[0].astype(float)
+    if src.nodata is not None:
+        dem_plot[dem_plot == src.nodata] = np.nan
     else:
-        geemap.ee_export_image(image, filename=filename, scale=30, region=box, file_per_band=False)
-        print('DEM successfully saved at', filename)
+        dem_plot[dem_plot == 0] = np.nan
 
-elif gee_backend == 'webservice':
-    print('Request DEM from MATILDA web service...')
-    download_dem_webservice(
-        lat=y,
-        lon=x,
-        buffer_m=buffer_m,
-        asset_id=dem_config[1],
-        output_path=filename
-    )
-    print('DEM successfully saved at', filename)
+    dem_image = show(dem_plot, transform=dem_transform, ax=ax, cmap="terrain")
 
-else:
-    raise ValueError(f"Unsupported GEE_BACKEND: {gee_backend}")
+if not rivers_plot.empty:
+    rivers_plot.plot(ax=ax, linewidth=0.8, color="darkblue", zorder=2)
 
-# %% [markdown]
-# ## Catchment deliniation
+outlet_gdf.plot(ax=ax, color="black", markersize=35, zorder=3)
 
-# %% [markdown]
-# Based on the downloaded DEM file, we can delineate the watershed using the <code>pysheds</code> library. The result will be a raster and displayed at the end of this section.
-#
-# The full documentation of the <code>pysheds</code> module can be found [here](https://github.com/pysheds/pysheds).
-#
-# <div class="alert alert-block alert-info">
-# <b>Note:</b> The catchment delineation involves several steps with large array operations and can take a moment.</div>
+legend_elements = [
+    Line2D([0], [0], color="darkblue", lw=1.0, label="Upstream rivers"),
+    Line2D([0], [0], marker="o", color="black", linestyle="None", markersize=6, label="Outlet point"),
+]
 
-# %%
-# %%time
+ax.legend(handles=legend_elements, fontsize=12)
+ax.set_title("Downloaded DEM clipped to the catchment", fontsize=16)
+ax.set_xlabel("Longitude")
+ax.set_ylabel("Latitude")
+ax.set_aspect("equal")
 
-# GIS packages
-from pysheds.grid import Grid
-import fiona
+cbar = plt.colorbar(dem_image.get_images()[0], ax=ax, shrink=0.8)
+cbar.set_label("Elevation (m)")
 
-# load DEM
-DEM_file = filename
-grid = Grid.from_raster(DEM_file)
-dem = grid.read_raster(DEM_file)
-print("DEM loaded.")
-
-# %%
-# %%time
-
-# Fill depressions in DEM
-print("Fill depressions in DEM...")
-flooded_dem = grid.fill_depressions(dem)
-# Resolve flats in DEM
-print("Resolve flats in DEM...")
-inflated_dem = grid.resolve_flats(flooded_dem)
-
-# Specify directional mapping
-# N    NE    E    SE    S    SW    W    NW
-dirmap = (64, 128, 1, 2, 4, 8, 16, 32)
-# Compute flow directions
-print("Compute flow directions...")
-fdir = grid.flowdir(inflated_dem, dirmap=dirmap)
-# catch = grid.catchment(x=x, y=y, fdir=fdir, dirmap=dirmap, xytype='coordinate')
-# Compute accumulation
-print("Compute accumulation...")
-acc = grid.accumulation(fdir)
-# Snap pour point to high accumulation cell
-x_snap, y_snap = grid.snap_to_mask(acc > 1000, (x, y))
-# Delineate the catchment
-print("Delineate the catchment...")
-catch = grid.catchment(x=x_snap, y=y_snap, fdir=fdir, xytype='coordinate')
-# Clip the DEM to the catchment
-print("Clip the DEM to the catchment...")
-grid.clip_to(catch)
-clipped_catch = grid.view(catch)
-print("Processing completed.")
-
-
-# %% [markdown]
-# Now let's have a look at the catchment area.
-
-# %%
-# Define a function to plot the digital elevation model
-def plotFigure(data, label, cmap='Blues'):
-    plt.figure(figsize=(12, 10))
-    plt.imshow(data, extent=grid.extent, cmap=cmap)
-    plt.colorbar(label=label)
-    plt.grid()
-
-
-demView = grid.view(dem, nodata=np.nan)
-plotFigure(demView, 'Elevation in Meters', cmap='terrain')
-plt.savefig(figures_folder + 'NB1_DEM_Catchment.png')
 plt.show()
 
 # %% [markdown]
-# For the following steps, we need the catchment outline in polygon form. Thus, we will **convert the raster to a polygon** and save both to the output folder in a **geopackage**. We can calculate the important **catchment statistics** needed for the glacio-hydrological model in Notebook 4 from these files.
+# For the following steps, we store the delineated catchment outline in a **GeoPackage** together with the elevation data derived from the DEM.
+#
+# We also calculate basic elevation statistics from the DEM clipped to the catchment:
+#
+# - minimum elevation
+# - maximum elevation
+# - mean catchment elevation
+#
+# These statistics will later be used for the glacio-hydrological model setup in Notebook 4.
 
 # %%
-from shapely.geometry import Polygon, shape
-from shapely.ops import transform
-import pyproj
+import numpy as np
 
-# Create shapefile and save it
-shapes = grid.polygonize()
+# Save catchment polygon to GeoPackage
+layer_name = "catchment_orig"
 
-schema = {
-    'geometry': 'Polygon',
-    'properties': {'LABEL': 'float:16'}
-}
-
-catchment_shape = {}
-layer_name = 'catchment_orig'
-with fiona.open(output_gpkg, 'w',
-                # driver='ESRI Shapefile',#
-                driver='GPKG',
-                layer=layer_name,
-                crs=grid.crs.srs,
-                schema=schema) as c:
-    i = 0
-    for shape, value in shapes:
-        catchment_shape = shape
-        rec = {}
-        rec['geometry'] = shape
-        rec['properties'] = {'LABEL': str(value)}
-        rec['id'] = str(i)
-        c.write(rec)
-        i += 1
+watershed_gdf.to_file(
+    output_gpkg,
+    layer=layer_name,
+    driver="GPKG"
+)
 
 print(f"Layer '{layer_name}' added to GeoPackage '{output_gpkg}'\n")
 
-catchment_bounds = [int(np.nanmin(demView)), int(np.nanmax(demView))]
-ele_cat = float(np.nanmean(demView))
-print(f"Catchment elevation ranges from {catchment_bounds[0]} m to {catchment_bounds[1]} m.a.s.l.")
-print(f"Mean catchment elevation is {ele_cat:.2f} m.a.s.l.")
+# Calculate elevation statistics from clipped DEM
+dem_values = dem_plot[~np.isnan(dem_plot)]
 
-# %% [markdown]
-# We can also add the catchment polygon to the interactive map. This sends it to GEE and allows us to use a GEE function to calculate its area. Please scroll up to see the results on the map.
+ele_min = float(np.min(dem_values))
+ele_max = float(np.max(dem_values))
+ele_mean = float(np.mean(dem_values))
 
-# %%
-catchment = ee.Geometry.Polygon(catchment_shape['coordinates'])
-if show_map:
-    Map.addLayer(catchment, {}, 'Catchment')
 
-catchment_area = catchment.area().divide(1000 * 1000).getInfo()
-print(f"Catchment area is {catchment_area:.2f} km²")
-
-# %% [markdown]
-# <div class="alert alert-block alert-warning">
-# <b>Note:</b>
-#  Please make sure to leave some buffer between the catchment outline and the applied bounding box (&rarr; <a href='#map'>Jump to map</a>). If you run into problems, please extent the box and repeat the DEM download and catchment delineation (&rarr; use <a href='#rp01'>Restart Point #1</a>).</div>
-#
-# Example:
-#
-# 1. The automatically created box for the pouring point (in gray) is not sufficient to cover the entire catchment area &rarr; cropped at the eastern edge.
-# 2. Manually drawn box (in blue) has been added to ensure that the catchment is not cropped &rarr; buffer remains on all edges
-#
-# ![Example for Cropped Catchment](images/gee_catchment_extent.png)
-#
-# ___
+print(f"Catchment elevation ranges from {ele_min:.0f} m to {ele_max:.0f} m a.s.l.")
+print(f"Mean catchment elevation is {ele_mean:.2f} m a.s.l.")
 
 # %% [markdown]
 # ## Determine glaciers in catchment area
@@ -442,10 +301,15 @@ rgi_code = int(df_regions_catchment['RGI_CODE'].iloc[0])
 
 # %%
 from resourcespace import ResourceSpace
+from tools.geetools import load_webservice_config
+import pandas as pd
+
 # use guest credentials to access media server
-api_base_url = config['MEDIA_SERVER']['api_base_url']
-private_key = config['MEDIA_SERVER']['private_key']
-user = config['MEDIA_SERVER']['user']
+hu_cfg = load_webservice_config(section="HU")
+
+api_base_url = hu_cfg["MEDIA_API_URL"]
+private_key = hu_cfg["MEDIA_PRIVATE_KEY"]
+user = hu_cfg["MEDIA_USER"]
 
 myrepository = ResourceSpace(api_base_url, user, private_key)
 
@@ -459,7 +323,7 @@ if not rgi_refs.empty:
     print("Listing files ...")
     display(rgi_refs)
 else:
-    print(f'No files found. Please check remote repository.')
+    print("No files found. Please check remote repository.")
 
 # %% [markdown]
 # ...and download the `.shp` files for the target region.
@@ -532,18 +396,18 @@ if len(rgi_catchment.index) > 0:
 # Some glaciers are not actually in the catchment, but intersect its outline due to spatial inaccuracies. We will first determine their fractional overlap with the target catchment.
 
 # %% tags=["output_scroll"]
-# intersects selects too many. calculate percentage of glacier area that is within catchment
+# calculate percentage of each glacier area that lies within the catchment
 rgi_catchment['rgi_area'] = rgi_catchment.to_crs(crs).area
 
-gdf_joined = gpd.overlay(catchment, rgi_catchment, how='union')
+gdf_joined = gpd.overlay(catchment, rgi_catchment, how='intersection')
 gdf_joined['area_joined'] = gdf_joined.to_crs(crs).area
 gdf_joined['share_of_area'] = round((gdf_joined['area_joined'] / gdf_joined['rgi_area'] * 100), 2)
 
 results = (gdf_joined
-           .groupby(['RGIId', 'LABEL_1'])
+           .groupby('RGIId', as_index=False)
            .agg({'share_of_area': 'sum'}))
 
-display(results.sort_values(['share_of_area'], ascending=False))
+display(results.sort_values('share_of_area', ascending=False))
 
 # %% [markdown]
 # Now we can **filter** based on the percentage of shared area. After that the catchment area will be adjusted as follows:
@@ -555,9 +419,12 @@ display(results.sort_values(['share_of_area'], ascending=False))
 rgi_catchment_merge = pd.merge(rgi_catchment, results, on="RGIId")
 rgi_in_catchment = rgi_catchment_merge.loc[rgi_catchment_merge['share_of_area'] >= 50]
 rgi_out_catchment = rgi_catchment_merge.loc[rgi_catchment_merge['share_of_area'] < 50]
+
 catchment_new = gpd.overlay(catchment, rgi_out_catchment, how='difference')
 catchment_new = gpd.overlay(catchment_new, rgi_in_catchment, how='union')
-catchment_new = catchment_new.dissolve()[['LABEL_1', 'geometry']]
+catchment_new = catchment_new.dissolve().reset_index(drop=True)
+catchment_new["LABEL"] = 1
+catchment_new = catchment_new[["LABEL", "geometry"]]
 
 print(f'Total number of determined glacier outlines: {len(rgi_catchment_merge)}')
 print(f'Number of included glacier outlines (overlap >= 50%): {len(rgi_in_catchment)}')
@@ -605,19 +472,7 @@ catchment_new.to_file(output_gpkg, layer='catchment_new', driver='GPKG')
 print(f"Layer 'catchment_new' added to GeoPackage '{output_gpkg}'")
 
 # %% [markdown]
-# ...and can also be added to the interactive map...
-
-# %%
-c_new = geemap.geopandas_to_ee(catchment_new)
-rgi = geemap.geopandas_to_ee(rgi_in_catchment)
-
-if show_map:
-    Map.addLayer(c_new, {'color': 'orange'}, "Catchment New")
-    Map.addLayer(rgi, {'color': 'white'}, "RGI60")
-    print('New layers added.')
-
-# %% [markdown]
-# ...or combined in a simple plot.
+# ... and can be combined in a simple plot.
 
 # %%
 fig, ax = plt.subplots()
@@ -632,8 +487,9 @@ plt.show()
 # After adding the new catchment area to GEE, we can easily calculate the mean catchment elevation in meters above sea level.
 
 # %%
-ele_cat = image.reduceRegion(ee.Reducer.mean(),
-                             geometry=c_new).getInfo()[dem_config[2]]
+from tools.helpers import mean_elevation_from_raster
+
+ele_cat = mean_elevation_from_raster(filename, catchment_new)
 print(f"Mean catchment elevation (adjusted) is {ele_cat:.2f} m a.s.l.")
 
 
@@ -695,26 +551,32 @@ print(f'DEM archives:\t\t{zips_dem.tolist()}')
 
 # %%
 from resourcespace import ResourceSpace
+from tools.geetools import load_webservice_config
 
 # use guest credentials to access media server
-api_base_url = config['MEDIA_SERVER']['api_base_url']
-private_key = config['MEDIA_SERVER']['private_key']
-user = config['MEDIA_SERVER']['user']
+hu_cfg = load_webservice_config(section="HU")
+
+api_base_url = hu_cfg["MEDIA_API_URL"]
+private_key = hu_cfg["MEDIA_PRIVATE_KEY"]
+user = hu_cfg["MEDIA_USER"]
 
 myrepository = ResourceSpace(api_base_url, user, private_key)
 
 # get resource IDs for each .zip file
 refs_thickness = pd.DataFrame(myrepository.get_collection_resources(12))[
-    ['ref', 'file_size', 'file_extension', 'field8']]
-refs_dem = pd.DataFrame(myrepository.get_collection_resources(21))[['ref', 'file_size', 'file_extension', 'field8']]
+    ['ref', 'file_size', 'file_extension', 'field8']
+]
+refs_dem = pd.DataFrame(myrepository.get_collection_resources(21))[
+    ['ref', 'file_size', 'file_extension', 'field8']
+]
 
-# reduce list of resources two required zip files
+# reduce list of resources to the required zip files
 refs_thickness = pd.merge(zips_thickness, refs_thickness, left_on='thickness', right_on='field8')
 refs_dem = pd.merge(zips_dem, refs_dem, left_on='dem', right_on='field8')
 
-print(f'Thickness archive references:\n')
+print('Thickness archive references:\n')
 display(refs_thickness)
-print(f'DEM archive references:\n')
+print('DEM archive references:\n')
 display(refs_dem)
 
 # %% [markdown]
@@ -792,6 +654,7 @@ else:
 
 # %%
 from osgeo import gdal
+gdal.UseExceptions()
 
 df_all = pd.DataFrame()
 if cnt_thickness != cnt_dem:
@@ -808,7 +671,7 @@ else:
             # Read arrays
             for file in file_list:
                 src = gdal.Open(file)
-                geotransform = src.GetGeoTransform()  # Could be done more elegantly outside the for loop
+                geotransform = src.GetGeoTransform()
                 projection = src.GetProjectionRef()
                 array_list.append(src.ReadAsArray())
                 pixelSizeX = geotransform[1]
@@ -837,23 +700,28 @@ if len(df_all) > 0:
     df_all.sort_values(by=['altitude'], inplace=True)
 
     # get min/max altitude considering catchment and all glaciers
-    alt_min = 10 * int(min(catchment_bounds[0], df_all['altitude'].min()) / 10)
-    alt_max = max(catchment_bounds[1], df_all['altitude'].max()) + 10
+    alt_min = 10 * int(min(ele_min, df_all['altitude'].min()) / 10)
+    alt_max = max(ele_max, df_all['altitude'].max()) + 10
 
-    # create bins in 10m steps
+    # create bins in 10 m steps
     bins = np.arange(alt_min, df_all['altitude'].max() + 10, 10)
 
     # aggregate per bin and do some math
-    df_agg = df_all.groupby(pd.cut(df_all['altitude'], bins))['thickness'].agg(count='size', mean='mean').reset_index()
+    df_agg = (
+    df_all.groupby(pd.cut(df_all['altitude'], bins), observed=False)['thickness']
+    .agg(count='size', mean='mean')
+    .reset_index()
+    )
     df_agg['Elevation'] = df_agg['altitude'].apply(lambda x: x.left).astype(int)
     df_agg['Area'] = df_agg['count'] * pixelSizeX * pixelSizeY / catchment_new.iloc[0]['area']
     df_agg['WE'] = df_agg['mean'] * 0.908 * 1000
     df_agg['EleZone'] = df_agg['Elevation'].apply(lambda x: 100 * int(x / 100))
 
     # delete empty elevation bands but keep at least one entry per elevation zone
-    df_agg = pd.concat([df_agg.loc[df_agg['count'] > 0],
-                        df_agg.loc[df_agg['count'] == 0].drop_duplicates(['EleZone'], keep='first')]
-                       ).sort_index()
+    df_agg = pd.concat([
+        df_agg.loc[df_agg['count'] > 0],
+        df_agg.loc[df_agg['count'] == 0].drop_duplicates(['EleZone'], keep='first')
+    ]).sort_index()
 
     df_agg.drop(['altitude', 'count', 'mean'], axis=1, inplace=True)
     df_agg = df_agg.replace(np.nan, 0)

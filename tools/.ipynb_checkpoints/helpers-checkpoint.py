@@ -4,6 +4,8 @@ import pandas as pd
 import os
 import sys
 import numpy as np
+import zipfile
+import shutil
 import spotpy
 import contextlib
 from pathlib import Path
@@ -15,6 +17,79 @@ from multiprocessing import Pool
 from functools import partial
 
 
+def mean_elevation_from_raster(raster_path, geometry_gdf):
+    """
+    Calculate mean elevation from a raster within a polygon geometry.
+
+    Parameters
+    ----------
+    raster_path : str or Path
+        Path to the DEM raster.
+    geometry_gdf : geopandas.GeoDataFrame
+        Polygon geometry used to clip the raster.
+
+    Returns
+    -------
+    float
+        Mean elevation of valid raster cells within the polygon.
+    """
+    import rasterio
+    from rasterio.mask import mask
+    import numpy as np
+
+    with rasterio.open(raster_path) as src:
+        geometry_plot = geometry_gdf.to_crs(src.crs)
+        dem_clip, _ = mask(src, geometry_plot.geometry, crop=True)
+
+        dem_values = dem_clip[0].astype(float)
+        if src.nodata is not None:
+            dem_values[dem_values == src.nodata] = np.nan
+        else:
+            dem_values[dem_values == 0] = np.nan
+
+        return float(np.nanmean(dem_values))
+
+        
+def restore_output_archive(
+    zip_file="output_download.zip",
+    target_dir="output"
+):
+    """
+    Extract a ZIP archive into target_dir.
+    If target_dir already contains files, ask whether to replace its contents.
+    """
+    zip_path = Path(zip_file)
+    out_path = Path(target_dir)
+
+    if not zip_path.exists():
+        print(f"Archive not found: {zip_path}")
+        return
+
+    out_path.mkdir(exist_ok=True)
+
+    has_content = any(out_path.iterdir())
+    if has_content:
+        answer = input(
+            f"The folder '{out_path}' already contains files. "
+            "Replace its contents? [y/N]: "
+        ).strip().lower()
+
+        if answer not in {"y", "yes"}:
+            print("Operation cancelled. Existing files were kept.")
+            return
+
+        for item in out_path.iterdir():
+            if item.is_dir():
+                shutil.rmtree(item)
+            else:
+                item.unlink()
+
+    with zipfile.ZipFile(zip_path, "r") as z:
+        z.extractall(out_path)
+
+    print(f"Archive '{zip_path.name}' extracted to '{out_path}/'")
+    
+    
 def read_yaml(file_path):
     """
     Read a YAML file and return the contents as a dictionary.
@@ -403,6 +478,7 @@ def drop_model(col_names, dict_or_df):
     """
     Drop columns with given names from either a dictionary of dataframes
     or a single dataframe.
+
     Parameters
     ----------
     col_names : list of str
@@ -410,9 +486,10 @@ def drop_model(col_names, dict_or_df):
     dict_or_df : dict of pandas.DataFrame or pandas.DataFrame
         If a dict of dataframes, all dataframes in the dict will be edited.
         If a single dataframe, only that dataframe will be edited.
+
     Returns
     -------
-    dict_of_dfs : dict of pandas.DataFrame or pandas.DataFrame
+    dict of pandas.DataFrame or pandas.DataFrame
         The updated dictionary of dataframes or dataframe with dropped columns.
     """
     if isinstance(dict_or_df, dict):
@@ -496,13 +573,18 @@ def adjust_bias(predictand, predictor, method='normal_mapping'):
 def confidence_interval(df):
     """
     Calculate the mean and 95% confidence interval for each row in a dataframe.
-    Parameters:
-    -----------
-        df (pandas.DataFrame): The input dataframe.
-    Returns:
-    --------
-        pandas.DataFrame: A dataframe with the mean and confidence intervals for each row.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The input dataframe.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A dataframe with the mean and confidence intervals for each row.
     """
+    
     mean = df.mean(axis=1)
     std = df.std(axis=1)
     count = df.count(axis=1)
@@ -558,6 +640,7 @@ def replace_values(target_df, source_df, source_column):
 def get_si(fast_results: str, to_csv: bool = False) -> pd.DataFrame:
     """
     Computes the sensitivity indices of a given FAST simulation results file.
+
     Parameters
     ----------
     fast_results : str
@@ -566,12 +649,14 @@ def get_si(fast_results: str, to_csv: bool = False) -> pd.DataFrame:
         If True, the sensitivity indices are saved to a CSV file with the same
         name as fast_results, but with '_sensitivity_indices.csv' appended to
         the end (default is False).
+
     Returns
     -------
     pd.DataFrame
         A pandas DataFrame containing the sensitivity indices and parameter
         names.
     """
+    
     if fast_results.endswith(".csv"):
         fast_results = fast_results[:-4]  # strip .csv
     results = spotpy.analyser.load_csv_results(fast_results)
@@ -590,25 +675,28 @@ def get_si(fast_results: str, to_csv: bool = False) -> pd.DataFrame:
 def create_scenario_dict(tas: dict, pr: dict, scenario_nums: list) -> dict:
     """
     Create a nested dictionary of scenarios and models from two dictionaries of pandas DataFrames.
+
     Parameters
     ----------
     tas : dict
-        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns
-        representing different climate model mean daily temperature (K) time series.
+        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has
+        columns representing different climate model mean daily temperature (K) time series.
     pr : dict
-        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has columns
-        representing different climate models mean daily precipitation (mm/day) time series.
+        A dictionary of pandas DataFrames where the keys are scenario names and each DataFrame has
+        columns representing different climate model mean daily precipitation (mm/day) time series.
     scenario_nums : list
         A list of integers representing the scenario numbers to include in the resulting dictionary.
+
     Returns
     -------
     dict
-        A nested dictionary where the top-level keys are scenario names (e.g. 'SSP2', 'SSP5') and the values are
-        dictionaries containing climate models as keys and the corresponding pandas DataFrames as values.
-        The DataFrames have three columns: 'TIMESTAMP', 'T2', and 'RRR', where 'TIMESTAMP'
-        represents the time step, 'T2' represents the mean daily temperature (K), and 'RRR' represents the mean
+        A nested dictionary where the top-level keys are scenario names (e.g. 'SSP2', 'SSP5') and
+        the values are dictionaries containing climate models as keys and the corresponding pandas
+        DataFrames as values. The DataFrames have three columns: 'TIMESTAMP', 'T2', and 'RRR', where
+        'TIMESTAMP' represents the time step, 'T2' the mean daily temperature (K), and 'RRR' the mean
         daily precipitation (mm/day).
     """
+    
     scenarios = {}
     for s in scenario_nums:
         s = 'SSP' + str(s)
