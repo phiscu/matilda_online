@@ -585,6 +585,313 @@ def download_dem_for_bbox(
     )
     
 
+def get_geopotential_webservice(
+    catchment,
+    config_path=None,
+    asset_id=None,
+    band=None,
+    show_progress=True,
+):
+    """
+    Request catchment-mean geopotential and reference elevation from the
+    MATILDA webservice.
+
+    Parameters
+    ----------
+    catchment : dict or geopandas.GeoDataFrame or shapely geometry
+        Catchment geometry as a GeoJSON FeatureCollection, GeoDataFrame,
+        or shapely geometry. If a GeoDataFrame or shapely geometry is
+        provided, it will be converted to a FeatureCollection payload.
+    config_path : str or Path, optional
+        Optional path to webservices.ini.
+    asset_id : str, optional
+        Optional override of the geopotential Earth Engine asset.
+    band : str, optional
+        Optional override of the band name.
+    show_progress : bool, optional
+        If True, show a simple live status message while the request runs.
+
+    Returns
+    -------
+    dict
+        Dictionary with keys:
+        - "geopotential_mean"
+        - "elevation_m"
+
+    Raises
+    ------
+    RuntimeError
+        If the webservice request fails or returns malformed output.
+    """
+    import json
+    import time
+    import threading
+    import requests
+
+    try:
+        from IPython.display import clear_output
+        in_notebook = True
+    except Exception:
+        in_notebook = False
+
+    cfg = load_webservice_config(config_path=config_path, section="GOOGLE")
+    service_url = f"{cfg['BASE_URL'].rstrip('/')}/geopotential"
+
+    if hasattr(catchment, "to_json"):
+        catchment = json.loads(catchment.to_json())
+    elif hasattr(catchment, "__geo_interface__") and not isinstance(catchment, dict):
+        catchment = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": catchment.__geo_interface__,
+                }
+            ],
+        }
+
+    if not isinstance(catchment, dict):
+        raise ValueError(
+            "catchment must be a GeoJSON dict, a GeoDataFrame, or a shapely geometry."
+        )
+
+    payload = {"catchment": catchment}
+
+    if asset_id is not None:
+        payload["asset_id"] = asset_id
+    if band is not None:
+        payload["band"] = band
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-API-Key": cfg["PUBLIC_API_KEY"],
+    }
+
+    stop_flag = False
+    start_time = time.time()
+
+    def progress_worker():
+        symbols = ["⏳", "⌛"]
+        i = 0
+        while not stop_flag:
+            elapsed = time.time() - start_time
+            msg1 = f"{symbols[i % 2]} Requesting reference elevation from the MATILDA web service..."
+            msg2 = f"Elapsed time: {elapsed:,.1f} s"
+
+            if in_notebook:
+                clear_output(wait=True)
+                print(msg1)
+                print(msg2)
+            else:
+                print(msg1, msg2)
+
+            time.sleep(1)
+            i += 1
+
+    thread = None
+    if show_progress:
+        thread = threading.Thread(target=progress_worker, daemon=True)
+        thread.start()
+
+    try:
+        response = requests.post(
+            service_url,
+            json=payload,
+            headers=headers,
+            timeout=cfg["TIMEOUT"],
+        )
+    except requests.RequestException as e:
+        raise RuntimeError(f"Failed to reach geopotential webservice: {e}") from e
+    finally:
+        stop_flag = True
+        if thread is not None:
+            thread.join()
+
+    elapsed_total = time.time() - start_time
+
+    if not response.ok:
+        try:
+            detail = response.json()
+        except Exception:
+            detail = response.text
+        raise RuntimeError(
+            f"Geopotential webservice request failed with status {response.status_code}: {detail}"
+        )
+
+    try:
+        data = response.json()
+    except Exception as e:
+        raise RuntimeError(f"Geopotential webservice did not return valid JSON: {e}") from e
+
+    required = {"geopotential_mean", "elevation_m"}
+    missing = required.difference(data.keys())
+    if missing:
+        raise RuntimeError(
+            f"Geopotential webservice response is missing keys: {sorted(missing)}"
+        )
+
+    if in_notebook and show_progress:
+        clear_output(wait=True)
+
+    print("✅ Reference elevation successfully retrieved.")
+    print(f"Geopotential mean:\t{data['geopotential_mean']:.2f} m2 s-2")
+    print(f"Reference elevation:\t{data['elevation_m']:.2f} m a.s.l.")
+    print(f"Elapsed time:\t\t{elapsed_total:,.1f} s")
+
+    return data
+
+
+def get_climate_data_webservice(
+    catchment,
+    date_range,
+    config_path=None,
+    show_progress=True,
+    max_concurrent=6,
+):
+    """
+    Request spatially aggregated ERA5-Land forcing data from the MATILDA
+    webservice and return them as a pandas DataFrame.
+
+    The webservice streams one JSON record per year (NDJSON).
+    """
+    import json
+    import time
+    import pandas as pd
+    import requests
+
+    try:
+        from IPython.display import clear_output
+        in_notebook = True
+    except Exception:
+        in_notebook = False
+
+    cfg = load_webservice_config(config_path=config_path, section="GOOGLE")
+    service_url = f"{cfg['BASE_URL'].rstrip('/')}/climate-data"
+
+    if hasattr(catchment, "to_json"):
+        catchment = json.loads(catchment.to_json())
+    elif hasattr(catchment, "__geo_interface__") and not isinstance(catchment, dict):
+        catchment = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": catchment.__geo_interface__,
+                }
+            ],
+        }
+
+    if not isinstance(catchment, dict):
+        raise ValueError(
+            "catchment must be a GeoJSON dict, a GeoDataFrame, or a shapely geometry."
+        )
+
+    if not isinstance(date_range, (list, tuple)) or len(date_range) != 2:
+        raise ValueError("date_range must be a list or tuple: [start_date, end_date]")
+
+    start_year = int(str(date_range[0])[:4])
+    end_year = int(str(date_range[1])[:4])
+    total_years = end_year - start_year + 1
+
+    payload = {
+        "catchment": catchment,
+        "date_range": [str(date_range[0]), str(date_range[1])],
+        "max_concurrent": int(max_concurrent),
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-API-Key": cfg["PUBLIC_API_KEY"],
+    }
+
+    start_time = time.time()
+    year_results = []
+    finished = 0
+
+    try:
+        response = requests.post(
+            service_url,
+            json=payload,
+            headers=headers,
+            timeout=cfg["TIMEOUT"],
+            stream=True,
+        )
+    except requests.RequestException as e:
+        raise RuntimeError(f"Failed to reach climate-data webservice: {e}") from e
+
+    if not response.ok:
+        try:
+            detail = response.json()
+        except Exception:
+            detail = response.text
+        raise RuntimeError(
+            f"Climate-data webservice request failed with status {response.status_code}: {detail}"
+        )
+
+    for line in response.iter_lines(decode_unicode=True):
+        if not line:
+            continue
+
+        try:
+            item = json.loads(line)
+        except Exception as e:
+            raise RuntimeError(f"Could not parse streamed climate-data response: {e}") from e
+
+        if "error" in item:
+            raise RuntimeError(f"Climate-data webservice failed for year {item.get('year')}: {item['error']}")
+
+        year_results.append(item)
+        finished += 1
+
+        if show_progress:
+            elapsed = time.time() - start_time
+            if in_notebook:
+                clear_output(wait=True)
+            print("⏳ Requesting ERA5-Land forcing data from the MATILDA web service...")
+            print(f"Years completed: {finished}/{total_years}")
+            print(f"Latest year received: {item.get('year')}")
+            print(f"Elapsed time: {elapsed:,.1f} s")
+
+    if not year_results:
+        raise RuntimeError("Climate-data webservice returned no data.")
+
+    year_results = sorted(year_results, key=lambda x: x["year"])
+
+    timestamps = []
+    temp = []
+    prec = []
+
+    for item in year_results:
+        timestamps.extend(item["timestamps"])
+        temp.extend(item["temp"])
+        prec.extend(item["prec"])
+
+    df = pd.DataFrame({
+        "ts": timestamps,
+        "temp": temp,
+        "prec": prec,
+    })
+
+    df = df.drop_duplicates(subset="ts").sort_values("ts").reset_index(drop=True)
+    df["dt"] = pd.to_datetime(df["ts"], unit="ms")
+    df["temp_c"] = df["temp"] - 273.15
+    df["prec_mm"] = df["prec"] * 1000
+
+    elapsed_total = time.time() - start_time
+
+    if in_notebook and show_progress:
+        clear_output(wait=True)
+
+    print("✅ ERA5-Land forcing data successfully retrieved.")
+    print(f"Date range: {df['dt'].min().date()} to {df['dt'].max().date()}")
+    print(f"Number of daily records: {len(df)}")
+    print(f"Elapsed time: {elapsed_total:,.1f} s")
+
+    return df
+    
+    
 def delineate_catchment_local(
     lat,
     lon,
