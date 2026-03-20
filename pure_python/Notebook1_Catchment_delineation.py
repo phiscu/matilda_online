@@ -68,7 +68,6 @@ zip_output = config['CONFIG']['ZIP_OUTPUT']
 dem_config = ast.literal_eval(config['CONFIG']['DEM'])
 y, x = ast.literal_eval(config['CONFIG']['COORDS'])
 
-catchment_backend = config['CONFIG'].get('CATCHMENT_BACKEND', 'mghydro').strip().lower()
 mghydro_precision = config['CONFIG'].get('MGHYDRO_PRECISION', 'high').strip().lower()
 
 plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
@@ -93,17 +92,12 @@ print(f'DEM output: {filename}')
 # %%
 from tools.geetools import delineate_catchment_mghydro
 
-if catchment_backend != 'mghydro':
-    raise ValueError(
-        f"This notebook currently supports only CATCHMENT_BACKEND='mghydro'. "
-        f"Found: {catchment_backend}"
-    )
-
 watershed_gdf, rivers_gdf = delineate_catchment_mghydro(
     lat=y,
     lon=x,
     watershed_output_path=catchment_file,
     rivers_output_path=rivers_file,
+    fallback_to_local=True
     precision=mghydro_precision,
     plot=True,
 )
