@@ -11,6 +11,8 @@ import ee
 import json
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import io
+import time
 
 from configparser import ConfigParser
 from pathlib import Path
@@ -840,7 +842,9 @@ def get_climate_data_webservice(
             raise RuntimeError(f"Could not parse streamed climate-data response: {e}") from e
 
         if "error" in item:
-            raise RuntimeError(f"Climate-data webservice failed for year {item.get('year')}: {item['error']}")
+            raise RuntimeError(
+                f"Climate-data webservice failed for year {item.get('year')}: {item['error']}"
+            )
 
         year_results.append(item)
         finished += 1
@@ -877,7 +881,7 @@ def get_climate_data_webservice(
     df = df.drop_duplicates(subset="ts").sort_values("ts").reset_index(drop=True)
     df["dt"] = pd.to_datetime(df["ts"], unit="ms")
     df["temp_c"] = df["temp"] - 273.15
-    df["prec_mm"] = df["prec"] * 1000
+    df["prec"] = df["prec"] * 1000
 
     elapsed_total = time.time() - start_time
 
@@ -889,7 +893,7 @@ def get_climate_data_webservice(
     print(f"Number of daily records: {len(df)}")
     print(f"Elapsed time: {elapsed_total:,.1f} s")
 
-    return df
+    return df[["dt", "temp", "temp_c", "prec"]]
     
     
 def delineate_catchment_local(
@@ -1190,6 +1194,435 @@ class CMIPDownloader:
                     pbar.update(1)
 
         print("All downloads complete.")
+
+
+class CMIPDownloaderWebservice:
+    """
+    Download spatially averaged CMIP6 yearly CSV files from the MATILDA webservice.
+
+    This class mirrors the output of the local CMIPDownloader, but uses the
+    /cmip6-data endpoint. It is designed as a low-disruption bridge so that
+    CMIPProcessor can remain unchanged.
+
+    Parameters
+    ----------
+    starty : int
+        First year to request.
+    endy : int
+        Last year to request.
+    catchment : dict or geopandas.GeoDataFrame or shapely geometry
+        Catchment geometry to send to the webservice.
+    variables : list of str, optional
+        Variables to request. Default is ["tas", "pr"].
+    dir : str, optional
+        Output directory for yearly CSV files.
+    max_concurrent : int, optional
+        Concurrency passed to the webservice endpoint.
+    block_size_years : int or None, optional
+        If given, split each variable request into year blocks of this size.
+        If None, request each variable over the full time period.
+    config_path : str or Path, optional
+        Optional path to webservices.ini.
+    show_progress : bool, optional
+        Whether to print progress information.
+    """
+
+    def __init__(
+        self,
+        starty,
+        endy,
+        catchment,
+        variables=None,
+        dir="./",
+        max_concurrent=6,
+        block_size_years=None,
+        config_path=None,
+        show_progress=True,
+    ):
+        self.starty = int(starty)
+        self.endy = int(endy)
+        self.catchment = catchment
+        self.variables = variables or ["tas", "pr"]
+        self.directory = dir
+        self.max_concurrent = int(max_concurrent)
+        self.block_size_years = block_size_years
+        self.config_path = config_path
+        self.show_progress = show_progress
+
+        if not os.path.exists(self.directory):
+            os.makedirs(self.directory)
+
+    def _normalize_catchment(self):
+        catchment = self.catchment
+
+        if hasattr(catchment, "to_json"):
+            catchment = json.loads(catchment.to_json())
+        elif hasattr(catchment, "__geo_interface__") and not isinstance(catchment, dict):
+            catchment = {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": catchment.__geo_interface__,
+                    }
+                ],
+            }
+
+        if not isinstance(catchment, dict):
+            raise ValueError(
+                "catchment must be a GeoJSON dict, a GeoDataFrame, or a shapely geometry."
+            )
+
+        return catchment
+
+    def _iter_blocks(self):
+        if self.block_size_years is None:
+            yield self.starty, self.endy
+            return
+
+        y = self.starty
+        while y <= self.endy:
+            block_end = min(y + self.block_size_years - 1, self.endy)
+            yield y, block_end
+            y = block_end + 1
+
+    def _request_block(self, variable, block_start, block_end, pbar=None):
+        cfg = load_webservice_config(config_path=self.config_path, section="GOOGLE")
+        service_url = f"{cfg['BASE_URL'].rstrip('/')}/cmip6-data"
+
+        payload = {
+            "catchment": self._normalize_catchment(),
+            "date_range": [f"{block_start}-01-01", f"{block_end}-12-31"],
+            "variables": [variable],
+            "max_concurrent": self.max_concurrent,
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+            "X-API-Key": cfg["PUBLIC_API_KEY"],
+        }
+
+        try:
+            response = requests.post(
+                service_url,
+                json=payload,
+                headers=headers,
+                timeout=cfg["TIMEOUT"],
+                stream=True,
+            )
+        except requests.RequestException as e:
+            raise RuntimeError(f"Failed to reach cmip6-data webservice: {e}") from e
+
+        if not response.ok:
+            try:
+                detail = response.json()
+            except Exception:
+                detail = response.text
+            raise RuntimeError(
+                f"cmip6-data webservice request failed with status {response.status_code}: {detail}"
+            )
+
+        received_years = []
+
+        for raw_line in response.iter_lines(decode_unicode=False):
+            if not raw_line:
+                continue
+
+            if isinstance(raw_line, bytes):
+                line = raw_line.decode("utf-8", errors="replace")
+            else:
+                line = raw_line
+
+            if not line.strip():
+                continue
+
+            try:
+                item = json.loads(line)
+            except Exception as e:
+                raise RuntimeError(f"Could not parse streamed cmip6-data response: {e}") from e
+
+            if "error" in item:
+                raise RuntimeError(
+                    f"cmip6-data webservice failed for var={item.get('var')} year={item.get('year')}: {item['error']}"
+                )
+
+            year = int(item["year"])
+            var = item["var"]
+            filename = item.get("filename", f"cmip6_{var}_{year}.csv")
+            csv_text = item["csv"]
+
+            out_path = os.path.join(self.directory, filename)
+            with open(out_path, "w", encoding="utf-8") as f:
+                f.write(csv_text)
+
+            received_years.append(year)
+
+            if pbar is not None:
+                pbar.update(1)
+                pbar.set_postfix_str(f"variable={var}, year={year}")
+
+        return sorted(received_years)
+
+    def download(self):
+        """
+        Download all requested variables and save yearly CSV files locally.
+
+        Returns
+        -------
+        dict
+            Summary of downloaded years by variable.
+        """
+        summary = {}
+        t0 = time.time()
+
+        total_expected = (self.endy - self.starty + 1) * len(self.variables)
+
+        pbar = tqdm(
+            total=total_expected,
+            desc="Downloading CMIP6 yearly files",
+            unit="file",
+            disable=not self.show_progress,
+        )
+
+        try:
+            for variable in self.variables:
+                if self.show_progress:
+                    pbar.set_postfix_str(f"variable={variable}")
+
+                variable_years = []
+
+                for block_start, block_end in self._iter_blocks():
+                    years = self._request_block(variable, block_start, block_end, pbar=pbar)
+                    variable_years.extend(years)
+
+                variable_years = sorted(set(variable_years))
+                summary[variable] = variable_years
+
+                expected = list(range(self.starty, self.endy + 1))
+                missing = sorted(set(expected) - set(variable_years))
+
+                if self.show_progress and missing:
+                    print(f"Missing years for {variable}: {missing[:10]}{' ...' if len(missing) > 10 else ''}")
+
+        finally:
+            pbar.close()
+
+        elapsed = time.time() - t0
+
+        if self.show_progress:
+            print(f"CMIP6 webservice download complete in {elapsed:,.1f} s.")
+
+        return
+
+
+class CMIPDownloaderManifest:
+    """
+    Fast CMIP6 downloader using the /cmip6-manifest endpoint.
+
+    The MATILDA webservice generates signed Earth Engine download URLs.
+    This helper downloads those files directly in parallel and saves them
+    with the same filenames expected by CMIPProcessor.
+    """
+
+    def __init__(
+        self,
+        starty,
+        endy,
+        catchment,
+        variables=None,
+        dir="./",
+        manifest_concurrent=6,
+        download_workers=10,
+        block_size_years=None,
+        config_path=None,
+        show_progress=True,
+    ):
+        self.starty = int(starty)
+        self.endy = int(endy)
+        self.catchment = catchment
+        self.variables = variables or ["tas", "pr"]
+        self.directory = dir
+        self.manifest_concurrent = int(manifest_concurrent)
+        self.download_workers = int(download_workers)
+        self.block_size_years = block_size_years
+        self.config_path = config_path
+        self.show_progress = show_progress
+
+        if not os.path.exists(self.directory):
+            os.makedirs(self.directory)
+
+    def _normalize_catchment(self):
+        catchment = self.catchment
+
+        if hasattr(catchment, "to_json"):
+            catchment = json.loads(catchment.to_json())
+        elif hasattr(catchment, "__geo_interface__") and not isinstance(catchment, dict):
+            catchment = {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": {},
+                        "geometry": catchment.__geo_interface__,
+                    }
+                ],
+            }
+
+        if not isinstance(catchment, dict):
+            raise ValueError(
+                "catchment must be a GeoJSON dict, a GeoDataFrame, or a shapely geometry."
+            )
+
+        return catchment
+
+    def _iter_blocks(self):
+        if self.block_size_years is None:
+            yield self.starty, self.endy
+            return
+
+        y = self.starty
+        while y <= self.endy:
+            block_end = min(y + self.block_size_years - 1, self.endy)
+            yield y, block_end
+            y = block_end + 1
+
+    def _fetch_manifest_block(self, variable, block_start, block_end):
+        cfg = load_webservice_config(config_path=self.config_path, section="GOOGLE")
+        service_url = f"{cfg['BASE_URL'].rstrip('/')}/cmip6-manifest"
+
+        payload = {
+            "catchment": self._normalize_catchment(),
+            "date_range": [f"{block_start}-01-01", f"{block_end}-12-31"],
+            "variables": [variable],
+            "max_concurrent": self.manifest_concurrent,
+        }
+
+        headers = {
+            "Content-Type": "application/json",
+            "X-API-Key": cfg["PUBLIC_API_KEY"],
+        }
+
+        try:
+            response = requests.post(
+                service_url,
+                json=payload,
+                headers=headers,
+                timeout=cfg["TIMEOUT"],
+                stream=True,
+            )
+        except requests.RequestException as e:
+            raise RuntimeError(f"Failed to reach cmip6-manifest webservice: {e}") from e
+
+        if not response.ok:
+            try:
+                detail = response.json()
+            except Exception:
+                detail = response.text
+            raise RuntimeError(
+                f"cmip6-manifest request failed with status {response.status_code}: {detail}"
+            )
+
+        entries = []
+        for raw_line in response.iter_lines(decode_unicode=False):
+            if not raw_line:
+                continue
+
+            line = raw_line.decode("utf-8", errors="replace") if isinstance(raw_line, bytes) else raw_line
+            if not line.strip():
+                continue
+
+            try:
+                item = json.loads(line)
+            except Exception as e:
+                raise RuntimeError(f"Could not parse streamed cmip6-manifest response: {e}") from e
+
+            if "error" in item:
+                raise RuntimeError(
+                    f"cmip6-manifest failed for var={item.get('var')} year={item.get('year')}: {item['error']}"
+                )
+
+            entries.append(item)
+
+        return entries
+
+    def _download_one(self, item):
+        filename = item["filename"]
+        url = item["download_url"]
+        out_path = os.path.join(self.directory, filename)
+
+        response = requests.get(url, timeout=300)
+        response.raise_for_status()
+
+        with open(out_path, "w", encoding="utf-8") as f:
+            f.write(response.text)
+
+        return {
+            "filename": filename,
+            "year": int(item["year"]),
+            "var": item["var"],
+            "path": out_path,
+        }
+
+    def download(self):
+        summary = {}
+        t0 = time.time()
+
+        manifest_entries = []
+        for variable in self.variables:
+            if self.show_progress:
+                print(f"Fetching manifest for '{variable}'...")
+
+            variable_entries = []
+            for block_start, block_end in self._iter_blocks():
+                variable_entries.extend(
+                    self._fetch_manifest_block(variable, block_start, block_end)
+                )
+
+            manifest_entries.extend(variable_entries)
+
+        if self.show_progress:
+            print(f"Received {len(manifest_entries)} manifest entries.")
+
+        total_expected = (self.endy - self.starty + 1) * len(self.variables)
+        pbar = tqdm(
+            total=total_expected,
+            desc="Downloading CMIP6 yearly files",
+            unit="file",
+            disable=not self.show_progress,
+        )
+
+        try:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=self.download_workers) as executor:
+                futures = [executor.submit(self._download_one, item) for item in manifest_entries]
+
+                downloaded = []
+                for future in concurrent.futures.as_completed(futures):
+                    result = future.result()
+                    downloaded.append(result)
+                    pbar.update(1)
+                    pbar.set_postfix_str(f"variable={result['var']}, year={result['year']}")
+
+        finally:
+            pbar.close()
+
+        for variable in self.variables:
+            years = sorted(
+                {item["year"] for item in downloaded if item["var"] == variable}
+            )
+            summary[variable] = years
+
+            expected = list(range(self.starty, self.endy + 1))
+            missing = sorted(set(expected) - set(years))
+
+            if self.show_progress and missing:
+                print(f"Missing years for {variable}: {missing[:10]}{' ...' if len(missing) > 10 else ''}")
+
+        elapsed = time.time() - t0
+        if self.show_progress:
+            print(f"CMIP6 manifest download complete in {elapsed:,.1f} s.")
+
+        return summary
 
 
 class CMIPProcessor:

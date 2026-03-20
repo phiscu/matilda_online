@@ -95,7 +95,7 @@ def plot_mean_annual_cycle(df):
         clim_df.groupby("doy_noleap")
         .agg(
             temp_c_mean=("temp_c", "mean"),
-            prec_mm_mean=("prec_mm", "mean")
+            prec_mean=("prec", "mean")
         )
         .reset_index(drop=True)
     )
@@ -121,7 +121,7 @@ def plot_mean_annual_cycle(df):
     # Precipitation on right axis
     ax2.bar(
         clim["plot_date"],
-        clim["prec_mm_mean"],
+        clim["prec_mean"],
         width=1.0,
         color=prec_color,
         alpha=0.8,

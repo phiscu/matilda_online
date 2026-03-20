@@ -76,7 +76,6 @@ plt.style.use(plt_style)
 os.makedirs(output_folder, exist_ok=True)
 os.makedirs(figures_folder, exist_ok=True)
 
-print(f'Catchment backend: {catchment_backend}')
 print(f'MG Hydro precision: {mghydro_precision}')
 print(f'DEM to download: {dem_config[3]}')
 print(f'Coordinates of discharge point: Lat {y}, Lon {x}')
@@ -97,7 +96,7 @@ watershed_gdf, rivers_gdf = delineate_catchment_mghydro(
     lon=x,
     watershed_output_path=catchment_file,
     rivers_output_path=rivers_file,
-    fallback_to_local=True
+    fallback_to_local=True,
     precision=mghydro_precision,
     plot=True,
 )

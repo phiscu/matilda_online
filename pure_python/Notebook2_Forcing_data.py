@@ -165,10 +165,8 @@ display(df.head())
 #
 # - a timestamp,
 # - the original temperature,
-# - the original precipitation in m per day,
-# - a readable date,
 # - the converted temperature in °C,
-# - and precipitation converted to mm per day.
+# - precipitation converted to mm per day.
 
 # %%
 import pandas as pd
@@ -187,6 +185,9 @@ display(summary_df)
 
 # %% [markdown]
 # A time series plot provides a first impression of the seasonal signal and the variability of both variables.
+
+# %%
+print( df[["dt", "temp_c", "prec"]])
 
 # %%
 import matplotlib.dates as mdates
