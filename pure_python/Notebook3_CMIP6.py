@@ -73,7 +73,7 @@ print("Catchment outline loaded.")
 #
 # The downloader sends the catchment geometry and time range to the MATILDA webservice. The webservice performs the spatial aggregation in Google Earth Engine and streams the yearly results back to the notebook. The files are saved locally as yearly CSV files, which keeps the following processing steps unchanged.
 #
-# By default, we request the full overlap between ERA5-Land and CMIP6 from 1979 to 2100. The current default setup requests the two variables separately, which is more robust for long time series. A moderate number of parallel requests is usually sufficient. In our tests, `max_concurrent=6` performed well. If you work in a more constrained environment and a full request becomes unstable, you can additionally split the download into shorter year blocks.
+# By default, we request the full overlap between ERA5-Land and CMIP6 from 1979 to 2100. The current default setup requests the two variables separately, which is more robust for long time series. A moderate number of parallel requests is usually sufficient. In our tests, `max_concurrent=6` performed well. If you work in a more constrained environment and a full request becomes unstable, you can additionally split the download into shorter year blocks. Usually this download takes 6-7 minutes.
 
 # %%
 from tools.geetools import CMIPDownloaderWebservice

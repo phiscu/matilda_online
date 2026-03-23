@@ -26,9 +26,7 @@
 #
 # 4. ...create a **glacier mass profile** based on elevation zones.
 #
-# <div class="alert alert-block alert-info">
-# <b>Note:</b> Catchment delineation in this notebook uses the <b>MG Hydro / Global Watersheds API</b>. This is usually faster than delineating locally from a DEM and allows the DEM to be downloaded afterwards for the actual catchment extent.
-# </div>
+# Catchment delineation in this notebook uses the **MG Hydro / Global Watersheds API**. This method is much faster than delineating locally and allows the DEM to be downloaded for the actual catchment area. The author [Matthew Herberger](https://mghydro.com/) deserves all the credit for this service. However, the author privately funds hosting of the service, which can experience downtime. Therefore, we implemented a fallback option that delineates the catchment area locally using the [pysheds](https://github.com/pysheds/pysheds) library.
 #
 # <div class="alert alert-block alert-warning">
 # <b>Troubleshooting:</b> Always inspect the delineated catchment visually. If the result looks implausible, first try <code>MGHYDRO_PRECISION = high</code> in <code>config.ini</code>. If that still does not work, use a high-resolution DEM and delineate locally as a fallback workflow outside this notebook.
@@ -114,7 +112,7 @@ print(f'Catchment bounds: xmin={xmin:.5f}, ymin={ymin:.5f}, xmax={xmax:.5f}, yma
 # %% [markdown]
 # ## Download the digital elevation model (DEM)
 #
-# Now that we have the catchment boundaries, we can send a precise request to the MATILDA web service to download a DEM. The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any DEM available in the *[Google Earth Engine Data Catalog](https://developers.google.com/earth-engine/datasets/catalog)* by specifying it in the `config.ini` file.
+# Now that we have the catchment boundaries, we can send a precise request to the MATILDA web service to download a DEM. The default is the [MERIT DEM](https://developers.google.com/earth-engine/datasets/catalog/MERIT_DEM_v1_0_3), but you can use any of the alternatives listed in the `config.ini` file.
 
 # %%
 from tools.geetools import download_dem_webservice
@@ -188,7 +186,7 @@ plt.show()
 # %% [markdown]
 # For the following steps, we store the delineated catchment outline in a **GeoPackage** together with the elevation data derived from the DEM.
 #
-# We also calculate basic elevation statistics from the DEM clipped to the catchment:
+# We also calculate basic elevation statistics from the clipped DEM:
 #
 # - minimum elevation
 # - maximum elevation

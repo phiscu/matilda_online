@@ -13,6 +13,7 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 import io
 import time
+import threading
 
 from configparser import ConfigParser
 from pathlib import Path
@@ -27,11 +28,11 @@ def delineate_catchment_mghydro(
     plot=False,
     timeout=120,
     fallback_to_local=False,
-    fallback_asset_id=None,
-    fallback_dem_filename=None,
+    fallback_dem_asset_id="MERIT/DEM/v1_0_3",
+    fallback_dem_filename="dem_gee.tif",
     fallback_buffer_m=40000,
     fallback_bbox=None,
-    fallback_config_path=None,
+    dem_config_path=None,
 ):
     """
     Delineate a catchment and fetch upstream rivers from the MG Hydro /
@@ -86,17 +87,17 @@ def delineate_catchment_mghydro(
     fallback_to_local : bool, optional
         If True, fall back to local pysheds delineation when the MG Hydro
         request fails. Default is False.
-    fallback_asset_id : str, optional
-        DEM asset ID used for local fallback delineation.
-    fallback_dem_filename : str or Path, optional
+    dem_asset_id : str, optional
+        Earth Engine asset ID of the DEM used for local fallback delineation.
+    dem_filename : str or Path, optional
         DEM filename used for local fallback delineation.
     fallback_buffer_m : int or float, optional
         Default buffer radius in meters for local fallback delineation.
     fallback_bbox : list or tuple, optional
         Optional custom bounding box [xmin, ymin, xmax, ymax] for local
-        fallback delineation.
-    fallback_config_path : str or Path, optional
-        Optional path to webservices.ini for local fallback DEM download.
+        fallback delineation. If None, the user is prompted for a bbox.
+    dem_config_path : str or Path, optional
+        Optional path to webservices.ini for local DEM download.
 
     Returns
     -------
@@ -110,7 +111,12 @@ def delineate_catchment_mghydro(
     RuntimeError
         If the API request fails or returns invalid data.
     """
-    
+    from pathlib import Path
+    import json
+    import requests
+    import geopandas as gpd
+    import matplotlib.pyplot as plt
+
     precision = str(precision).strip().lower()
     if precision not in {"low", "high"}:
         raise ValueError("precision must be 'low' or 'high'")
@@ -203,25 +209,52 @@ def delineate_catchment_mghydro(
         if not fallback_to_local:
             raise
 
-        if fallback_asset_id is None or fallback_dem_filename is None:
+        if fallback_dem_asset_id is None or fallback_dem_filename is None:
             raise RuntimeError(
                 "MG Hydro delineation failed and local fallback is not fully configured. "
-                "Please provide fallback_asset_id and fallback_dem_filename."
+                "Please provide fallback_dem_asset_id and dem_filename."
             ) from e
 
         print("MG Hydro delineation failed.")
         print(f"Reason: {e}")
         print("Falling back to local delineation with pysheds...")
 
+        bbox_to_use = fallback_bbox
+
+        if bbox_to_use is None:
+            print(
+                "Please provide a custom DEM bounding box in geographic coordinates:\n"
+                "bbox = [xmin, ymin, xmax, ymax]"
+            )
+            bbox_str = input("Enter bbox as xmin,ymin,xmax,ymax: ").strip()
+
+            try:
+                bbox_to_use = [float(x) for x in bbox_str.split(",")]
+            except Exception as parse_err:
+                raise RuntimeError(
+                    "Could not parse bbox input. Expected format: xmin,ymin,xmax,ymax"
+                ) from parse_err
+
+            if len(bbox_to_use) != 4:
+                raise RuntimeError(
+                    "Invalid bbox input. Expected exactly 4 values: xmin,ymin,xmax,ymax"
+                )
+
+            xmin, ymin, xmax, ymax = bbox_to_use
+            if not (xmin < xmax and ymin < ymax):
+                raise RuntimeError(
+                    "Invalid bbox input. Expected xmin < xmax and ymin < ymax."
+                )
+
         watershed_gdf, info = delineate_catchment_local(
             lat=lat,
             lon=lon,
             dem_filename=fallback_dem_filename,
             catchment_filename=watershed_output_path,
-            asset_id=fallback_asset_id,
+            asset_id=fallback_dem_asset_id,
             buffer_m=fallback_buffer_m,
-            bbox=fallback_bbox,
-            config_path=fallback_config_path,
+            bbox=bbox_to_use,
+            config_path=dem_config_path,
         )
 
         rivers_gdf = gpd.GeoDataFrame(geometry=[], crs=watershed_gdf.crs)
@@ -247,7 +280,7 @@ def delineate_catchment_mghydro(
         plt.show()
 
     return watershed_gdf, rivers_gdf
-
+    
 
 def load_webservice_config(config_path=None, section="GOOGLE"):
     """
@@ -257,7 +290,7 @@ def load_webservice_config(config_path=None, section="GOOGLE"):
     ----------
     config_path : str or Path, optional
         Path to webservices.ini. If None, defaults to repo_root/webservices.ini
-        assuming this file lives in tools/.
+        assuming this file lives in repo_root.
     section : str, optional
 
     Returns
@@ -443,6 +476,13 @@ def download_dem_webservice(
     RuntimeError
         If the webservice request fails or returns unexpected content.
     """
+
+    try:
+        from IPython.display import clear_output
+        in_notebook = True
+    except Exception:
+        in_notebook = False
+
     cfg = load_webservice_config(config_path=config_path, section="GOOGLE")
     service_url = f"{cfg['BASE_URL'].rstrip('/')}/download-dem"
 
@@ -497,12 +537,15 @@ def download_dem_webservice(
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
+    start_time = time.time()
+
     try:
         response = requests.post(
             service_url,
             json=payload,
             headers=headers,
             timeout=cfg["TIMEOUT"],
+            stream=True,
         )
     except requests.RequestException as e:
         raise RuntimeError(f"Failed to reach DEM webservice: {e}") from e
@@ -526,9 +569,42 @@ def download_dem_webservice(
             f"DEM webservice returned unexpected content type '{content_type}': {detail}"
         )
 
-    output_path.write_bytes(response.content)
-    print(f"DEM successfully downloaded from the MATILDA web service and saved to: {output_path}")
-    return output_path
+    total_size = int(response.headers.get("Content-Length", 0))
+    downloaded = 0
+    chunk_size = 1024 * 1024  # 1 MB
+
+    with open(output_path, "wb") as f:
+        for chunk in response.iter_content(chunk_size=chunk_size):
+            if not chunk:
+                continue
+            f.write(chunk)
+            downloaded += len(chunk)
+
+            elapsed = time.time() - start_time
+            if in_notebook:
+                clear_output(wait=True)
+
+            print("⏳ Downloading DEM from the MATILDA web service...")
+            if total_size > 0:
+                progress_pct = downloaded / total_size * 100
+                print(
+                    f"Downloaded: {downloaded / 1024**2:,.1f} / {total_size / 1024**2:,.1f} MB "
+                    f"({progress_pct:.1f}%)"
+                )
+            else:
+                print(f"Downloaded: {downloaded / 1024**2:,.1f} MB")
+            print(f"Elapsed time: {elapsed:,.1f} s")
+
+    elapsed_total = time.time() - start_time
+
+    if in_notebook:
+        clear_output(wait=True)
+
+    print("✅ DEM successfully downloaded from the MATILDA web service.")
+    print(f"Saved to: {output_path}")
+    print(f"File size: {downloaded / 1024**2:,.1f} MB")
+    print(f"Elapsed time: {elapsed_total:,.1f} s")
+    return
 
 
 def download_dem_for_bbox(
@@ -585,6 +661,209 @@ def download_dem_for_bbox(
         geometry=geometry,
         config_path=config_path,
     )
+
+
+def delineate_catchment_local(
+    lat,
+    lon,
+    dem_filename,
+    catchment_filename,
+    asset_id,
+    buffer_m=40000,
+    bbox=None,
+    snap_acc_threshold=1000,
+    config_path=None,
+):
+    """
+    Delineate a catchment locally with pysheds after downloading a DEM.
+
+    The function uses the MATILDA DEM webservice to download a DEM either for
+    a default square around the outlet point or for a custom bounding box.
+    It then performs local delineation with pysheds.
+
+    If the resulting catchment touches the DEM boundary, the DEM extent is
+    likely too small and the function raises an error asking the user to
+    provide a custom lat/lon bounding box.
+
+    Parameters
+    ----------
+    lat : float
+        Latitude of the outlet / pour point.
+    lon : float
+        Longitude of the outlet / pour point.
+    dem_filename : str or Path
+        Output path for the downloaded DEM GeoTIFF.
+    catchment_filename : str or Path
+        Output path for the delineated catchment GeoJSON.
+    asset_id : str
+        Earth Engine asset ID of the DEM to download.
+    buffer_m : int or float, optional
+        Buffer radius in meters for the default DEM download box.
+        Ignored when bbox is provided.
+    bbox : list or tuple, optional
+        Custom bounding box in geographic coordinates:
+        [xmin, ymin, xmax, ymax].
+    snap_acc_threshold : int or float, optional
+        Accumulation threshold used to snap the outlet point to the channel
+        network. Default is 1000.
+    config_path : str or Path, optional
+        Optional path to webservices.ini.
+
+    Returns
+    -------
+    tuple
+        (catchment_gdf, info)
+
+        catchment_gdf : geopandas.GeoDataFrame
+            Delineated catchment polygon.
+        info : dict
+            Dictionary with useful diagnostics:
+            - dem_filename
+            - catchment_filename
+            - snapped_lon
+            - snapped_lat
+            - bbox_used
+            - edge_touched
+
+    Raises
+    ------
+    RuntimeError
+        If delineation fails or if the DEM extent appears too small.
+    ValueError
+        If bbox is invalid.
+    """
+    from pathlib import Path
+
+    import numpy as np
+    import geopandas as gpd
+    from shapely.geometry import shape
+    from rasterio.features import shapes
+    from pysheds.grid import Grid
+
+    dem_filename = Path(dem_filename)
+    catchment_filename = Path(catchment_filename)
+    dem_filename.parent.mkdir(parents=True, exist_ok=True)
+    catchment_filename.parent.mkdir(parents=True, exist_ok=True)
+
+    if bbox is not None:
+        if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
+            raise ValueError("bbox must be a list or tuple: [xmin, ymin, xmax, ymax]")
+
+        xmin, ymin, xmax, ymax = map(float, bbox)
+        if not (xmin < xmax and ymin < ymax):
+            raise ValueError("bbox must satisfy xmin < xmax and ymin < ymax")
+
+        bbox_used = [xmin, ymin, xmax, ymax]
+
+        if dem_filename.exists():
+            print(f"Using existing DEM: {dem_filename}")
+        else:
+            print("Downloading DEM for custom bounding box...")
+            download_dem_for_bbox(
+                bbox=bbox_used,
+                output_path=dem_filename,
+                asset_id=asset_id,
+                config_path=config_path,
+            )
+    else:
+        bbox_used = None
+        if dem_filename.exists():
+            print(f"Using existing DEM: {dem_filename}")
+        else:
+            print(f"Downloading DEM for default {buffer_m} m box around outlet point...")
+            download_dem_webservice(
+                output_path=dem_filename,
+                asset_id=asset_id,
+                lat=lat,
+                lon=lon,
+                buffer_m=buffer_m,
+                config_path=config_path,
+            )
+
+    print("Loading DEM into pysheds...")
+    grid = Grid.from_raster(str(dem_filename))
+    dem = grid.read_raster(str(dem_filename))
+
+    print("Filling depressions...")
+    flooded_dem = grid.fill_depressions(dem)
+
+    print("Resolving flats...")
+    inflated_dem = grid.resolve_flats(flooded_dem)
+
+    dirmap = (64, 128, 1, 2, 4, 8, 16, 32)
+
+    print("Computing flow directions...")
+    fdir = grid.flowdir(inflated_dem, dirmap=dirmap)
+
+    print("Computing flow accumulation...")
+    acc = grid.accumulation(fdir, dirmap=dirmap)
+
+    print("Snapping outlet point to channel network...")
+    x_snap, y_snap = grid.snap_to_mask(acc > snap_acc_threshold, (lon, lat))
+
+    print("Delineating catchment...")
+    catch = grid.catchment(
+        x=x_snap,
+        y=y_snap,
+        fdir=fdir,
+        dirmap=dirmap,
+        xytype="coordinate",
+    )
+
+    catch_view = np.asarray(grid.view(catch), dtype=np.uint8)
+
+    edge_touched = bool(
+        catch_view[0, :].any()
+        or catch_view[-1, :].any()
+        or catch_view[:, 0].any()
+        or catch_view[:, -1].any()
+    )
+
+    if edge_touched:
+        raise RuntimeError(
+            "Local delineation touches the DEM boundary. "
+            "The DEM extent is likely too small. "
+            "Please provide a larger custom lat/lon bounding box "
+            "as bbox=[xmin, ymin, xmax, ymax]."
+        )
+
+    print("Converting delineated catchment raster to polygon...")
+    polygons = []
+    for geom, value in shapes(
+        catch_view,
+        mask=catch_view.astype(bool),
+        transform=grid.affine,
+    ):
+        if value == 1:
+            polygons.append(shape(geom))
+
+    if not polygons:
+        raise RuntimeError("No catchment polygon could be created from the delineation result.")
+
+    catchment_gdf = gpd.GeoDataFrame(
+        geometry=polygons,
+        crs=grid.crs,
+    )
+
+    catchment_gdf = catchment_gdf.dissolve().explode(index_parts=False).reset_index(drop=True)
+
+    if len(catchment_gdf) > 1:
+        areas = catchment_gdf.to_crs(catchment_gdf.estimate_utm_crs()).area
+        catchment_gdf = catchment_gdf.loc[[areas.idxmax()]].reset_index(drop=True)
+
+    catchment_gdf.to_file(catchment_filename, driver="GeoJSON")
+    print(f"Local catchment delineation saved to: {catchment_filename}")
+
+    info = {
+        "dem_filename": str(dem_filename),
+        "catchment_filename": str(catchment_filename),
+        "snapped_lon": float(x_snap),
+        "snapped_lat": float(y_snap),
+        "bbox_used": bbox_used,
+        "edge_touched": edge_touched,
+    }
+
+    return catchment_gdf, info
     
 
 def get_geopotential_webservice(
@@ -625,10 +904,6 @@ def get_geopotential_webservice(
     RuntimeError
         If the webservice request fails or returns malformed output.
     """
-    import json
-    import time
-    import threading
-    import requests
 
     try:
         from IPython.display import clear_output
@@ -894,200 +1169,8 @@ def get_climate_data_webservice(
     print(f"Elapsed time: {elapsed_total:,.1f} s")
 
     return df[["dt", "temp", "temp_c", "prec"]]
+
     
-    
-def delineate_catchment_local(
-    lat,
-    lon,
-    dem_filename,
-    catchment_filename,
-    asset_id,
-    buffer_m=40000,
-    bbox=None,
-    snap_acc_threshold=1000,
-    config_path=None,
-):
-    """
-    Delineate a catchment locally with pysheds after downloading a DEM.
-
-    The function uses the MATILDA DEM webservice to download a DEM either for
-    a default square around the outlet point or for a custom bounding box.
-    It then performs local delineation with pysheds.
-
-    If the resulting catchment touches the DEM boundary, the DEM extent is
-    likely too small and the function raises an error asking the user to
-    provide a custom lat/lon bounding box.
-
-    Parameters
-    ----------
-    lat : float
-        Latitude of the outlet / pour point.
-    lon : float
-        Longitude of the outlet / pour point.
-    dem_filename : str or Path
-        Output path for the downloaded DEM GeoTIFF.
-    catchment_filename : str or Path
-        Output path for the delineated catchment GeoJSON.
-    asset_id : str
-        Earth Engine asset ID of the DEM to download.
-    buffer_m : int or float, optional
-        Buffer radius in meters for the default DEM download box.
-        Ignored when bbox is provided.
-    bbox : list or tuple, optional
-        Custom bounding box in geographic coordinates:
-        [xmin, ymin, xmax, ymax].
-    snap_acc_threshold : int or float, optional
-        Accumulation threshold used to snap the outlet point to the channel
-        network. Default is 1000.
-    config_path : str or Path, optional
-        Optional path to webservices.ini.
-
-    Returns
-    -------
-    tuple
-        (catchment_gdf, info)
-
-        catchment_gdf : geopandas.GeoDataFrame
-            Delineated catchment polygon.
-        info : dict
-            Dictionary with useful diagnostics:
-            - dem_filename
-            - catchment_filename
-            - snapped_lon
-            - snapped_lat
-            - bbox_used
-            - edge_touched
-
-    Raises
-    ------
-    RuntimeError
-        If delineation fails or if the DEM extent appears too small.
-    ValueError
-        If bbox is invalid.
-    """
-    from pathlib import Path
-
-    import numpy as np
-    import geopandas as gpd
-    from shapely.geometry import shape
-    from rasterio.features import shapes
-    from pysheds.grid import Grid
-
-    dem_filename = Path(dem_filename)
-    catchment_filename = Path(catchment_filename)
-    dem_filename.parent.mkdir(parents=True, exist_ok=True)
-    catchment_filename.parent.mkdir(parents=True, exist_ok=True)
-
-    if bbox is not None:
-        if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
-            raise ValueError("bbox must be a list or tuple: [xmin, ymin, xmax, ymax]")
-        xmin, ymin, xmax, ymax = map(float, bbox)
-        if not (xmin < xmax and ymin < ymax):
-            raise ValueError("bbox must satisfy xmin < xmax and ymin < ymax")
-
-        bbox_used = [xmin, ymin, xmax, ymax]
-
-        print("Downloading DEM for custom bounding box...")
-        download_dem_for_bbox(
-            bbox=bbox_used,
-            output_path=dem_filename,
-            asset_id=asset_id,
-            config_path=config_path,
-        )
-    else:
-        bbox_used = None
-        print(f"Downloading DEM for default {buffer_m} m box around outlet point...")
-        download_dem_webservice(
-            output_path=dem_filename,
-            asset_id=asset_id,
-            lat=lat,
-            lon=lon,
-            buffer_m=buffer_m,
-            config_path=config_path,
-        )
-
-    print("Loading DEM into pysheds...")
-    grid = Grid.from_raster(str(dem_filename))
-    dem = grid.read_raster(str(dem_filename))
-
-    print("Filling depressions...")
-    flooded_dem = grid.fill_depressions(dem)
-
-    print("Resolving flats...")
-    inflated_dem = grid.resolve_flats(flooded_dem)
-
-    dirmap = (64, 128, 1, 2, 4, 8, 16, 32)
-
-    print("Computing flow directions...")
-    fdir = grid.flowdir(inflated_dem, dirmap=dirmap)
-
-    print("Computing flow accumulation...")
-    acc = grid.accumulation(fdir, dirmap=dirmap)
-
-    print("Snapping outlet point to channel network...")
-    x_snap, y_snap = grid.snap_to_mask(acc > snap_acc_threshold, (lon, lat))
-
-    print("Delineating catchment...")
-    catch = grid.catchment(
-        x=x_snap,
-        y=y_snap,
-        fdir=fdir,
-        dirmap=dirmap,
-        xytype="coordinate",
-    )
-
-    catch_view = np.asarray(grid.view(catch), dtype=np.uint8)
-
-    edge_touched = bool(
-        catch_view[0, :].any()
-        or catch_view[-1, :].any()
-        or catch_view[:, 0].any()
-        or catch_view[:, -1].any()
-    )
-
-    if edge_touched:
-        raise RuntimeError(
-            "Local delineation touches the DEM boundary. "
-            "The default DEM extent is likely too small. "
-            "Please provide a custom lat/lon bounding box "
-            "as bbox=[xmin, ymin, xmax, ymax]."
-        )
-
-    print("Converting delineated catchment raster to polygon...")
-    polygons = []
-    for geom, value in shapes(catch_view, mask=catch_view.astype(bool), transform=grid.affine):
-        if value == 1:
-            polygons.append(shape(geom))
-
-    if not polygons:
-        raise RuntimeError("No catchment polygon could be created from the delineation result.")
-
-    catchment_gdf = gpd.GeoDataFrame(
-        geometry=polygons,
-        crs=grid.crs,
-    )
-
-    catchment_gdf = catchment_gdf.dissolve().explode(index_parts=False).reset_index(drop=True)
-
-    if len(catchment_gdf) > 1:
-        areas = catchment_gdf.to_crs(catchment_gdf.estimate_utm_crs()).area
-        catchment_gdf = catchment_gdf.loc[[areas.idxmax()]].reset_index(drop=True)
-
-    catchment_gdf.to_file(catchment_filename, driver="GeoJSON")
-    print(f"Local catchment delineation saved to: {catchment_filename}")
-
-    info = {
-        "dem_filename": str(dem_filename),
-        "catchment_filename": str(catchment_filename),
-        "snapped_lon": float(x_snap),
-        "snapped_lat": float(y_snap),
-        "bbox_used": bbox_used,
-        "edge_touched": edge_touched,
-    }
-
-    return catchment_gdf, info
-    
-
 class CMIPDownloader:
     """Class to download spatially averaged CMIP6 data for a given period, variable, and spatial subset."""
 
