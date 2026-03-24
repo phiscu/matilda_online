@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 import io
 import time
 import threading
+import getpass
 
 from configparser import ConfigParser
 from pathlib import Path
@@ -282,7 +283,49 @@ def delineate_catchment_mghydro(
     return watershed_gdf, rivers_gdf
     
 
-def load_webservice_config(config_path=None, section="GOOGLE"):
+def _prompt_for_api_key(prompt_text="API key not found in config or environment. Please paste your MATILDA-Online API key: "):
+    """Prompt interactively for an API key without echoing it to the screen."""
+    try:
+        return getpass.getpass(prompt_text).strip()
+    except Exception:
+        return input(prompt_text).strip()
+
+
+
+def resolve_api_key(config=None, env_var="MATILDA_API_KEY", prompt_if_missing=True):
+    """
+    Resolve the MATILDA webservice API key.
+
+    Priority
+    --------
+    1. MATILDA_API_KEY environment variable
+    2. PUBLIC_API_KEY from webservices.ini
+    3. Interactive prompt (optional)
+    """
+    env_key = os.environ.get(env_var, "").strip()
+    if env_key:
+        return env_key
+
+    if config is not None:
+        cfg_key = str(config.get("PUBLIC_API_KEY", "")).strip()
+        if cfg_key:
+            return cfg_key
+
+    if not prompt_if_missing:
+        raise ValueError(
+            "No MATILDA webservice API key found. Provide MATILDA_API_KEY as an "
+            "environment variable, add PUBLIC_API_KEY to webservices.ini, or enter it "
+            "interactively."
+        )
+
+    api_key = _prompt_for_api_key()
+    if not api_key:
+        raise ValueError("No API key provided.")
+    return api_key
+
+
+
+def load_webservice_config(config_path=None, section="GOOGLE", prompt_for_api_key=True):
     """
     Load settings from webservices.ini.
 
@@ -292,6 +335,9 @@ def load_webservice_config(config_path=None, section="GOOGLE"):
         Path to webservices.ini. If None, defaults to repo_root/webservices.ini
         assuming this file lives in repo_root.
     section : str, optional
+    prompt_for_api_key : bool, optional
+        If True and section is [GOOGLE], prompt interactively for an API key when
+        neither MATILDA_API_KEY nor PUBLIC_API_KEY is available.
 
     Returns
     -------
@@ -325,7 +371,7 @@ def load_webservice_config(config_path=None, section="GOOGLE"):
     config = dict(parser[section])
 
     required_keys_by_section = {
-    "GOOGLE": ["PUBLIC_CLOUD_PROJECT", "PUBLIC_API_KEY", "BASE_URL"],
+    "GOOGLE": ["PUBLIC_CLOUD_PROJECT", "BASE_URL"],
     "HU": ["MEDIA_API_URL", "MEDIA_PRIVATE_KEY", "MEDIA_USER"],
     }
 
@@ -338,6 +384,10 @@ def load_webservice_config(config_path=None, section="GOOGLE"):
 
     if section == "GOOGLE":
         config["TIMEOUT"] = int(config.get("TIMEOUT", 120))
+        config["PUBLIC_API_KEY"] = resolve_api_key(
+            config=config,
+            prompt_if_missing=prompt_for_api_key,
+        )
 
     return config
     
