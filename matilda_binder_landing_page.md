@@ -13,9 +13,10 @@ Because of this, longer sessions may stop unexpectedly.
 
 ## ✅ How to work more safely in Binder
 
-Please follow these steps while working:
 
-**Use only one notebook at a time!**
+### >> Use only *one* notebook at a time! <<
+
+---
 
 ### After finishing a notebook:
 
@@ -25,12 +26,13 @@ Please follow these steps while working:
 
 ### 📤 If the server connection breaks:
 
-1. Restart the binder.
-2. Select your saved **`output_download.zip`** file from your computer
-3. Run the Notebook *Restore_Output_Folder.ipynb*.
-4. When ask, if you want to overwrite the *output/* folder, type *y*.
-5. Close the Notebook *Restore_Output_Folder.ipynb* and shut down the kernel.
-6. Continue with the next notebook int he workflow.
+1. **Restart** the binder.
+2. Click on the **upload icon** 📤 in the tool bar.
+3. Select your saved **`output_download.zip`** file from your computer
+4. Run the Notebook **`Restore_Output_Folder.ipynb`**.
+5. When ask, if you want to overwrite the *output/* folder, **type** **`y`**.
+6. **Close the Notebook** `Restore_Output_Folder.ipynb` and **shut down the kernel**.
+7. Continue with the next notebook in the workflow.
 
 
 
@@ -70,4 +72,4 @@ We are currently exploring other ways to host MATILDA-Online on a more stable pl
 
 Until then, the most reliable option is to **run the tool locally** on your own computer.
 
-➡️ Please follow the **local installation guidelines** in the repository for a more stable experience.
+➡️ Please follow the **local installation guidelines** in the Github repository for a more stable experience.
