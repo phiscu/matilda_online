@@ -1,5 +1,5 @@
 # MATILDA-Online: Workflow for Modeling Water Resources in Glacierized Catchments
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phiscu/matilda_edu/no_outputs?urlpath=lab/tree/matilda_binder_landing_page.md) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15712744.svg)](https://doi.org/10.5281/zenodo.15712744) [![Documentation Status](https://readthedocs.org/projects/matilda-online/badge/?version=latest)](https://matilda-online.readthedocs.io/en/latest/)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phiscu/matilda_edu/release-1.x?urlpath=lab/tree/matilda_binder_landing_page.md) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15712744.svg)](https://doi.org/10.5281/zenodo.15712744) [![Documentation Status](https://readthedocs.org/projects/matilda-online/badge/?version=latest)](https://matilda-online.readthedocs.io/en/latest/)
 
 Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hydrological modeling framework. This repository hosts the extended MATILDA workflow in form of a Jupyter Book. Designed for researchers, practitioners, and students, this workflow guides users from data acquisition to the analysis of climate change impacts on glacierized catchments.
 
