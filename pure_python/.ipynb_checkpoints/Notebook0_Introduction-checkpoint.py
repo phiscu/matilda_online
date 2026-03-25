@@ -17,6 +17,8 @@
 #
 # MATILDA is a **notebook-based workflow** for modeling water resources in glacierized catchments.
 #
+# ---
+#
 # ## 🧭 How this works
 #
 # MATILDA is a series of **Jupyter notebooks**. They contain a mix of executable code and descriptive text. There is one notebook for each step of the modeling workflow:
@@ -34,17 +36,17 @@
 #
 # You can run the notebooks either **online** or on your **local** computer.
 #
+# In this branch, the online version is designed to be simple to use. Some data-processing steps are handled through a **web service** in the background instead of running fully inside Binder.
+#
 # Choose one way to start:
 #
-# - **Launch online:** click the **rocket icon** (🚀) above and start the online environment called **Binder**.     ➜     ***Less setup, less easy to run!***
-# - **Run locally:** click the **GitHub icon** (<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18">), open the repository, and follow the setup steps in the manual.     ➜     ***More setup, more easy to run!***
-#
-# > Before launch, please **read the notes on the different versions** below.
+# - **Launch online:** open the Binder environment and work through the notebooks in your browser.
+# - **Run locally:** download the repository and run the notebooks on your own computer.
 #
 # ---
 # ## ✅ What you need before continuing
 #
-# To run MATILDA with the **example data**, you mainly need:
+# To run MATILDA with the **example data** in this branch, you mainly need:
 #
 # - a stable internet connection
 # - enough time for the notebooks to finish processing
@@ -54,16 +56,36 @@
 # - discharge observations (in the same format as the example)
 # - gauging station coordinates
 #
+# If you decide to use the **fully local workflow** instead of the web-service workflow, you will also need:
+#
+# - your own **Google Cloud / Earth Engine project**
+# - permission to use that project
+#
+# ---
+#
+# ## 📝 By the end of this Notebook you will have ...
+#
+# 1. understood how the MATILDA workflow is organized
+# 2. learned the difference between the web-service and local workflows
+# 3. understood why run times can vary in Binder
+# 4. checked the most important settings in the `config.ini`
+#
+# <div class="alert alert-block alert-info">
+#     <b>Good to know:</b> In this branch, you do <b>not</b> need to register Google Earth Engine inside Binder to get started.
+# </div>
+#
+# After that, continue with **Notebook 1**.
+#
 # ---
 
 # %% [markdown]
-# ## 🔀 Two ways to run MATILDA
+# ## ☁️ Two ways to run MATILDA
 #
 # MATILDA can currently be used in **two different workflows**.
 #
-# ### ☁️ 1. Web-service workflow (*v2.0.0-beta*)
+# ### 1. Web-service workflow (this branch)
 #
-# This version is connected to a small web service in the background. Some tasks that were previously run directly with Google Earth Engine from inside the notebook are now sent to this service.
+# This Binder version is connected to a small web service in the background. Some tasks that were previously run directly with Google Earth Engine from inside the notebook are now sent to this service.
 #
 # For you as a user, this mainly means:
 #
@@ -71,14 +93,12 @@
 # - you do not need to complete the Earth Engine registration steps in Binder
 # - the notebooks are easier to use in teaching and demonstration settings
 #
-# <div class="alert alert-block alert-info">
-#     <b>Please note:</b> MATILDA-Online is currently under peer-review. During this period, the latest version <b>2.0.0-beta requires an API key</b>. If you have not been provided with one, please use version 1.0.2 (see below).
+# <div class="alert alert-block alert-warning">
+#     <b>Please note:</b> A simpler setup does not always mean a faster workflow. Run times can still vary depending on server load, internet connection, request size, and the complexity of your catchment.
 # </div>
-#
-# You can start this version directly from this website's toolbar via the **rocket icon** (🚀) for the online option oder the **GitHub icon** (<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18">) for the local installation.
 
 # %% [markdown]
-# ### 🖥️ 2. Fully local workflow (*v1.0.2*)
+# ### 2. Fully local workflow
 #
 # MATILDA can also be run in a more direct way on your own computer. In that case, requests are processed locally through your own setup rather than through the shared web service.
 #
@@ -88,23 +108,24 @@
 #
 # - your own **Google Cloud project**
 # - access to **Google Earth Engine**
-# - preferably a **local MATILDA installation** since the Binder struggles with multi-processing
+# - a local Python environment with the required packages
 #
 # This option can be useful if you:
 #
-# - want to work independently from the shared web service
+# - want to work more independently from the shared online environment
 # - need to process many catchments or larger requests
-# - already have experience with the GEE Python API
+# - already have experience with local scientific Python workflows
+
+# %% [markdown]
+# ## 🔀 How to switch between workflows
 #
-# You can access this version here:
+# The different MATILDA setups are provided through different **Git branches**.
 #
-# > <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18"> [Repository](https://github.com/phiscu/matilda_online/tree/release-1.x)
+# So, if you want to use another workflow, you usually do **not** need a different tool. You simply use a **different branch** of the repository.
 #
-# > 🚀 [Binder](https://mybinder.org/v2/gh/phiscu/matilda_edu/release-1.x?urlpath=lab/tree/matilda_binder_landing_page.md)
+# The Binder for the branch with the current web-service based setup can be opened here:
 #
-# <div class="alert alert-block alert-info">
-#     <b>Please note:</b> The MATILDA-Online website only shows the workflow of the latest version.
-# </div>
+# [Launch Binder for the `no_outputs` branch](https://mybinder.org/v2/gh/phiscu/matilda_edu/no_outputs?urlpath=lab/tree/matilda_binder_landing_page.md)
 
 # %% [markdown]
 # ## ⏱️ What affects run time?
@@ -115,7 +136,6 @@
 #
 # - **shared online resources:** Binder sessions do not have dedicated computing power
 # - **web-service traffic:** several users may send requests at the same time
-# - **cold starts:** the first web-service request usually takes longer
 # - **request size:** larger catchments or longer time periods usually take more time
 # - **internet connection:** data need to be transferred between your notebook and the service
 #
@@ -150,4 +170,14 @@
 # 3. Depending on the workflow branch, some settings may be more relevant than others. In the web-service workflow, parts of the remote data access are already handled in the background. In a fully local workflow, you may need to define your own cloud-related settings more explicitly.
 
 # %% [markdown]
+# ## 📌 Summary
+#
+# In the current Binder branch, MATILDA is set up to be easier to use:
+#
+# - no Earth Engine registration is required inside Binder
+# - some remote data tasks are handled through a web service
+# - run times may still vary because Binder and the service are shared resources
+#
+# If you prefer a more independent setup, you can use the local workflow on a different branch. This requires your own Google Cloud / Earth Engine project.
+#
 # With the basic setup understood, you may now continue with **[Notebook 1](Notebook1_Catchment_delineation.ipynb)**.
