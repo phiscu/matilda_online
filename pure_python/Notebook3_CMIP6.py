@@ -90,7 +90,6 @@ downloader = CMIPDownloaderWebservice(
 )
 
 download_summary = downloader.download()
-print(download_summary)
 
 # %% [markdown]
 # We have now downloaded one CSV file per year and variable and stored them in `output/cmip6/`. These files can now be combined into continuous scenario time series.

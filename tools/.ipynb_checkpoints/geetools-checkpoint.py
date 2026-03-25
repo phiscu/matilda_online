@@ -291,7 +291,6 @@ def _prompt_for_api_key(prompt_text="API key not found in config or environment.
         return input(prompt_text).strip()
 
 
-
 def resolve_api_key(config=None, env_var="MATILDA_API_KEY", prompt_if_missing=True):
     """
     Resolve the MATILDA webservice API key.
@@ -309,6 +308,7 @@ def resolve_api_key(config=None, env_var="MATILDA_API_KEY", prompt_if_missing=Tr
     if config is not None:
         cfg_key = str(config.get("PUBLIC_API_KEY", "")).strip()
         if cfg_key:
+            os.environ[env_var] = cfg_key
             return cfg_key
 
     if not prompt_if_missing:
@@ -321,8 +321,9 @@ def resolve_api_key(config=None, env_var="MATILDA_API_KEY", prompt_if_missing=Tr
     api_key = _prompt_for_api_key()
     if not api_key:
         raise ValueError("No API key provided.")
-    return api_key
 
+    os.environ[env_var] = api_key
+    return api_key
 
 
 def load_webservice_config(config_path=None, section="GOOGLE", prompt_for_api_key=True):
@@ -1508,45 +1509,47 @@ class CMIPDownloaderWebservice:
         """
         summary = {}
         t0 = time.time()
-
+    
+        _ = load_webservice_config(config_path=self.config_path, section="GOOGLE")
+    
         total_expected = (self.endy - self.starty + 1) * len(self.variables)
-
+    
         pbar = tqdm(
             total=total_expected,
             desc="Downloading CMIP6 yearly files",
             unit="file",
             disable=not self.show_progress,
         )
-
+    
         try:
             for variable in self.variables:
                 if self.show_progress:
                     pbar.set_postfix_str(f"variable={variable}")
-
+    
                 variable_years = []
-
+    
                 for block_start, block_end in self._iter_blocks():
                     years = self._request_block(variable, block_start, block_end, pbar=pbar)
                     variable_years.extend(years)
-
+    
                 variable_years = sorted(set(variable_years))
                 summary[variable] = variable_years
-
+    
                 expected = list(range(self.starty, self.endy + 1))
                 missing = sorted(set(expected) - set(variable_years))
-
+    
                 if self.show_progress and missing:
                     print(f"Missing years for {variable}: {missing[:10]}{' ...' if len(missing) > 10 else ''}")
-
+    
         finally:
             pbar.close()
-
+    
         elapsed = time.time() - t0
-
+    
         if self.show_progress:
             print(f"CMIP6 webservice download complete in {elapsed:,.1f} s.")
-
-        return
+    
+        return summary
 
 
 class CMIPDownloaderManifest:
