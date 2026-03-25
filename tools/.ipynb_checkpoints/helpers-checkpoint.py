@@ -15,6 +15,7 @@ from tqdm import tqdm
 from matilda.core import matilda_simulation
 from multiprocessing import Pool
 from functools import partial
+from urllib.parse import urljoin
 
 
 def mean_elevation_from_raster(raster_path, geometry_gdf):
@@ -397,6 +398,34 @@ def adjust_jupyter_config():
             print('Jupyter config has been updated to run Dash!')
         else:
             print('JupyterLab seems to run on unsupported environment.')
+
+
+def get_dash_proxy_url(port: int):
+    # local notebook / no JupyterHub proxy
+    service_prefix = os.getenv("JUPYTERHUB_SERVICE_PREFIX")
+    if not service_prefix:
+        return None
+
+    # best case: public URL is explicitly provided by the platform
+    public_url = os.getenv("JUPYTERHUB_PUBLIC_URL")
+    public_hub_url = os.getenv("JUPYTERHUB_PUBLIC_HUB_URL")
+
+    if public_url:
+        base = public_url.rstrip("/") + "/"
+        return urljoin(base, f"proxy/{port}/")
+
+    if public_hub_url:
+        # often the user server lives under the service prefix
+        base = public_hub_url.rstrip("/") + service_prefix.lstrip("/")
+        if not base.endswith("/"):
+            base += "/"
+        return urljoin(base, f"proxy/{port}/")
+
+    # fallback for known deployments only
+    if "notebooks.gesis.org" in os.getenv("JUPYTERHUB_BASE_URL", ""):
+        return f"https://notebooks.gesis.org{service_prefix}proxy/{port}/"
+
+    return None
 
 
 class DataFilter:

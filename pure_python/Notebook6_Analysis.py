@@ -137,22 +137,25 @@ plot_ci_matilda('total_runoff',dic=matilda_scenarios, resample_freq='YE', show=T
 # To make the full dataset more accessible, we can integrate these figures into an **interactive application** using [`ploty.Dash`](https://dash.plotly.com/). This launches a `Dash` server that updates the figures as you select variables and frequencies in the **dropdown menus**. To compare time series, you can align multiple figures in the same application. The demo application aligns four figures showing *total runoff, total precipitation*, *runoff_from_glaciers*, and *glacier area* by default directly in the output cell. If you want to display the complete application in a separate Jupyter tab, set `display_mode='tab'`.
 
 # %%
-from tools.helpers import adjust_jupyter_config
+from tools.helpers import get_dash_proxy_url
 from dash import Dash
 from jupyter_server import serverapp
 from tools.plots import matilda_dash
 
-# retrieve server information to find out whether it's running locally or on mybinder.org server
-#adjust_jupyter_config()
-
 app1 = Dash(__name__)
 matilda_dash(app1,dic=matilda_scenarios, fig_count=4, display_mode='inLine')
 
-port = 8051
-if list(serverapp.list_running_servers()) == []:
-    app1.run(port=port, jupyter_mode="external")
+dash_url = get_dash_proxy_url(8051)
+
+if dash_url is None:
+    app1.run(port=8051, host="127.0.0.1", jupyter_mode="inline")
 else:
-    app1.run(port=port)
+    app1.run(
+        port=8051,
+        host="0.0.0.0",
+        jupyter_mode="external",
+        jupyter_server_url=dash_url,
+    )
 
 # %% [markdown]
 # ## Climate Change Impact Analysis
@@ -201,11 +204,17 @@ from jupyter_server import serverapp
 app2 = Dash(__name__)
 matilda_indicators_dash(app2, matilda_indicators)
 
-port = 8052
-if list(serverapp.list_running_servers()) == []:
-    app2.run(port=port, jupyter_mode="external")
+dash_url = get_dash_proxy_url(8052)
+
+if dash_url is None:
+    app2.run(port=8052, host="127.0.0.1", jupyter_mode="inline")
 else:
-    app2.run(port=port)
+    app2.run(
+        port=8052,
+        host="0.0.0.0",
+        jupyter_mode="external",
+        jupyter_server_url=dash_url,
+    )
 
 # %% [markdown]
 # ## Matilda Summary
