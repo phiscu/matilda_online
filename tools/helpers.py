@@ -369,63 +369,54 @@ def hydrologicalize(df, begin_of_water_year=10):
     return crop2wy(df_new, begin_of_water_year)
 
 
-def adjust_jupyter_config():
+def handle_dash_availability():
+    """
+    Check whether the notebook is running locally.
+
+    Returns
+    -------
+    bool
+        True if Dash dashboards should be displayed.
+        False if Dash should be skipped.
+    """
     from jupyter_server import serverapp
-    from dash._jupyter import _jupyter_config
-    import os
+    from IPython.display import Markdown, display
 
-    js = list(serverapp.list_running_servers())[0]
+    servers = list(serverapp.list_running_servers())
+    if not servers:
+        display(Markdown(
+            "⚠️ **Dash dashboards are unavailable.** "
+            "The notebook environment could not be identified."
+        ))
+        return False
 
-    if js['hostname'] == 'localhost':
-        print('JupyterLab seems to run on local machine.')
-    else:
-        base = js['base_url']
-        if base.split('/')[1] == 'binder':
-            print('JupyterLab seems to run on binder server.')
+    js = servers[0]
+    hostname = js.get("hostname", "")
+    base_url = js.get("base_url", "")
 
-            # start updating jupyter server config
-            # official docu: https://dash.plotly.com/dash-in-jupyter
-            # however, due to problems of jupyterlab v4 a work-around must be implemented
-            # see: https://github.com/plotly/dash/issues/2804
-            # and: https://github.com/plotly/dash/issues/2998
-            # solution inspired by: https://github.com/mthiboust/jupyterlab-retrieve-base-url/tree/main
-            conf = {'type': 'base_url_response',
-                    'server_url': 'https://notebooks.gesis.org',
-                    'base_subpath': os.getenv('JUPYTERHUB_SERVICE_PREFIX'),
-                    'frontend': 'jupyterlab'}
+    # Local notebook
+    if hostname in ("localhost", "127.0.0.1"):
+        print("JupyterLab seems to run on a local machine. Dash dashboards are enabled.")
+        return True
 
-            _jupyter_config.update(conf)
-            print('Jupyter config has been updated to run Dash!')
-        else:
-            print('JupyterLab seems to run on unsupported environment.')
+    # Binder / hosted environment
+    if "/binder/" in base_url or "/user/" in base_url:
+        display(Markdown(
+            "ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**\n\n"
+            "Unfortunately, they no longer run reliably in Binder-based environments. "
+            "This is caused by the current notebook/proxy setup, and we do not have a practical "
+            "way to fix it from within this notebook.\n\n"
+            "Please run the notebook locally if you would like to use the interactive dashboards."
+        ))
+        return False
 
-
-def get_dash_proxy_url(port: int):
-    # local notebook / no JupyterHub proxy
-    service_prefix = os.getenv("JUPYTERHUB_SERVICE_PREFIX")
-    if not service_prefix:
-        return None
-
-    # best case: public URL is explicitly provided by the platform
-    public_url = os.getenv("JUPYTERHUB_PUBLIC_URL")
-    public_hub_url = os.getenv("JUPYTERHUB_PUBLIC_HUB_URL")
-
-    if public_url:
-        base = public_url.rstrip("/") + "/"
-        return urljoin(base, f"proxy/{port}/")
-
-    if public_hub_url:
-        # often the user server lives under the service prefix
-        base = public_hub_url.rstrip("/") + service_prefix.lstrip("/")
-        if not base.endswith("/"):
-            base += "/"
-        return urljoin(base, f"proxy/{port}/")
-
-    # fallback for known deployments only
-    if "notebooks.gesis.org" in os.getenv("JUPYTERHUB_BASE_URL", ""):
-        return f"https://notebooks.gesis.org{service_prefix}proxy/{port}/"
-
-    return None
+    # Fallback for any other hosted setup
+    display(Markdown(
+        "ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**\n\n"
+        "This notebook appears to be running in a hosted environment, so the Dash dashboards "
+        "will be skipped."
+    ))
+    return False
 
 
 class DataFilter:
