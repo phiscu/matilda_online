@@ -16,340 +16,246 @@
 # # Climate forcing data
 
 # %% [markdown]
-# Now that we have all the static data, we can focus on the **climate variables**. In this notebook we will...
+# Now that we have all the **static catchment data**, we can turn to the **climate forcing** needed for MATILDA.
 #
-# 1. ...download **ERA5 land reanalysis data** aggregated to our catchment,
-# 2. ...and determine the **reference altitude** of the data from the geopotential height.
+# In this notebook we will...
 #
-# For data preprocessing and download we will again use the **Google Earth Engine** (GEE) to offload as much as possible to external servers. ERA5-Land is the latest reanalysis dataset from the European Center for Medium-Range Weather Forecast ([ECMWF](https://www.ecmwf.int/en/era5-land)), available from 1950 to near real-time. The GEE data catalog summarizes...
+# 1. request the **reference elevation** of the forcing data,
+# 2. request **ERA5-Land temperature and precipitation** for the catchment,
+# 3. inspect the returned time series,
+# 4. and store the results for the next workflow steps.
 #
-# > ERA5-Land is a reanalysis dataset providing a consistent view of the evolution of land variables over several decades at an enhanced resolution compared to ERA5. ERA5-Land has been produced by replaying the land component of the ECMWF ERA5 climate reanalysis. Reanalysis combines model data with observations from across the world into a globally complete and consistent dataset using the laws of physics. Reanalysis produces data that goes several decades back in time, providing an accurate description of the climate of the past.
-# >
-# > Source: [GEE Data Catalog](https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_RAW#description)
+# 🌦️ The aim is not only to obtain the data, but also to make each step easy to follow. Even when code cells are hidden in the final Jupyter Book, the printed outputs and figures should still show a clear workflow.
 
 # %% [markdown]
-# To get started we read some settings from the `config.ini` file again:
+# To get started, we read the settings from the `config.ini` file again.
 #
-# - **cloud project** name for the GEE access
-# - **input/output folders** for data imports and downloads
-# - **filenames** (DEM, GeoPackage)
-# - include future **projections** or not
-# - show/hide **interactive map** in notebooks
+# We will need:
+#
+# - paths for **input**, **output**, and **figures**,
+# - the name of the output **GeoPackage** from Notebook 1,
+# - whether **projections** are enabled,
+# - whether a refreshed **ZIP archive** should be created,
+# - and the **MATILDA-Webservice URL** plus **API key** for the requests.
+
+# %%
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
+import ast
+import configparser
+import os
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+
+dir_input = config["FILE_SETTINGS"]["DIR_INPUT"]
+dir_output = config["FILE_SETTINGS"]["DIR_OUTPUT"]
+dir_figures = config["FILE_SETTINGS"]["DIR_FIGURES"]
+output_gpkg = dir_output + config["FILE_SETTINGS"]["GPKG_NAME"]
+scenarios = config.getboolean("CONFIG", "PROJECTIONS")
+show_map = config.getboolean("CONFIG", "SHOW_MAP")
+zip_output = config.getboolean("CONFIG", "ZIP_OUTPUT")
+
+plt_style = ast.literal_eval(config["CONFIG"]["PLOT_STYLE"])
+
+print(f"Output GeoPackage: {output_gpkg}")
+print(f"Figure directory:  {dir_figures}")
+
+# %% [markdown]
+# If you have decided to back up your output files, you can now load them.
 
 # %%
 import zipfile
 
-with zipfile.ZipFile("output_download.zip", "r") as z:
-    z.extractall(".")
+if zip_output:
+    with zipfile.ZipFile("output_download.zip", "r") as z:
+        z.extractall(dir_output)
 
-# %%
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)     # Suppress Deprecation Warnings
-import pandas as pd
-import configparser
-import ast
-
-# read local config.ini file
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-# get file config from config.ini
-cloud_project = config['CONFIG']['CLOUD_PROJECT']
-dir_input = config['FILE_SETTINGS']['DIR_INPUT']
-dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
-dir_figures = config['FILE_SETTINGS']['DIR_FIGURES']
-output_gpkg = dir_output + config['FILE_SETTINGS']['GPKG_NAME']
-scenarios = config.getboolean('CONFIG', 'PROJECTIONS')
-show_map = config.getboolean('CONFIG','SHOW_MAP')
-zip_output = config['CONFIG']['ZIP_OUTPUT']
-
-# get style for matplotlib plots
-plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
+    print(f'Extracted "output_download.zip" to "{dir_output}".')
 
 # %% [markdown]
-# ...and **initialize** the GEE API.
-
-# %%
-import ee
-from tools.geetools import authenticate_and_initialize_ee
-
-authenticate_and_initialize_ee(cloud_project)
-
-# %% [markdown]
-# We can now load the catchment outline from the previous notebook and convert it to a `ee.FeatureCollection` to use it in GEE.
+# Next, we load the **catchment geometry** from Notebook 1.
+#
+# This geometry is the spatial reference for all following requests:
+#
+# - the **reference elevation** is calculated for this catchment,
+# - and the **ERA5-Land time series** are aggregated to exactly this area.
 
 # %%
 import geopandas as gpd
-import geemap
+import json
+import matplotlib.pyplot as plt
 
-catchment_new = gpd.read_file(output_gpkg, layer='catchment_new')
-catchment = geemap.geopandas_to_ee(catchment_new)
+catchment_new = gpd.read_file(output_gpkg, layer="catchment_new")
+catchment_geojson = json.loads(catchment_new.to_json())
+
+print(f"Loaded catchment layer with {len(catchment_new)} feature(s).")
+print(f"Catchment CRS: {catchment_new.crs}")
+display(catchment_new.head(1))
 
 # %% [markdown]
-# ## Set the date range
+# ## ERA5-Land reference elevation
 
 # %% [markdown]
-# If you are only interested in modeling the past, set `PROJECTIONS=False` in the `config.ini` to only download reanalysis data for your defined modeling period. Otherwise, all available historical data (since 1979) is downloaded to provide the best possible basis for bias adjustment of the climate scenario data.
+# ERA5-Land provides the atmospheric forcing variables we need, but for a lumped hydrological model we also need one representative **reference elevation** of the forcing data. 
+#
+# This elevation is derived from the **surface geopotential**:
+#
+# > The geopotential height can be calculated by dividing the geopotential by the Earth's gravitational acceleration,
+# > \(g = 9.80665\; m\; s^{-2}\).
+#
+# In practical terms, this gives us a representative elevation for the catchment-wide forcing data — similar in spirit to the elevation of a weather station.
+#
+# ✨ In the notebook, we simply request this value from the MATILDA-Webservice and inspect the result.
 
 # %%
-if scenarios == True:
-    date_range = ['1979-01-01', '2025-01-01']
-else:
-    date_range = ast.literal_eval(config['CONFIG']['DATE_RANGE'])
+from tools.geetools import get_geopotential_webservice
 
-print(f'The selected date range is {date_range[0]} to {date_range[1]}')
+geopot_data = get_geopotential_webservice(catchment_new)
+mean_val = geopot_data["geopotential_mean"]
+ele_dat = geopot_data["elevation_m"]
 
 # %% [markdown]
 # ***
 
 # %% [markdown]
-# ## ERA5L Geopotential height
+# ## ERA5-Land temperature and precipitation data
 
 # %% [markdown]
-# The **reference surface elevation** of ERA5-Land grid cells cannot be obtained directly, but must be calculated from the **geopotential**.
+# ### Select the date range
+# The selected time period depends on whether the workflow should prepare **only past forcing data** or also support later **scenario processing**.
 #
-# > This parameter is the gravitational potential energy of a unit mass, at a particular location, relative to mean sea level. It is also the amount of work that would have to be done, against the force of gravity, to lift a unit mass to that location from mean sea level.
-# >
-# > The geopotential height can be calculated by dividing the geopotential by the Earth's gravitational acceleration, g (=9.80665 m s-2). The geopotential height plays an important role in synoptic meteorology (analysis of weather patterns). Charts of geopotential height plotted at constant pressure levels (e.g., 300, 500 or 850 hPa) can be used to identify weather systems such as cyclones, anticyclones, troughs and ridges.
-# >
-# > At the surface of the Earth, this parameter shows the variations in geopotential (height) of the surface, and is often referred to as the orography.
-# >
-# > Source: [ECMWF Parameter Database](https://codes.ecmwf.int/grib/param-db/?id=129)
-
-# %% [markdown]
-# Since the ERA5 geopotential height is not available in the GEE Data Catalog, we downloaded it using the ECMWF Copernicus Data Store ([CDS](https://cds.climate.copernicus.eu/#!/home)) API, converted it to `.ncdf` format, and reuploaded it. Therefore, the file has to be accessed in a similar way to the ice thickness data in Notebook 1.
+# - If `PROJECTIONS=False`, the date range is taken directly from the `config.ini`.
+# - If `PROJECTIONS=True`, the workflow requests the historical period from **1979 onward** to provide a broader baseline for later bias adjustment.
 
 # %%
-from resourcespace import ResourceSpace
-
-# use guest credentials to access media server 
-api_base_url = config['MEDIA_SERVER']['api_base_url']
-private_key = config['MEDIA_SERVER']['private_key']
-user = config['MEDIA_SERVER']['user']
-
-myrepository = ResourceSpace(api_base_url, user, private_key)
-
-# get resource IDs for each .zip file
-refs_era5l = pd.DataFrame(myrepository.get_collection_resources(128))[['ref', 'file_size', 'file_extension', 'field8']]
-ref_geopot = refs_era5l.loc[refs_era5l['field8'] == 'ERA5_land_Z_geopotential']
-print("Dataset file and reference on media server:\n")
-display(ref_geopot)
-
-# %% [markdown]
-# The `.ncdf` file is then unzipped and loaded as `xarray` dataset for further processing.
-
-# %%
-from zipfile import ZipFile
-import io
-import xarray as xr
-
-content = myrepository.get_resource_file(ref_geopot.at[0,'ref'])
-with ZipFile(io.BytesIO(content), 'r') as zipObj:
-    # Get a list of all archived file names from the zip
-    filename = zipObj.namelist()[0]
-    print(f'Reading file "{filename}"...')
-    file_bytes = zipObj.read(filename)
-
-# Open the file-like object as an xarray dataset
-ds = xr.open_dataset(io.BytesIO(file_bytes))
-print(f'Dataset contains {ds.z.attrs["long_name"]} in {ds.z.attrs["units"]} as variable \'{ds.z.attrs["GRIB_cfVarName"]}\'')
-
-# %% [markdown]
-# The original dataset covers the entire globe, so we crop it to the catchment area plus a 1° buffer zone.
-
-# %%
-# get catchment bounding box with buffer
-bounds = catchment_new.total_bounds
-min_lon = bounds[0] - 1
-min_lat = bounds[1] - 1
-max_lon = bounds[2] + 1
-max_lat = bounds[3] + 1
-
-cropped_ds = ds.sel(lat=slice(min_lat,max_lat), lon=slice(min_lon,max_lon))
-print(f"xr.Dataset cropped to bbox[{round(min_lon, 2)}, {round(min_lat, 2)}, {round(max_lon, 2)}, {round(max_lat)}]")
-
-# %% [markdown]
-# To load `xarray` data into GEE a little workaround is needed. Credits to [Oliver Lopez](https://github.com/lopezvoliver/geemap/blob/netcdf_to_ee/geemap/common.py#L1776) for this solution.
-
-# %%
-# function to load nc file into GEE
-import numpy as np
-
-def netcdf_to_ee(ds):
-    data = ds['z']
-
-    lon_data = np.round(data['lon'], 3)
-    lat_data = np.round(data['lat'], 3)
-
-    dim_lon = np.unique(np.ediff1d(lon_data).round(3))
-    dim_lat = np.unique(np.ediff1d(lat_data).round(3))
-
-    if (len(dim_lon) != 1) or (len(dim_lat) != 1):
-        print("The netCDF file is not a regular longitude/latitude grid")
-    
-    print("Converting xarray to numpy array...")
-    data_np = np.array(data)
-    data_np = np.transpose(data_np)
-
-    # Figure out if we need to roll the data or not
-    # (see https://github.com/giswqs/geemap/issues/285#issuecomment-791385176)
-    if np.max(lon_data) > 180:
-        data_np = np.roll(data_np, 180, axis=0)
-        west_lon = lon_data[0] - 180
-    else:
-        west_lon = lon_data[0]
-    
-    print("Saving data extent and origin...")
-    transform = [dim_lon[0], 0, float(west_lon) - dim_lon[0]/2, 0, dim_lat[0], float(lat_data[0]) - dim_lat[0]/2]
-    
-    print("Converting numpy array to ee.Array...")
-    image = geemap.numpy_to_ee(
-        data_np, "EPSG:4326", transform=transform, band_names='z'
-    )
-    print("Done!")
-    return image, data_np, transform
-
-
-image, data_np, transform = netcdf_to_ee(cropped_ds)
-
-# %% [markdown]
-# If mapping is enabled in the `config.ini` you can now display the **geopotential** data in the **GEE map**. <a id="map"></a>
-
-# %%
-import geemap.colormaps as cm
-
-if show_map:
-    Map = geemap.Map()
-    # add geopotential as layer
-    vis_params =  {'min': int(data_np.min()), 'max': int(data_np.max()), 'palette': cm.palettes.terrain, 'opacity': 0.8}
-    Map.addLayer(image, vis_params, "ERA5L geopotential")
-    
-    # add catchment
-    Map.addLayer(catchment, {'color': 'darkgrey'}, "Catchment")
-    Map.centerObject(catchment, zoom=9)
-    display(Map)
+if scenarios is True:
+    date_range = ["1979-01-01", "2026-01-01"]
 else:
-    print("Map view disabled in config.ini")        
+    date_range = ast.literal_eval(config["CONFIG"]["DATE_RANGE"])
+
+print(f"The selected date range is {date_range[0]} to {date_range[1]}")
 
 # %% [markdown]
-# Since our workflow will use a **lumped model**, we will use **area-weighted catchment-wide averages** of our forcing data. Thus, we also aggregate the geopotential based on the grid cell fractions in the catchment and convert it to **geopotential height in meters above sea level**. This represents the **reference altitude of our forcing data**, just as the elevation of a weather station would.
+# ### Download ERA5-Land data
+# For the MATILDA model, the key meteorological inputs are:
+#
+# - **air temperature**
+# - **precipitation**
+#
+# We request both as **catchment-aggregated daily time series** for the selected period.
+#
+# The returned values are then converted into a compact `pandas.DataFrame`:
+#
+# - temperature from **Kelvin** to **°C**,
+# - precipitation from **meters** to **millimeters**.
+#
+# > 💡 **How are the ERA5-Land data aggregated?**  
+# > The ERA5-Land data has an approximate spatial resolution of 9 km. Depending on the size of your catchment area, the data may cover many or just a few grid cells. The web service calculates one area-weighted, catchment-wide average for each day. This means each cell is weighted according to its overlap with the catchment area.
 
 # %%
-# execute reducer
-dict = image.reduceRegion(ee.Reducer.mean(),
-                          geometry=catchment,
-                          crs='EPSG:4326',
-                          crsTransform=transform)
+from tools.geetools import get_climate_data_webservice
 
-# get mean value and print
-mean_val = dict.getInfo()['z']
-ele_dat = mean_val / 9.80665
-print(f'Geopotential mean:\t{mean_val:.2f} m2 s-2\nElevation:\t\t {ele_dat:.2f} m a.s.l.')
+df = get_climate_data_webservice(catchment_new, date_range)
+display(df.head())
 
 # %% [markdown]
-# ***
-
-# %% [markdown]
-# ## ERA5-Land Temperature and Precipitation Data
-
-# %% [markdown]
-# Our model only requires **temperature and precipitation** as inputs. We will download both time series from the **ERA5-Land Daily Aggregated - ECMWF Climate Reanalysis** `ECMWF/ERA5_LAND/DAILY_RAW` dataset in the <a href="https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_RAW#bands">Google Earth Engine Data Catalog</a>
+# The first rows already show the structure of the forcing data:
 #
-# > The asset is a daily aggregate of ECMWF ERA5 Land hourly assets. [...] Daily aggregates have been pre-calculated to facilitate many applications requiring easy and fast access to the data.
-# >
-# > Source: [GEE Data Catalog](https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_DAILY_RAW#description)
-
-# %% [markdown]
-# On the server side, we simply create an `ee.ImageCollection` with the desired bands (temperature and precipitation) and date range. To calculate area-weighted aggregates we apply the `ee.Reducer` function.
+# - a timestamp,
+# - the original temperature,
+# - the converted temperature in °C,
+# - precipitation converted to mm per day.
 
 # %%
 import pandas as pd
-import datetime
 
-def setProperty(image):
-    dict = image.reduceRegion(ee.Reducer.mean(), catchment)
-    return image.set(dict)
-
-
-collection = ee.ImageCollection('ECMWF/ERA5_LAND/DAILY_RAW')\
-    .select('temperature_2m','total_precipitation_sum')\
-    .filterDate(date_range[0], date_range[1])
-
-withMean = collection.map(setProperty)
-
-# %% [markdown]
-# We can then aggregate the results into arrays, download them with `.getInfo()` and store them as dataframe columns. Depending on the selected date range and server traffic this can take up to a few minutes.
-
-# %%
-# %%time
-
-df = pd.DataFrame()
-print("Get timestamps...")
-df['ts'] = withMean.aggregate_array('system:time_start').getInfo()
-df['dt'] = df['ts'].apply(lambda x: datetime.datetime.fromtimestamp(x / 1000))
-print("Get temperature values...")
-df['temp'] = withMean.aggregate_array('temperature_2m').getInfo()
-df['temp_c'] = df['temp'] - 273.15
-print("Get precipitation values...")
-df['prec'] = withMean.aggregate_array('total_precipitation_sum').getInfo()
-df['prec'] = df['prec'] * 1000
+summary_df = pd.DataFrame(
+    {
+        "variable": ["Temperature", "Precipitation"],
+        "minimum": [df["temp_c"].min(), df["prec"].min()],
+        "mean": [df["temp_c"].mean(), df["prec"].mean()],
+        "maximum": [df["temp_c"].max(), df["prec"].max()],
+        "unit": ["°C", "mm d-1"],
+    }
+)
+print("Quick summary statistics of the forcing data:")
+display(summary_df)
 
 # %% [markdown]
-# The constructed data frame now looks like this:
+# A time series plot provides a first impression of the seasonal signal and the variability of both variables.
 
 # %%
-display(df)
-
-# %% [markdown]
-# Let's **plot** the full time series.
+print( df[["dt", "temp_c", "prec"]])
 
 # %%
-import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import scienceplots
 
-# set style from config
 plt.style.use(plt_style)
 
-axes = df.drop(['ts','temp'],axis=1).plot.line(x='dt', subplots=True, legend=False, figsize=(10,5),
-                                               title='ERA5-Land Data for Target Catchment',
-                                               color={"temp_c": "red", "prec": "darkblue"})
-axes[0].set_ylabel("Temperature [°C]")
+axes = df[["dt", "temp_c", "prec"]].plot.line(
+    x="dt",
+    subplots=True,
+    legend=False,
+    figsize=(10, 5),
+    title="ERA5-Land data for target catchment",
+    color={"temp_c": "#A24600", "prec": "#005A9C"},
+)
+
+axes[0].set_ylabel("Temperature [$^\circ$C]")
 axes[1].set_ylabel("Precipitation [mm]")
 axes[1].set_xlabel("Date")
 axes[1].xaxis.set_minor_locator(mdates.YearLocator())
 plt.xlim(date_range)
 plt.tight_layout()
-plt.savefig(dir_figures+'NB2_ERA5_Temp_Prec.png')
+plt.savefig(dir_figures + "NB2_ERA5_Temp_Prec.png")
 plt.show()
+print(f'Saved overview plot to "{dir_figures}NB2_ERA5_Temp_Prec.png".')
+
+# %% [markdown]
+# For long time series, a short close-up can be useful as well 🔎
+
+# %%
+from tools.plots import plot_mean_annual_cycle
+
+fig, ax1, ax2, clim = plot_mean_annual_cycle(df)
+fig.savefig(dir_figures + "NB2_ERA5_Temp_Prec_clim.png")
+
+print(f'Saved climatology plot to "{dir_figures}NB2_ERA5_Temp_Prec_clim.png".')
 
 # %% [markdown]
 # ## Store data for next steps
 
 # %% [markdown]
-# To continue in the workflow, we write the ERA5 data to a `.csv` file...
+# To continue in the workflow, we store two outputs:
+#
+# - the **ERA5-Land forcing time series** as `ERA5L.csv`,
+# - and the **reference elevation** in `settings.yml` as `ele_dat`.
 
 # %%
-df.to_csv(dir_output + 'ERA5L.csv',header=True,index=False)
-
-# %% [markdown]
-# ...and update the `settings.yml` file with the reference altitude of the ERA5-Land data (`ele_dat`) and refresh `output_download.zip` with newly acquired data.
+era5l_path = dir_output + "ERA5L.csv"
+df.to_csv(era5l_path, header=True, index=False)
+print(f'ERA5-Land forcing data written to "{era5l_path}".')
 
 # %%
 from tools.helpers import update_yaml
-import shutil
 
-# update settings file
-update_yaml(dir_output + 'settings.yml', {'ele_dat': float(ele_dat)})
-
-if zip_output:
-    # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
-    print('Output folder can be download now (file output_download.zip)')
-
-# %%
-# %reset -f
-
+update_yaml(dir_output + "settings.yml", {"ele_dat": float(ele_dat)})
+print(f'Updated "{dir_output}settings.yml" with ele_dat = {float(ele_dat):.2f}.')
 
 # %% [markdown]
-# You can now continue with [Notebook 3](Notebook3_CMIP6.ipynb).
+# Finally, if requested in the `config.ini`, we refresh `output_download.zip` so that all newly generated output files can be downloaded together.
+
+# %%
+import shutil
+
+if zip_output:
+    shutil.make_archive("output_download", "zip", "output")
+    print('Output folder refreshed and available as "output_download.zip".')
+else:
+    print("ZIP output disabled in config.ini")
+
+# %% [markdown]
+# ✅ Notebook 2 is complete. You can now continue with [Notebook 3](Notebook3_CMIP6.ipynb).

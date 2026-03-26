@@ -74,6 +74,94 @@ def df2long(df, intv_sum='ME', intv_mean='YE', precip=False):
     return df
 
 
+def plot_mean_annual_cycle(df):
+    df = df.copy()
+
+    # Make sure datetime is available
+    df["dt"] = pd.to_datetime(df["dt"])
+
+    # Day of year and month-day labels
+    df["doy"] = df["dt"].dt.dayofyear
+    df["month_day"] = df["dt"].dt.strftime("%m-%d")
+
+    # Remove Feb 29 to keep all years aligned to 365 days
+    clim_df = df.loc[df["month_day"] != "02-29"].copy()
+
+    # Recompute no-leap day index so all years align correctly
+    clim_df["doy_noleap"] = np.arange(len(clim_df)) % 365 + 1
+
+    # Mean annual cycle
+    clim = (
+        clim_df.groupby("doy_noleap")
+        .agg(
+            temp_c_mean=("temp_c", "mean"),
+            prec_mean=("prec", "mean")
+        )
+        .reset_index(drop=True)
+    )
+
+    # Create a date axis for monthly ticks
+    clim["plot_date"] = pd.date_range("2001-01-01", periods=len(clim), freq="D")
+
+    # Darker, colorblind-friendly colors
+    temp_color = "#A24600"   # darker orange-brown
+    prec_color = "#005A9C"   # darker blue
+
+    year_min = clim_df["dt"].dt.year.min()
+    year_max = clim_df["dt"].dt.year.max()
+
+    fig, ax1 = plt.subplots(figsize=(8, 5))
+    ax2 = ax1.twinx()
+
+    # Put temperature axis above precipitation axis
+    ax1.set_zorder(3)
+    ax2.set_zorder(2)
+    ax1.patch.set_alpha(0)   # keep bars visible behind the top axis
+
+    # Precipitation on right axis
+    ax2.bar(
+        clim["plot_date"],
+        clim["prec_mean"],
+        width=1.0,
+        color=prec_color,
+        alpha=0.8,
+        zorder=1
+    )
+    ax2.set_ylabel("Precipitation [mm day$^{-1}$]", color=prec_color, fontsize=13)
+    ax2.tick_params(axis="y", colors=prec_color, labelsize=12)
+    ax2.margins(x=0)
+
+    # Temperature on left axis
+    ax1.plot(
+        clim["plot_date"],
+        clim["temp_c_mean"],
+        linewidth=2,
+        color=temp_color,
+        zorder=4
+    )
+    ax1.set_ylabel("Temperature [$^\circ$C]", color=temp_color, fontsize=13)
+    ax1.set_xlabel("Month", fontsize=13)
+    ax1.set_title(f"Mean annual cycle ({year_min}-{year_max})", fontsize=16)
+    ax1.tick_params(axis="y", colors=temp_color, labelsize=12)
+    ax1.tick_params(axis="x", labelsize=12)
+
+    # Remove white space before and after the time series
+    ax1.set_xlim(clim["plot_date"].min(), clim["plot_date"].max())
+    ax1.margins(x=0)
+
+    # Month ticks
+    month_starts = pd.date_range("2001-01-01", "2001-12-31", freq="MS")
+    ax1.set_xticks(month_starts)
+    ax1.set_xticklabels([d.strftime("%b") for d in month_starts])
+
+    # Grid and layout
+    ax1.grid(True, axis="y", alpha=0.3, zorder=0)
+    fig.tight_layout()
+    plt.show()
+
+    return fig, ax1, ax2, clim
+
+    
 def cmip_plot(ax, df, target, title=None, precip=False, smooth_window=10, agg_level='monthly',
               target_label='Target', show_target_label=False):
     """Plots climate model and target data using moving window smoothing."""

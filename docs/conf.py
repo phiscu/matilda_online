@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath(".."))
 project = 'Matilda ONLINE'
 copyright = '2026, Alexander Georgi, Phillip Schuster, Mia Janzen'
 author = 'Alexander Georgi, Phillip Schuster, Mia Janzen'
-release = '1.0.2'
+release = '2.0.0-beta'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

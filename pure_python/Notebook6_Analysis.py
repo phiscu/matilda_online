@@ -47,6 +47,7 @@ config.read('config.ini')
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 settings = read_yaml(os.path.join(dir_output, 'settings.yml'))
+zip_output = config['CONFIG']['ZIP_OUTPUT']
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')
@@ -137,22 +138,15 @@ plot_ci_matilda('total_runoff',dic=matilda_scenarios, resample_freq='YE', show=T
 # To make the full dataset more accessible, we can integrate these figures into an **interactive application** using [`ploty.Dash`](https://dash.plotly.com/). This launches a `Dash` server that updates the figures as you select variables and frequencies in the **dropdown menus**. To compare time series, you can align multiple figures in the same application. The demo application aligns four figures showing *total runoff, total precipitation*, *runoff_from_glaciers*, and *glacier area* by default directly in the output cell. If you want to display the complete application in a separate Jupyter tab, set `display_mode='tab'`.
 
 # %%
-from tools.helpers import adjust_jupyter_config
-from dash import Dash
-from jupyter_server import serverapp
-from tools.plots import matilda_dash
+from tools.helpers import handle_dash_availability
 
-# retrieve server information to find out whether it's running locally or on mybinder.org server
-#adjust_jupyter_config()
+if handle_dash_availability():
+    from dash import Dash
+    from tools.plots import matilda_dash
 
-app1 = Dash(__name__)
-matilda_dash(app1,dic=matilda_scenarios, fig_count=4, display_mode='inLine')
-
-port = 8051
-if list(serverapp.list_running_servers()) == []:
-    app1.run(port=port, jupyter_mode="external")
-else:
-    app1.run(port=port)
+    app1 = Dash(__name__)
+    matilda_dash(app1, dic=matilda_scenarios, fig_count=4)
+    app1.run(port=8051)
 
 # %% [markdown]
 # ## Climate Change Impact Analysis
@@ -188,24 +182,19 @@ if compact_files:
     dict_to_parquet(matilda_indicators, f"{dir_output}cmip6/adjusted/matilda_indicators_parquet")
 else:
     dict_to_pickle(matilda_indicators, f"{dir_output}cmip6/adjusted/matilda_indicators_pickle")
+print("Done!")
 
 # %% [markdown]
 # Now, we create another **interactive application** to visualize the calculated indicators.
 
 # %%
-from tools.plots import matilda_indicators_dash
-from dash import Dash
-from jupyter_server import serverapp
+if handle_dash_availability():
+    from dash import Dash
+    from tools.plots import matilda_indicators_dash
 
-
-app2 = Dash(__name__)
-matilda_indicators_dash(app2, matilda_indicators)
-
-port = 8052
-if list(serverapp.list_running_servers()) == []:
-    app2.run(port=port, jupyter_mode="external")
-else:
-    app2.run(port=port)
+    app2 = Dash(__name__)
+    matilda_indicators_dash(app2, matilda_indicators)
+    app2.run(port=8052)
 
 # %% [markdown]
 # ## Matilda Summary
@@ -231,6 +220,14 @@ from tools.plots import plot_annual_cycles
 
 plot_annual_cycles(matilda_scenarios, save_path=f"{dir_output}/figures/summary_gridplots.png")
 
+
+# %%
+import shutil
+
+if zip_output:
+    # refresh `output_download.zip` with the final figures
+    shutil.make_archive('output_download', 'zip', 'output')
+    print('Output folder can be download now (file output_download.zip)')
 
 # %% [markdown]
 # ## Finish line

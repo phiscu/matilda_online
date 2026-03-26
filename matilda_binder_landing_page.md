@@ -16,12 +16,13 @@ Because of this, longer sessions may stop unexpectedly.
 
 ### >> Use only *one* notebook at a time! <<
 
+### >> Take it easy - A Binder is a delicate creature. <<
 ---
 
 ### After finishing a notebook:
 
 1. **Download the `output_download.zip` file** as a backup (see below).
-2. **Close the notebook and shut down its kernel** (see below).
+2. **Close the notebook and shut down its kernel** (see below). You can discard changes.
 3. Then open the next notebook.
 
 ### 📤 If the server connection breaks:
@@ -32,7 +33,7 @@ Because of this, longer sessions may stop unexpectedly.
 4. Run the Notebook **`Restore_Output_Folder.ipynb`**.
 5. When ask, if you want to overwrite the *output/* folder, **type** **`y`**.
 6. **Close the Notebook** `Restore_Output_Folder.ipynb` and **shut down the kernel**.
-7. Continue with the next notebook in the workflow.
+7. Continue with the next notebook in the workflow. *(Consider running the critical notebook cell-by-cell.)*
 
 
 
@@ -59,7 +60,7 @@ If the Binder session breaks, you can upload it again...
 - Under **Kernels**, find the notebook you just used
 - Click the 🗙 for **Shut Down** next to that kernel
 
-You can then close the notebook tab.
+You can then close the notebook tab (and discard changes).
 
 > **Important:** Closing the notebook tab alone is **not enough**.  
 > The kernel may keep running in the background until it is shut down manually.

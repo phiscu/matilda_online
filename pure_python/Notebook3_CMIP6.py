@@ -22,21 +22,21 @@
 # 3. ... compare the CMIP6 models with our reanalysis data and adjust them for biases,
 # 4. ... and visualize the data before and after bias adjustment.
 #
-# The [NEX-GDDP-CMIP6 dataset](https://www.nature.com/articles/s41597-022-01393-4) we are going to use has been downscaled to 27830 m resolution by the [NASA Climate Analytics Group](https://www.nature.com/articles/s41597-022-01393-4) and is available in two [Shared Socio-Economic Pathways](https://unfccc.int/sites/default/files/part1_iiasa_rogelj_ssp_poster.pdf) (SSP2 and SSP5). It is available via [Google Earth Engine](https://developers.google.com/earth-engine/datasets/catalog/NASA_GDDP-CMIP6#bands) which makes it subsettable on the server side and the download files relatively lightweight.
+# The [NEX-GDDP-CMIP6 dataset](https://www.nature.com/articles/s41597-022-01393-4) we are going to use has been downscaled to 27,830 m resolution by the NASA Climate Analytics Group and is available in two [Shared Socio-Economic Pathways](https://unfccc.int/sites/default/files/part1_iiasa_rogelj_ssp_poster.pdf) (SSP2 and SSP5). The data are available through [Google Earth Engine](https://developers.google.com/earth-engine/datasets/catalog/NASA_GDDP-CMIP6#bands).
+#
+# In this workflow, the spatial aggregation and data extraction are handled by the MATILDA webservice. The notebook only sends the catchment geometry and download settings, then receives yearly CSV files that can be processed directly in Python.
 
 # %% [markdown]
-# We start by reading the config and initializing the Google Earth Engine access again.
+# We start by reading the configuration and loading the catchment geometry that was created in Notebook 1.
 
 # %%
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning)     # Suppress Deprecation Warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
 import configparser
 import ast
 import geopandas as gpd
-import ee
-import geemap
 import numpy as np
-from tools.geetools import authenticate_and_initialize_ee
 
 # read local config.ini file
 config = configparser.ConfigParser()
@@ -52,60 +52,72 @@ zip_output = config['CONFIG']['ZIP_OUTPUT']
 # plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
 
 # set the file format for storage
-compact_files = config.getboolean('CONFIG','COMPACT_FILES')
-
-# read cloud-project
-cloud_project = config['CONFIG']['CLOUD_PROJECT']
-
-# initialize GEE
-authenticate_and_initialize_ee(cloud_project)
-
-# %% [markdown]
-# Now we can send the catchment outline to GEE to use it as target polygon for aggregation.
-
-# %%
-# load catchment outline as target polygon
-catchment_new = gpd.read_file(output_gpkg, layer='catchment_new')
-catchment = geemap.geopandas_to_ee(catchment_new)
-print("Catchment outline converted to GEE polygon.")
+compact_files = config.getboolean('CONFIG', 'COMPACT_FILES')
 
 # name target subdirectory to be created
 cmip_dir = dir_output + 'cmip6/'
 
 # %% [markdown]
-# ## Select, aggregate, and download downscaled CMIP6 data
-# %% [markdown]
-# We have designed a class called `CMIPDownloader` that does everything promised in the heading in one go. The `buildFeature()` function requests daily catchment wide averages of all available CMIP6 models for individual years. All requested years are stored in an `ee.ImageCollection` by the`getResult()` function. To provide the best basis for bias adjustment, a large overlap of reanalysis and scenario data is recommended. By default, the `CMIPDownloader` class requests everything between the earliest available date from ERA5 (1979) and the latest available date from CMIP6 (2100). The `download()` function then starts a given number of parallel requests, each downloading a single year and saving it as a CSV file.
-#
-# We can simply specify a target location and start the download for both variables individually. If you are in a binder or only have few CPUs available, choose a moderate number of requests to avoid "hickups". The download time depends on the number of parallel processes, the traffic on the GEE servers and other mysterious factors. If you run this notebook in a binder, it usually doesn't take more than 5 minutes for both downloads to finish.
+# Now we load the catchment outline. It will be sent to the MATILDA webservice, which performs the aggregation in Google Earth Engine and returns one CSV file per year and variable.
 
 # %%
-from tools.geetools import CMIPDownloader
-
-downloader_t = CMIPDownloader(var='tas', starty=1979, endy=2100, shape=catchment, processes=30, dir=cmip_dir)
-downloader_t.download()
-downloader_p = CMIPDownloader(var='pr', starty=1979, endy=2100, shape=catchment, processes=30, dir=cmip_dir)
-downloader_p.download()
+# load catchment outline as target polygon
+catchment_new = gpd.read_file(output_gpkg, layer='catchment_new')
+print("Catchment outline loaded.")
 
 # %% [markdown]
-# We have now downloaded individual files for each year and variable and stored them in `output/cmip_dir`. To use them as model forcing data, they need to be processed.
+# ## Select, aggregate, and download downscaled CMIP6 data
+
+# %% [markdown]
+# We use the `CMIPDownloaderWebservice` class to request daily catchment-wide averages of all available CMIP6 models for the variables temperature (`tas`) and precipitation (`pr`).
+#
+# The downloader sends the catchment geometry and time range to the MATILDA webservice. The webservice performs the spatial aggregation in Google Earth Engine and streams the yearly results back to the notebook. The files are saved locally as yearly CSV files, which keeps the following processing steps unchanged.
+#
+# By default, we request the full overlap between ERA5-Land and CMIP6 from 1979 to 2100. The current default setup requests the two variables separately, which is more robust for long time series. A moderate number of parallel requests is usually sufficient. In our tests, `max_concurrent=6` performed well. If you work in a more constrained environment and a full request becomes unstable, you can additionally split the download into shorter year blocks. Usually this download takes 6-7 minutes.
+
+# %%
+from tools.geetools import CMIPDownloaderWebservice
+
+downloader = CMIPDownloaderWebservice(
+    starty=1979,
+    endy=2100,
+    catchment=catchment_new,
+    variables=['tas', 'pr'],
+    dir=cmip_dir,
+    max_concurrent=6,
+    block_size_years=None,   # use e.g. 20 as fallback in constrained environments
+    show_progress=True,
+)
+
+download_summary = downloader.download()
+
+# %% [markdown]
+# We have now downloaded one CSV file per year and variable and stored them in `output/cmip6/`. These files can now be combined into continuous scenario time series.
 
 # %% [markdown]
 # ## Processing CMIP6 data
 
 # %% [markdown]
-# The corresponding `CMIPProcessor` class will read all downloaded CSV files and concatenate them into a single file per scenario. It also checks for consistency and drops models that are not available for individual years or scenarios. It processes variables individually and returns a single dataframe for each of the two scenarios from 1979 to 2100.
+# The `CMIPProcessor` class reads the downloaded yearly CSV files and concatenates them into continuous time series for each scenario. It also checks model consistency and drops models that are not available across all required years and scenarios.
+#
+# The processor works on one variable at a time and returns one dataframe for SSP2 and one for SSP5, both covering the full period from 1979 to 2100.
 
 # %%
 from tools.geetools import CMIPProcessor
-
-cmip_dir = dir_output + 'cmip6/'
 
 processor_t = CMIPProcessor(file_dir=cmip_dir, var='tas')
 ssp2_tas_raw, ssp5_tas_raw = processor_t.get_results()
 
 processor_p = CMIPProcessor(file_dir=cmip_dir, var='pr')
 ssp2_pr_raw, ssp5_pr_raw = processor_p.get_results()
+
+print("Raw CMIP6 scenario data loaded.")
+print("ssp2_tas_raw shape:", ssp2_tas_raw.shape)
+print("ssp5_tas_raw shape:", ssp5_tas_raw.shape)
+print("ssp2_pr_raw shape:", ssp2_pr_raw.shape)
+print("ssp5_pr_raw shape:", ssp5_pr_raw.shape)
+
+ssp2_tas_raw.head()
 
 # %% [markdown]
 # Let's have a look. We can see that our scenario dataset now contains a fairly large number of CMIP6 models in alphabetical order.
@@ -250,8 +262,8 @@ cmip_plot_combined(data=ssp_pr_dict, target=era5, precip=True, target_label='ERA
 # %%
 from tools.plots import cmip_plot_ensemble
 
-cmip_plot_ensemble(ssp_tas_dict, era5['temp'], intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Temp.pdf')
-cmip_plot_ensemble(ssp_pr_dict, era5['prec'], precip=True, intv_sum='ME', intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Prec.pdf')
+cmip_plot_ensemble(ssp_tas_dict, era5['temp'], intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Temp.png')
+cmip_plot_ensemble(ssp_pr_dict, era5['prec'], precip=True, intv_sum='ME', intv_mean='YE', fig_path=f'{dir_figures}NB3_CMIP6_Ensemble_Prec.png')
 
 # %% [markdown]
 # We can see that the SDM adjusts the range and mean of the target data while preserving the distribution and trend of the original data. However, the inter-model variance is slightly reduced for temperature and notably increased for precipitation.

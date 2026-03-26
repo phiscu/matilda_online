@@ -1,9 +1,10 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using the following metadata."
 title: "MATILDA-Online: Cloud-based Workflow for Modeling wATer resources In gLacierizeD cAtchments"
-version: "1.0.2"
+version: "2.0.0-beta"
 doi: "10.5281/zenodo.15712744"
-date-released: "2026-03-25"
+date-released: "2026-03-26"
+
 authors:
   - family-names: "Schuster"
     given-names: "Phillip"
