@@ -9,6 +9,12 @@ Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hy
 
 ## Installation
 
+> **Note:** You are currently using the **beta version (v2.x-beta)** of MATILDA-Online. This version is designed to test a Google-hosted web service that handles requests to Google Earth Engine. During the current peer-review phase, access requires an API key provided by the developers.  
+>
+> If you would prefer to use the **stable classic workflow (v1.0.2)** with your own Google Cloud project, please use the ***release-1.x*** branch or follow the links below:  
+> 💾 [Repository](https://github.com/phiscu/matilda_online/tree/release-1.x)  
+> 🚀 [Binder](https://mybinder.org/v2/gh/phiscu/matilda_edu/release-1.x?urlpath=lab/tree/matilda_binder_landing_page.md)
+
 You can run most of the workflow in an online environment hosted on **mybinder.org**. However, model calibration is computationally intensive and can be slow in Binder because only limited computing resources are available. For more comprehensive calibration runs, we recommend downloading the notebooks and running them **locally** on a machine with multiple CPU cores.
 
 MATILDA-Online is designed to be run in **JupyterLab**.
