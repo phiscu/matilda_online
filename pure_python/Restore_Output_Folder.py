@@ -27,7 +27,7 @@
 # ## How to use this notebook
 #
 # 1. Upload `output_download.zip` to this folder
-# 2. Run the code cell below
+# (2. Run the code cell below)
 # 3. Confirm whether the current `output/` folder should be replaced
 #
 # After that, your saved results should be available again in `output/`.
