@@ -16,6 +16,7 @@ Because of this, longer sessions may stop unexpectedly.
 
 ### >> Use only *one* notebook at a time! <<
 
+### >> Take it easy - A Binder is a delicate creature. <<
 ---
 
 ### After finishing a notebook:
@@ -32,7 +33,7 @@ Because of this, longer sessions may stop unexpectedly.
 4. Run the Notebook **`Restore_Output_Folder.ipynb`**.
 5. When ask, if you want to overwrite the *output/* folder, **type** **`y`**.
 6. **Close the Notebook** `Restore_Output_Folder.ipynb` and **shut down the kernel**.
-7. Continue with the next notebook in the workflow.
+7. Continue with the next notebook in the workflow. *(Consider running the critical notebook cell-by-cell.)*
 
 
 
