@@ -9,6 +9,8 @@ Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hy
 
 ## Installation
 
+> **Note**: You are now on the **legacy branch v1.x** which is designed to use MATILDA-Online with your own Google Cloud Project. If want to use the web-service version instead, switch to the *main* branch or follow the links on the [MATILDA-Online Website](https://matilda-online.github.io/jbook).
+
 You can run most of the workflow in an online environment hosted on **mybinder.org**. However, model calibration is computationally intensive and can be slow in Binder because only limited computing resources are available. For more comprehensive calibration runs, we recommend downloading the notebooks and running them **locally** on a machine with multiple CPU cores.
 
 MATILDA-Online is designed to be run in **JupyterLab**.
@@ -30,7 +32,7 @@ Open a terminal.
 Then run:
 
 ```bash
-git clone https://github.com/phiscu/matilda_online.git
+git clone --branch release-1.x --single-branch https://github.com/phiscu/matilda_online.git
 cd matilda_online
 ```
 
@@ -39,7 +41,7 @@ cd matilda_online
 Create a new conda environment from the provided `environment.yml` file:
 
 ```bash
-conda env create -f environment.yml -n matilda_online
+conda env create -f binder/environment.yml -n matilda_online
 ```
 
 This may take a few minutes the first time.
@@ -67,7 +69,7 @@ conda install -c conda-forge jupyterlab
 From the root folder of the repository, start JupyterLab:
 
 ```bash
-jupyter lab
+jupyter lab Notebook0_Introduction.ipynb
 ```
 
 JupyterLab should open automatically in your browser. If it does not, copy the local URL shown in the terminal and paste it into your browser.
@@ -124,3 +126,4 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 
 
 
+git clone --branch gee-webservice --single-branch https://github.com/phiscu/matilda_edu.git
