@@ -47,6 +47,7 @@ config.read('config.ini')
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 settings = read_yaml(os.path.join(dir_output, 'settings.yml'))
+zip_output = config['CONFIG']['ZIP_OUTPUT']
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')
@@ -219,6 +220,14 @@ from tools.plots import plot_annual_cycles
 
 plot_annual_cycles(matilda_scenarios, save_path=f"{dir_output}/figures/summary_gridplots.png")
 
+
+# %%
+import shutil
+
+if zip_output:
+    # refresh `output_download.zip` with the final figures
+    shutil.make_archive('output_download', 'zip', 'output')
+    print('Output folder can be download now (file output_download.zip)')
 
 # %% [markdown]
 # ## Finish line
