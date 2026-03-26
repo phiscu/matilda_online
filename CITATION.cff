@@ -4,6 +4,7 @@ title: "MATILDA-Online: Cloud-based Workflow for Modeling wATer resources In gLa
 version: "2.0.0-beta"
 doi: "10.5281/zenodo.15712744"
 date-released: "2026-03-26"
+
 authors:
   - family-names: "Schuster"
     given-names: "Phillip"
