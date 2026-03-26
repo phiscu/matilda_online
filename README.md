@@ -39,7 +39,7 @@ cd matilda_online
 Create a new conda environment from the provided `environment.yml` file:
 
 ```bash
-conda env create -f environment.yml -n matilda_online
+conda env create -f binder/environment.yml -n matilda_online
 ```
 
 This may take a few minutes the first time.
@@ -91,7 +91,7 @@ In JupyterLab, navigate to the cloned `matilda_online` folder and open the noteb
 If the `environment.yml` file changes in a future version of the repository, update the environment with:
 
 ```bash
-conda env update -f environment.yml -n matilda_online --prune
+conda env update -f binder/environment.yml -n matilda_online --prune
 ```
 ---
 
