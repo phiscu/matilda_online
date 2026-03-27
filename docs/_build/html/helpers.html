@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tools.helpers &mdash; Matilda ONLINE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+  <title>tools.helpers &mdash; Matilda ONLINE 2.0.0-beta documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=8d563738"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/documentation_options.js?v=7a8f76e3"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -34,7 +34,7 @@
           
           <a href="index.html" class="icon icon-home">
             Matilda ONLINE
-              <img src="_static/matilda_cupcake.png" class="logo" alt="Logo"/>
+              <img src="_static/MATILDA_Logo_processes.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -70,12 +70,15 @@
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.drop_keys"><code class="docutils literal notranslate"><span class="pre">drop_keys()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.drop_model"><code class="docutils literal notranslate"><span class="pre">drop_model()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.get_si"><code class="docutils literal notranslate"><span class="pre">get_si()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.helpers.handle_dash_availability"><code class="docutils literal notranslate"><span class="pre">handle_dash_availability()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.hydrologicalize"><code class="docutils literal notranslate"><span class="pre">hydrologicalize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.helpers.mean_elevation_from_raster"><code class="docutils literal notranslate"><span class="pre">mean_elevation_from_raster()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.parquet_to_dict"><code class="docutils literal notranslate"><span class="pre">parquet_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.pickle_to_dict"><code class="docutils literal notranslate"><span class="pre">pickle_to_dict()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.read_era5l"><code class="docutils literal notranslate"><span class="pre">read_era5l()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.read_yaml"><code class="docutils literal notranslate"><span class="pre">read_yaml()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.replace_values"><code class="docutils literal notranslate"><span class="pre">replace_values()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.helpers.restore_output_archive"><code class="docutils literal notranslate"><span class="pre">restore_output_archive()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.update_yaml"><code class="docutils literal notranslate"><span class="pre">update_yaml()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.water_year"><code class="docutils literal notranslate"><span class="pre">water_year()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.helpers.write_yaml"><code class="docutils literal notranslate"><span class="pre">write_yaml()</span></code></a></li>
@@ -380,6 +383,21 @@ names.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="tools.helpers.handle_dash_availability">
+<span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">handle_dash_availability</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#handle_dash_availability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.handle_dash_availability" title="Link to this definition"></a></dt>
+<dd><p>Check whether the notebook is running locally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if Dash dashboards should be displayed.
+False if Dash should be skipped.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="tools.helpers.hydrologicalize">
 <span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">hydrologicalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">begin_of_water_year</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#hydrologicalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.hydrologicalize" title="Link to this definition"></a></dt>
 <dd><p>Adds a ‘water_year’ column to a DataFrame and crops it to include only complete water years.
@@ -393,6 +411,26 @@ names.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>pandas.DataFrame or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.helpers.mean_elevation_from_raster">
+<span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">mean_elevation_from_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raster_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_gdf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#mean_elevation_from_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.mean_elevation_from_raster" title="Link to this definition"></a></dt>
+<dd><p>Calculate mean elevation from a raster within a polygon geometry.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raster_path</strong> (<em>str</em><em> or </em><em>Path</em>) – Path to the DEM raster.</p></li>
+<li><p><strong>geometry_gdf</strong> (<em>geopandas.GeoDataFrame</em>) – Polygon geometry used to clip the raster.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Mean elevation of valid raster cells within the polygon.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -478,6 +516,13 @@ from the source dataframe using the specified source column.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="tools.helpers.restore_output_archive">
+<span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">restore_output_archive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zip_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output_download.zip'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'output'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#restore_output_archive"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.restore_output_archive" title="Link to this definition"></a></dt>
+<dd><p>Extract a ZIP archive into target_dir.
+If target_dir already contains files, ask whether to replace its contents.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="tools.helpers.update_yaml">
 <span class="sig-prename descclassname"><span class="pre">tools.helpers.</span></span><span class="sig-name descname"><span class="pre">update_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/helpers.html#update_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.helpers.update_yaml" title="Link to this definition"></a></dt>
 <dd><p>Update a YAML file with the contents of a dictionary.
@@ -541,7 +586,7 @@ Ensures all values are in standard Python types before writing.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
+    <p>&#169; Copyright 2026, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

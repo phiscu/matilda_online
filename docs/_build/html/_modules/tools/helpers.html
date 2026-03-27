@@ -1,295 +1,182 @@
 
+
 <!DOCTYPE html>
-
-
-<html lang="en" data-content_root="../../" >
-
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tools.helpers &#8212; Matilda ONLINE 1.0.0 documentation</title>
-  
-  
-  
-  <script data-cfasync="false">
-    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
-  </script>
-  
-  <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tools.helpers &mdash; Matilda ONLINE 2.0.0-beta documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-  
-  <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
-
-    <script src="../../_static/documentation_options.js?v=f9c1cefe"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/tools/helpers';</script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=7a8f76e3"></script>
+      <script src="../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-  </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
 
-  
-  
-  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
-  
-  <div id="pst-scroll-pixel-helper"></div>
-  
-  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
-<form class="bd-search d-flex align-items-center"
-      action="../../search.html"
-      method="get">
-  <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search"
-         class="form-control"
-         name="q"
-         id="search-input"
-         placeholder="Search..."
-         aria-label="Search..."
-         autocomplete="off"
-         autocorrect="off"
-         autocapitalize="off"
-         spellcheck="false"/>
-  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
-
-  <div class="pst-async-banner-revealer d-none">
-  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Matilda ONLINE
+              <img src="../../_static/MATILDA_Logo_processes.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-
-  
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
-    </header>
-  
-
-  <div class="bd-container">
-    <div class="bd-container__inner bd-page-width">
-      
-      
-      
-        
-      
-      <div class="bd-sidebar-primary bd-sidebar">
-        
-
-  
-  <div class="sidebar-header-items sidebar-primary__section">
-    
-    
-    
-    
-  </div>
-  
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item">
-
-  
-    
-  
-
-<a class="navbar-brand logo" href="../../index.html">
-  
-  
-  
-  
-  
-    
-    
-      
-    
-    
-    <img src="../../_static/matilda_cupcake.png" class="logo__image only-light" alt="Matilda ONLINE 1.0.0 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/matilda_cupcake.png" class="logo__image only-dark" alt="Matilda ONLINE 1.0.0 documentation - Home"/>`);</script>
-  
-  
-</a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="nav bd-sidenav">
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../../README.html">Getting started</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">Tools Modules</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../helpers.html">tools.helpers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../indicators.html">tools.indicators</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../geetools.html">tools.geetools</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../plots.html">tools.plots</a></li>
-</ul>
-</details></li>
+<p class="caption" role="heading"><span class="caption-text">MATILDA Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">Tools Modules</a></li>
 </ul>
 
-    </div>
-</nav></div>
-    </div>
-  
-  
-  <div class="sidebar-primary-items__end sidebar-primary__section">
-  </div>
-  
-  <div id="rtd-footer-container"></div>
-
-
-      </div>
-      
-      <main id="main-content" class="bd-main" role="main">
-        
-        
-
-<div class="sbt-scroll-pixel-helper"></div>
-
-          <div class="bd-content">
-            <div class="bd-article-container">
-              
-              <div class="bd-header-article d-print-none">
-<div class="header-article-items header-article__inner">
-  
-    <div class="header-article-items__start">
-      
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <span class="fa-solid fa-bars"></span>
-</button></div>
-      
-    </div>
-  
-  
-    <div class="header-article-items__end">
-      
-        <div class="header-article-item">
-
-<div class="article-header-buttons">
-
-
-
-<button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
-  title="Fullscreen mode"
-  data-bs-placement="bottom" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-expand"></i>
-  </span>
-
-</button>
-
-
-
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
-
-
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-
-</div></div>
-      
-    </div>
-  
-</div>
-</div>
-              
-              
-
-<div id="jb-print-docs-body" class="onlyprint">
-    <h1></h1>
-    <!-- Table of contents -->
-    <div id="print-main-content">
-        <div id="jb-print-toc">
-            
         </div>
-    </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Matilda ONLINE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tools.helpers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
 </div>
-
-              
-                
-<div id="searchbox"></div>
-                <article class="bd-article">
-                  
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <h1>Source code for tools.helpers</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">spotpy</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">fastparquet</span><span class="w"> </span><span class="kn">import</span> <span class="n">write</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">bias_correction</span><span class="w"> </span><span class="kn">import</span> <span class="n">BiasCorrection</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">matilda.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">matilda_simulation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pool</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span></span><span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">spotpy</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">fastparquet</span> <span class="kn">import</span> <span class="n">write</span>
+<span class="kn">from</span> <span class="nn">bias_correction</span> <span class="kn">import</span> <span class="n">BiasCorrection</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">matilda.core</span> <span class="kn">import</span> <span class="n">matilda_simulation</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
 
 
+<div class="viewcode-block" id="mean_elevation_from_raster">
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.mean_elevation_from_raster">[docs]</a>
+<span class="k">def</span> <span class="nf">mean_elevation_from_raster</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">geometry_gdf</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate mean elevation from a raster within a polygon geometry.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raster_path : str or Path</span>
+<span class="sd">        Path to the DEM raster.</span>
+<span class="sd">    geometry_gdf : geopandas.GeoDataFrame</span>
+<span class="sd">        Polygon geometry used to clip the raster.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Mean elevation of valid raster cells within the polygon.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">rasterio</span>
+    <span class="kn">from</span> <span class="nn">rasterio.mask</span> <span class="kn">import</span> <span class="n">mask</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+        <span class="n">geometry_plot</span> <span class="o">=</span> <span class="n">geometry_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="n">dem_clip</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">mask</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">geometry_plot</span><span class="o">.</span><span class="n">geometry</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">dem_values</span> <span class="o">=</span> <span class="n">dem_clip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">nodata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dem_values</span><span class="p">[</span><span class="n">dem_values</span> <span class="o">==</span> <span class="n">src</span><span class="o">.</span><span class="n">nodata</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dem_values</span><span class="p">[</span><span class="n">dem_values</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">dem_values</span><span class="p">))</span></div>
+
+
+        
+<div class="viewcode-block" id="restore_output_archive">
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.restore_output_archive">[docs]</a>
+<span class="k">def</span> <span class="nf">restore_output_archive</span><span class="p">(</span>
+    <span class="n">zip_file</span><span class="o">=</span><span class="s2">&quot;output_download.zip&quot;</span><span class="p">,</span>
+    <span class="n">target_dir</span><span class="o">=</span><span class="s2">&quot;output&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract a ZIP archive into target_dir.</span>
+<span class="sd">    If target_dir already contains files, ask whether to replace its contents.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">zip_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">zip_file</span><span class="p">)</span>
+    <span class="n">out_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">target_dir</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">zip_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Archive not found: </span><span class="si">{</span><span class="n">zip_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">out_path</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">has_content</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">out_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">has_content</span><span class="p">:</span>
+        <span class="n">answer</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The folder &#39;</span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">&#39; already contains files. &quot;</span>
+            <span class="s2">&quot;Replace its contents? [y/N]: &quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">answer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">}:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Operation cancelled. Existing files were kept.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">out_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">item</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">z</span><span class="p">:</span>
+        <span class="n">z</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">out_path</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Archive &#39;</span><span class="si">{</span><span class="n">zip_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; extracted to &#39;</span><span class="si">{</span><span class="n">out_path</span><span class="si">}</span><span class="s2">/&#39;&quot;</span><span class="p">)</span></div>
+
+    
+    
 <div class="viewcode-block" id="read_yaml">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.read_yaml">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_yaml</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">read_yaml</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a YAML file and return the contents as a dictionary.</span>
 <span class="sd">    Parameters</span>
@@ -309,7 +196,7 @@ document.write(`
 
 <div class="viewcode-block" id="write_yaml">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.write_yaml">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">write_yaml</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">write_yaml</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write a dictionary to a YAML file.</span>
 <span class="sd">    Ensures all values are in standard Python types before writing.</span>
@@ -343,7 +230,7 @@ document.write(`
 
 <div class="viewcode-block" id="update_yaml">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.update_yaml">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">update_yaml</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">new_items</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">update_yaml</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">new_items</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update a YAML file with the contents of a dictionary.</span>
 <span class="sd">    Parameters</span>
@@ -364,7 +251,7 @@ document.write(`
 
 <div class="viewcode-block" id="pickle_to_dict">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.pickle_to_dict">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">pickle_to_dict</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">pickle_to_dict</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads a dictionary from a pickle file at a specified file path.</span>
 <span class="sd">    Parameters</span>
@@ -384,7 +271,7 @@ document.write(`
 
 <div class="viewcode-block" id="dict_to_pickle">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.dict_to_pickle">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">dict_to_pickle</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">target_path</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">dict_to_pickle</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">target_path</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Saves a dictionary to a pickle file at the specified target path.</span>
 <span class="sd">    Creates target directory if not existing.</span>
@@ -409,7 +296,7 @@ document.write(`
 
 <div class="viewcode-block" id="drop_keys">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.drop_keys">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">drop_keys</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">keys_to_drop</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">drop_keys</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">keys_to_drop</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Removes specified keys from a dictionary.</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -432,7 +319,7 @@ document.write(`
 
 <div class="viewcode-block" id="parquet_to_dict">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.parquet_to_dict">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">parquet_to_dict</span><span class="p">(</span><span class="n">directory_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">parquet_to_dict</span><span class="p">(</span><span class="n">directory_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Recursively loads dataframes from the parquet files in the specified directory and returns a dictionary.</span>
 <span class="sd">    Nested directories are supported.</span>
@@ -465,7 +352,7 @@ document.write(`
 
 <div class="viewcode-block" id="dict_to_parquet">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.dict_to_parquet">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">dict_to_parquet</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">directory_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">dict_to_parquet</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">directory_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Recursively stores the dataframes in the input dictionary as parquet files in the specified directory.</span>
 <span class="sd">    Nested dictionaries are supported. If the specified directory does not exist, it will be created.</span>
@@ -536,7 +423,7 @@ document.write(`
 
 <div class="viewcode-block" id="water_year">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.water_year">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">water_year</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">water_year</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the water year for each date in the index of the input DataFrame.</span>
 <span class="sd">    Parameters</span>
@@ -556,7 +443,7 @@ document.write(`
 
 <div class="viewcode-block" id="crop2wy">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.crop2wy">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">crop2wy</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">crop2wy</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Crops a DataFrame to include only the rows that fall within a complete water year.</span>
 <span class="sd">    Parameters</span>
@@ -578,7 +465,7 @@ document.write(`
 
 <div class="viewcode-block" id="hydrologicalize">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.hydrologicalize">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">hydrologicalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin_of_water_year</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">hydrologicalize</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">begin_of_water_year</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds a &#39;water_year&#39; column to a DataFrame and crops it to include only complete water years.</span>
 <span class="sd">    Parameters</span>
@@ -598,39 +485,61 @@ document.write(`
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">adjust_jupyter_config</span><span class="p">():</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">jupyter_server</span><span class="w"> </span><span class="kn">import</span> <span class="n">serverapp</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">dash._jupyter</span><span class="w"> </span><span class="kn">import</span> <span class="n">_jupyter_config</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<div class="viewcode-block" id="handle_dash_availability">
+<a class="viewcode-back" href="../../helpers.html#tools.helpers.handle_dash_availability">[docs]</a>
+<span class="k">def</span> <span class="nf">handle_dash_availability</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check whether the notebook is running locally.</span>
 
-    <span class="n">js</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">serverapp</span><span class="o">.</span><span class="n">list_running_servers</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if Dash dashboards should be displayed.</span>
+<span class="sd">        False if Dash should be skipped.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">jupyter_server</span> <span class="kn">import</span> <span class="n">serverapp</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Markdown</span><span class="p">,</span> <span class="n">display</span>
 
-    <span class="k">if</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;hostname&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;localhost&#39;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JupyterLab seems to run on local machine.&#39;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">base</span> <span class="o">=</span> <span class="n">js</span><span class="p">[</span><span class="s1">&#39;base_url&#39;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;binder&#39;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JupyterLab seems to run on binder server.&#39;</span><span class="p">)</span>
+    <span class="n">servers</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">serverapp</span><span class="o">.</span><span class="n">list_running_servers</span><span class="p">())</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">servers</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span>
+            <span class="s2">&quot;⚠️ **Dash dashboards are unavailable.** &quot;</span>
+            <span class="s2">&quot;The notebook environment could not be identified.&quot;</span>
+        <span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span>
 
-            <span class="c1"># start updating jupyter server config</span>
-            <span class="c1"># official docu: https://dash.plotly.com/dash-in-jupyter</span>
-            <span class="c1"># however, due to problems of jupyterlab v4 a work-around must be implemented</span>
-            <span class="c1"># see: https://github.com/plotly/dash/issues/2804</span>
-            <span class="c1"># and: https://github.com/plotly/dash/issues/2998</span>
-            <span class="c1"># solution inspired by: https://github.com/mthiboust/jupyterlab-retrieve-base-url/tree/main</span>
-            <span class="n">conf</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;base_url_response&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;server_url&#39;</span><span class="p">:</span> <span class="s1">&#39;https://notebooks.gesis.org&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;base_subpath&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;JUPYTERHUB_SERVICE_PREFIX&#39;</span><span class="p">),</span>
-                    <span class="s1">&#39;frontend&#39;</span><span class="p">:</span> <span class="s1">&#39;jupyterlab&#39;</span><span class="p">}</span>
+    <span class="n">js</span> <span class="o">=</span> <span class="n">servers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">hostname</span> <span class="o">=</span> <span class="n">js</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;hostname&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="n">js</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;base_url&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-            <span class="n">_jupyter_config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">conf</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Jupyter config has been updated to run Dash!&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;JupyterLab seems to run on unsupported environment.&#39;</span><span class="p">)</span>
+    <span class="c1"># Local notebook</span>
+    <span class="k">if</span> <span class="n">hostname</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;JupyterLab seems to run on a local machine. Dash dashboards are enabled.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Binder / hosted environment</span>
+    <span class="k">if</span> <span class="s2">&quot;/binder/&quot;</span> <span class="ow">in</span> <span class="n">base_url</span> <span class="ow">or</span> <span class="s2">&quot;/user/&quot;</span> <span class="ow">in</span> <span class="n">base_url</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span>
+            <span class="s2">&quot;ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Unfortunately, they no longer run reliably in Binder-based environments. &quot;</span>
+            <span class="s2">&quot;This is caused by the current notebook/proxy setup, and we do not have a practical &quot;</span>
+            <span class="s2">&quot;way to fix it from within this notebook.</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Please run the notebook locally if you would like to use the interactive dashboards.&quot;</span>
+        <span class="p">))</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Fallback for any other hosted setup</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span>
+        <span class="s2">&quot;ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+        <span class="s2">&quot;This notebook appears to be running in a hosted environment, so the Dash dashboards &quot;</span>
+        <span class="s2">&quot;will be skipped.&quot;</span>
+    <span class="p">))</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<span class="k">class</span><span class="w"> </span><span class="nc">DataFilter</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">zscore_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">resampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">jump_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+
+<span class="k">class</span> <span class="nc">DataFilter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">zscore_threshold</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">resampling_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prec</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">jump_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">zscore_threshold</span> <span class="o">=</span> <span class="n">zscore_threshold</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resampling_rate</span> <span class="o">=</span> <span class="n">resampling_rate</span>
@@ -639,7 +548,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">filter_all</span><span class="p">()</span>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">check_outliers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">check_outliers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A function for filtering a pandas dataframe for columns with obvious outliers</span>
 <span class="sd">        and dropping them based on a z-score threshold.</span>
@@ -666,7 +575,7 @@ document.write(`
         <span class="c1"># Return the list of columns with outliers</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">outliers</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">check_jumps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">check_jumps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A function for checking a pandas dataframe for columns with sudden jumps or drops</span>
 <span class="sd">        and returning a list of the columns that have them.</span>
@@ -687,7 +596,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">jumps</span> <span class="o">=</span> <span class="n">jumps</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">jumps</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">filter_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">filter_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A function for filtering a dataframe for columns with obvious outliers</span>
 <span class="sd">        or sudden jumps or drops in temperature, and returning a list of the</span>
@@ -706,7 +615,7 @@ document.write(`
 
 <div class="viewcode-block" id="drop_model">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.drop_model">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">drop_model</span><span class="p">(</span><span class="n">col_names</span><span class="p">,</span> <span class="n">dict_or_df</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">drop_model</span><span class="p">(</span><span class="n">col_names</span><span class="p">,</span> <span class="n">dict_or_df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Drop columns with given names from either a dictionary of dataframes</span>
 <span class="sd">    or a single dataframe.</span>
@@ -741,7 +650,7 @@ document.write(`
 
 <div class="viewcode-block" id="read_era5l">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.read_era5l">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_era5l</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">read_era5l</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Reads ERA5-Land data, drops redundant columns, and adds DatetimeIndex.</span>
 <span class="sd">    Resamples the dataframe to reduce the DatetimeIndex to daily resolution.&quot;&quot;&quot;</span>
     
@@ -754,7 +663,7 @@ document.write(`
 
 <div class="viewcode-block" id="adjust_bias">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.adjust_bias">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">adjust_bias</span><span class="p">(</span><span class="n">predictand</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;normal_mapping&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">adjust_bias</span><span class="p">(</span><span class="n">predictand</span><span class="p">,</span> <span class="n">predictor</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;normal_mapping&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Applies bias correction to discrete periods individually.&quot;&quot;&quot;</span>
     <span class="c1"># Read predictor data</span>
     <span class="n">predictor</span> <span class="o">=</span> <span class="n">read_era5l</span><span class="p">(</span><span class="n">predictor</span><span class="p">)</span>
@@ -811,7 +720,7 @@ document.write(`
 
 <div class="viewcode-block" id="confidence_interval">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.confidence_interval">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">confidence_interval</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">confidence_interval</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the mean and 95% confidence interval for each row in a dataframe.</span>
 
@@ -839,7 +748,7 @@ document.write(`
 
 <div class="viewcode-block" id="dict_filter">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.dict_filter">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">dict_filter</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">dict_filter</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">filter_string</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a dict with all elements of the input dict that contain a filter string in their keys.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">filter_string</span> <span class="ow">in</span> <span class="n">key</span><span class="p">}</span></div>
 
@@ -847,7 +756,7 @@ document.write(`
 
 <div class="viewcode-block" id="replace_values">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.replace_values">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">replace_values</span><span class="p">(</span><span class="n">target_df</span><span class="p">,</span> <span class="n">source_df</span><span class="p">,</span> <span class="n">source_column</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">replace_values</span><span class="p">(</span><span class="n">target_df</span><span class="p">,</span> <span class="n">source_df</span><span class="p">,</span> <span class="n">source_column</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Replaces values in the overlapping period in the target dataframe with values</span>
 <span class="sd">    from the source dataframe using the specified source column.</span>
@@ -887,7 +796,7 @@ document.write(`
 
 <div class="viewcode-block" id="get_si">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.get_si">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_si</span><span class="p">(</span><span class="n">fast_results</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_csv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">get_si</span><span class="p">(</span><span class="n">fast_results</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">to_csv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the sensitivity indices of a given FAST simulation results file.</span>
 
@@ -925,7 +834,7 @@ document.write(`
 
 <div class="viewcode-block" id="create_scenario_dict">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.create_scenario_dict">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">create_scenario_dict</span><span class="p">(</span><span class="n">tas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">scenario_nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">create_scenario_dict</span><span class="p">(</span><span class="n">tas</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">pr</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">scenario_nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a nested dictionary of scenarios and models from two dictionaries of pandas DataFrames.</span>
 
@@ -966,7 +875,7 @@ document.write(`
 
 <div class="viewcode-block" id="MatildaBulkProcessor">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">MatildaBulkProcessor</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">MatildaBulkProcessor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to run multiple MATILDA simulations for different input scenarios and models in single or multi-processing</span>
 <span class="sd">    mode and store the results in a dictionary.</span>
@@ -991,7 +900,7 @@ document.write(`
 <span class="sd">        values.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenarios</span><span class="p">,</span> <span class="n">matilda_settings</span><span class="p">,</span> <span class="n">matilda_parameters</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenarios</span><span class="p">,</span> <span class="n">matilda_settings</span><span class="p">,</span> <span class="n">matilda_parameters</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1010,7 +919,7 @@ document.write(`
 <div class="viewcode-block" id="MatildaBulkProcessor.matilda_headless">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor.matilda_headless">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">matilda_headless</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">matilda_settings</span><span class="p">,</span> <span class="n">matilda_parameters</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">matilda_headless</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">matilda_settings</span><span class="p">,</span> <span class="n">matilda_parameters</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A helper function to run a single MATILDA simulation given a dataframe, MATILDA settings and parameter</span>
 <span class="sd">        values.</span>
@@ -1036,7 +945,7 @@ document.write(`
 
 <div class="viewcode-block" id="MatildaBulkProcessor.run_single_process">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor.run_single_process">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run_single_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run_single_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Runs the MATILDA simulations for the scenarios and models in single-processing mode and returns a dictionary</span>
 <span class="sd">        of results.</span>
@@ -1065,7 +974,7 @@ document.write(`
 
 <div class="viewcode-block" id="MatildaBulkProcessor.run_multi_process">
 <a class="viewcode-back" href="../../helpers.html#tools.helpers.MatildaBulkProcessor.run_multi_process">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run_multi_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_cores</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">run_multi_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_cores</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Runs the MATILDA simulations for the scenarios and models in multi-processing mode and returns a dictionary</span>
 <span class="sd">        of results.</span>
@@ -1095,70 +1004,31 @@ document.write(`
 
 </pre></div>
 
-                </article>
-              
-
-              
-              
-              
-              
-                <footer class="prev-next-footer d-print-none">
-                  
-<div class="prev-next-area">
-</div>
-                </footer>
-              
-            </div>
-            
-            
-              
-            
+           </div>
           </div>
-          <footer class="bd-footer-content">
-            
-<div class="bd-footer-content__inner container">
-  
-  <div class="footer-item">
-    
-<p class="component-author">
-By Alexander Georgi, Phillip Schuster, Mia Janzen
-</p>
+          <footer>
 
-  </div>
-  
-  <div class="footer-item">
-    
+  <hr/>
 
-  <p class="copyright">
-    
-      © Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.
-      <br/>
-    
-  </p>
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
+  </div>
 
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-  <div class="footer-item">
-    
-  </div>
-  
-</div>
-          </footer>
-        
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
-      </main>
-    </div>
+</footer>
+        </div>
+      </div>
+    </section>
   </div>
-  
-  <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-  <footer class="bd-footer">
-  </footer>
-  </body>
+</body>
 </html>
