@@ -1,0 +1,16 @@
+References
+==========
+
+.. [WESMCM2015] *Uncertainty in hydrological hydrology*
+                by I. K. Westerberg and H. K. McMillan, 2015
+                `DOI: 10.5194/hess-19-3951-2015 <https://doi.org/10.5194/hess-19-3951-2015>`_
+
+.. [CLBGS2000] *Flow variables for ecological studies in temperate streams: groupings based on covariance*,
+               B Clausen, BJF Biggs 2000
+               `DOI:10.1016/S0022-1694(00)00306-1 <https://doi.org/10.1016/S0022-1694(00)00306-1>`_
+
+.. [YADV2007] *Regionalization of constraints on expected watershed response behavior for improved
+              predictions in ungauged basins*, M Yadev, T Wagener, H Gupta, 2007
+              `DOI:10.1016/j.advwatres.2007.01.005 <https://doi.org/10.1016/j.advwatres.2007.01.005>`_
+
+Source: `spotpy/hydrology/signatures.py <https://github.com/thouska/spotpy/blob/master/src/spotpy/hydrology/signatures.py>`_

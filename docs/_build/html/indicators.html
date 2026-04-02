@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tools.indicators &mdash; Matilda ONLINE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+  <title>tools.indicators &mdash; Matilda ONLINE 2.0.0-beta documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=8d563738"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/documentation_options.js?v=7a8f76e3"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
       <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
@@ -36,7 +36,7 @@
           
           <a href="index.html" class="icon icon-home">
             Matilda ONLINE
-              <img src="_static/matilda_cupcake.png" class="logo" alt="Logo"/>
+              <img src="_static/MATILDA_Logo_processes.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -67,6 +67,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#tools.indicators.melting_season"><code class="docutils literal notranslate"><span class="pre">melting_season()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.indicators.peak_doy"><code class="docutils literal notranslate"><span class="pre">peak_doy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.indicators.prec_minmax"><code class="docutils literal notranslate"><span class="pre">prec_minmax()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="geetools.html">tools.geetools</a></li>
@@ -264,10 +265,18 @@ year in the input DataFrame.</p>
 <dd><p>Variation of spotpy.hydrology.signatures.get_qhf() that allows definition of a global
 median to investigate long-term trends.
 Calculates the frequency of high flow events defined as <span class="math notranslate nohighlight">\(Q &gt; 9 \cdot Q_{50}\)</span>
-cf. <span id="id1">[CLBGS2000]</span>, <span id="id2">[WESMCM2015]</span>. The frequency is given as :math: <span class="math notranslate nohighlight">\(yr^{-1}\)</span>
-:param data: the timeseries
-:param measurements_per_day: the measurements_per_day of the timeseries
-:return: Q_{HF}, Q_{HD}</p>
+cf. <a class="reference internal" href="#clbgs2000" id="id1"><span>[CLBGS2000]</span></a>, <a class="reference internal" href="#wesmcm2015" id="id2"><span>[WESMCM2015]</span></a>. The frequency is given as <span class="math notranslate nohighlight">\(yr^{-1}\)</span></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – the timeseries</p></li>
+<li><p><strong>measurements_per_day</strong> – the measurements_per_day of the timeseries</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Q_{HF}, Q_{HD}</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -277,11 +286,19 @@ cf. <span id="id1">[CLBGS2000]</span>, <span id="id2">[WESMCM2015]</span>. The f
 individual years with a global mean to investigate long-term trends.
 Calculates the frequency of low flow events defined as
 <span class="math notranslate nohighlight">\(Q &lt; 0.2 \cdot \overline{Q_{mean}}\)</span>
-cf. <span id="id3">[CLBGS2000]</span>, <span id="id4">[WESMCM2015]</span>. The frequency is given
-in <span class="math notranslate nohighlight">\(yr^{-1}\)</span> and for the whole timeseries
-:param data: the timeseries
-:param measurements_per_day: the measurements_per_day of the timeseries
-:return: Q_{LF}, Q_{LD}</p>
+cf. <a class="reference internal" href="#clbgs2000" id="id3"><span>[CLBGS2000]</span></a>, <a class="reference internal" href="#wesmcm2015" id="id4"><span>[WESMCM2015]</span></a>. The frequency is given
+in <span class="math notranslate nohighlight">\(yr^{-1}\)</span> and for the whole timeseries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – the timeseries</p></li>
+<li><p><strong>measurements_per_day</strong> – the measurements_per_day of the timeseries</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Q_{LF}, Q_{LD}</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -366,6 +383,26 @@ the rolling mean of the temperature.
 </dl>
 </dd></dl>
 
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<div role="list" class="citation-list">
+<div class="citation" id="wesmcm2015" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>WESMCM2015<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id2">1</a>,<a role="doc-backlink" href="#id4">2</a>)</span>
+<p><em>Uncertainty in hydrological hydrology</em>
+by I. K. Westerberg and H. K. McMillan, 2015
+<a class="reference external" href="https://doi.org/10.5194/hess-19-3951-2015">DOI: 10.5194/hess-19-3951-2015</a></p>
+</div>
+<div class="citation" id="clbgs2000" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CLBGS2000<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p><em>Flow variables for ecological studies in temperate streams: groupings based on covariance</em>,
+B Clausen, BJF Biggs 2000
+<a class="reference external" href="https://doi.org/10.1016/S0022-1694(00)00306-1">DOI:10.1016/S0022-1694(00)00306-1</a></p>
+</div>
+</div>
+<p>Adapted from <a class="reference external" href="https://github.com/thouska/spotpy/blob/master/src/spotpy/hydrology/signatures.py">spotpy/hydrology/signatures.py</a>.</p>
+</section>
 </section>
 
 
@@ -379,7 +416,7 @@ the rolling mean of the temperature.
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
+    <p>&#169; Copyright 2026, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
