@@ -1,8 +1,7 @@
 # MATILDA-Online: Workflow for Modeling Water Resources in Glacierized Catchments
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phiscu/matilda_edu/no_outputs?urlpath=lab/tree/matilda_binder_landing_page.md) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15712744.svg)](https://doi.org/10.5281/zenodo.15712744)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/phiscu/matilda_edu/main?labpath=Notebook0_Introduction.ipynb) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15712744.svg)](https://doi.org/10.5281/zenodo.15712744)
-
-Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hydrological modeling framework. This repository hosts the extended MATILDA workflow in form of a Jupyter Book. Designed for researchers, practitioners, and students, this workflow guides users from data acquisition to the analysis of climate change impacts on glacierized catchments.
+Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hydrological modeling framework. Designed for researchers, practitioners, and students, this workflow in form of a Jupyter Book guides users from data acquisition to the analysis of climate change impacts on glacierized catchments.
 
 📚 **Explore the Jupyter Book** on the [MATILDA-Online Website](https://matilda-online.github.io/jbook).
 
@@ -10,64 +9,103 @@ Welcome to **MATILDA-Online**, the online companion to the **MATILDA** glacio-hy
 
 ## Installation
 
-You can run most of the workflow in an online environment hosted in mybinder.org. However, calibrating the model is computationally intensive and will be slow to run on a single CPU. For a comprehensive calibration, we recommend downloading the notebooks and running them on a local machine with multi-core processing capabilities.
+> **Note:** You are currently viewing the docs of the **beta version (v2.x-beta)** of MATILDA-Online. This version is designed to test a Google-hosted web service that handles requests to Google Earth Engine. During the current peer-review phase, access requires an API key provided by the developers.  
+>
+> If you would prefer to use the **stable classic workflow (v1.0.2)** with your own Google Cloud project, please use the ***release-1.x*** branch or follow the links below:  
+> 💾 [Repository](https://github.com/phiscu/matilda_online/tree/release-1.x)  
+> 🚀 [Binder](https://mybinder.org/v2/gh/phiscu/matilda_edu/release-1.x?urlpath=lab/tree/matilda_binder_landing_page.md)
 
-To run the MATILDA-Online workflow locally, follow these steps:
+You can run most of the workflow in an online environment hosted on **mybinder.org**. However, model calibration is computationally intensive and can be slow in Binder because only limited computing resources are available. For more comprehensive calibration runs, we recommend downloading the notebooks and running them **locally** on a machine with multiple CPU cores.
 
-1. Clone this repository to your local machine and navigate to its root folder:
+MATILDA-Online is designed to be run in **JupyterLab**.
 
-```
+### 1. Install the required tools
+
+Before you begin, make sure the following are installed on your computer:
+
+- **Git** ([Install Git for Windows](https://git-scm.com/download/win))
+- **Conda** (we recommend [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
+
+### 2. Clone the repository
+
+Open a terminal.
+
+- On **macOS / Linux**, use your default terminal.
+- On **Windows**, use **Anaconda Prompt** (*recommended*), **PowerShell**, or **Git Bash**.
+
+Then run:
+
+```bash
 git clone https://github.com/phiscu/matilda_online.git
 cd matilda_online
 ```
 
-2. Create and activate a Python environment using the provided environment.yml file. We recommend the use of conda:
+### 3. Create the Python environment
 
+Create a new conda environment from the provided `environment.yml` file:
+
+```bash
+conda env create -f binder/environment.yml -n matilda_online
 ```
-conda env create -f environment.yml -n matilda_online
+
+This may take a few minutes the first time.
+
+### 4. Activate the environment
+
+Activate the new environment:
+
+```bash
 conda activate matilda_online
 ```
 
-3. Install Jupyter Notebook or Jupyter Lab if not already installed:
+If `conda activate` does not work in Windows PowerShell, open **Anaconda Prompt** and run the same command there.
 
-```
-conda -c conda-forge install jupyterlab
+### 5. Install JupyterLab
+
+If JupyterLab is not already included in your environment, install it with:
+
+```bash
+conda install -c conda-forge jupyterlab
 ```
 
-4. Launch the Jupyter Notebook interface:
+### 6. Launch MATILDA-Online in JupyterLab
 
-```
+From the root folder of the repository, start JupyterLab:
+
+```bash
 jupyter lab
 ```
 
+JupyterLab should open automatically in your browser. If it does not, copy the local URL shown in the terminal and paste it into your browser.
+
+### 7. Open the notebooks
+
+In JupyterLab, navigate to the cloned `matilda_online` folder and open the notebooks in order, starting with the introduction notebook.
+
+---
+
+### Notes for Windows users
+
+- We recommend using **Anaconda Prompt** if you are unfamiliar with the command line.
+- If `git` is not recognized, make sure Git is installed and available in your system PATH.
+- If `jupyter lab` is not recognized, check that your conda environment is activated before launching it.
+
+---
+
+### Updating the environment
+
+If the `environment.yml` file changes in a future version of the repository, update the environment with:
+
+```bash
+conda env update -f binder/environment.yml -n matilda_online --prune
+```
 ---
 
 ## Workflow Overview
 
-The MATILDA-Online workflow is organized into a series of interactive Jupyter notebooks. These cover all key steps of modeling water resources in glacierized catchments, including catchment delineation, data acquisition, model calibration, and scenario analysis.
+The MATILDA-Online workflow is organized into a series of interactive Jupyter notebooks. These cover all key steps of modeling water resources in glacierized catchments, including catchment delineation, data acquisition, model calibration, and scenario analysis. Below is a detailed flowchart of the workflow:
 
-The workflow is divided into a series of interactive notebooks, each focused on a specific component of the modeling process. These notebooks streamline complex tasks such as catchment delineation, data processing, model calibration, and climate scenario analysis, ensuring clarity and reproducibility at each step:
-
-- **[Notebook 0 - Introduction](https://matilda-online.github.io/jbook/Notebook0_Introduction.html):**
-
-- **[Notebook 1 - Catchment Delineation](https://matilda-online.github.io/jbook/Notebook1_Catchment_delineation.html):** Delineate your catchment and retrieve static geospatial data, including digital elevation models, glacier outlines, and ice thickness distributions.
-- **[Notebook 2 - Forcing Data](https://matilda-online.github.io/jbook/Notebook2_Forcing_data.html):** Acquire and process ERA5-Land reanalysis data, preparing inputs for glacio-hydrological model calibration.
-
-- **[Notebook 3 - CMIP6 Climate Data](https://matilda-online.github.io/jbook/Notebook3_CMIP6.html):** Download and process historical and future climate data from the Coupled Model Intercomparison Project Phase 6 (CMIP6) for two emission scenarios.
-
-- **[Notebook 4 - MATILDA Model](https://matilda-online.github.io/jbook/Notebook4_MATILDA.html):** Run the MATILDA model with default parameters and calibrate it based on mutiple objectives.
-
-- **[Notebook 5 - Scenario Simulations](https://matilda-online.github.io/jbook/Notebook5_MATILDA_scenarios.html):** Apply your calibrated parameter set to run the model over all CMIP6 ensemble members for robust scenario-based analysis.
-
-- **[Notebook 6 - Result Analysis & Impact Assessment](https://matilda-online.github.io/jbook/Notebook6_Analysis.html):** Visualize model output in interactive plots across ensemble simulations, extract key meteorological and hydrological indicators of of climate change impacts, and create a visual summary.
-
-The workflow below is demonstrated using a sample site in the Tian Shan Mountains of Kyrgyzstan. To try the toolkit for yourself, simply click on the rocket icon in the toolbar above to launch an online environment hosted by [mybinder.org](https://mybinder.org/). There you can run any notebook with the sample data or upload your own and edit the config file accordingly. Note that while most of the workflow will work fine in the binder, calibrating the model is computationally intensive and will be slow to run on a single CPU. For a comprehensive calibration that takes full advantage of the [spotpy](https://spotpy.readthedocs.io/en/latest/) library, we recommend downloading the notebooks and running them on a local machine with multi-core processing capabilities. Additional options to reduce calibration time are described in Notebook 4.
-
-Have fun exploring and happy modeling!
-
-Below is a detailed flowchart of the workflow:
-
-![Workflow Flowchart](workflow_detailed_2024_-Full_legend.png)
+![Workflow Flowchart](images/workflow_detailed_2024_-Full_legend.png)
 
 ---
 
@@ -88,3 +126,7 @@ The core routines of MATILDA, including the temperature-index melt model and HBV
 ## License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+
+
+
