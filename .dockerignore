@@ -1,0 +1,16 @@
+_build/
+.ipynb_checkpoints/
+__pycache__/
+.jupyter_cache/
+.git/
+.git
+output/
+catchment_dirs/
+deployment/
+docs/
+*.pyc
+.DS_Store
+workflows/
+pure_python/
+requirements.txt
+matilda_edu_CLI.py
