@@ -4,7 +4,6 @@ __pycache__/
 .jupyter_cache/
 .git/
 .git
-output/
 catchment_dirs/
 deployment/
 docs/
@@ -14,3 +13,6 @@ workflows/
 pure_python/
 requirements.txt
 matilda_edu_CLI.py
+CITATION.cff
+jupytext.toml
+LICENSE
