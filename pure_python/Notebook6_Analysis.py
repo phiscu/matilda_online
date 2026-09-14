@@ -51,6 +51,12 @@ zip_output = config['CONFIG']['ZIP_OUTPUT']
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')
+from tools.helpers import runtime_profile
+profile = runtime_profile()
+if profile['compact_files'] is not None:
+    compact_files = profile['compact_files']
+
+print(f"Runtime profile: {profile['name']} (compact files: {compact_files})")
 
 print("Importing MATILDA scenarios...")
 
@@ -208,7 +214,7 @@ if handle_dash_availability():
 # %%
 from tools.plots import MatildaSummary
 
-summary = MatildaSummary(dir_input, dir_output, settings)
+summary = MatildaSummary(dir_input, dir_output, settings, compact_files=compact_files)
 
 summary.plot_summary(save_path=f"{dir_output}/figures/summary_ensemble.png");
 

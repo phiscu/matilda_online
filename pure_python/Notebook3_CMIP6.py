@@ -53,6 +53,11 @@ zip_output = config['CONFIG']['ZIP_OUTPUT']
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG', 'COMPACT_FILES')
+from tools.helpers import runtime_profile
+profile = runtime_profile()
+if profile['compact_files'] is not None:
+    compact_files = profile['compact_files']
+print(f"Runtime profile: {profile['name']} (compact files: {compact_files})")
 
 # name target subdirectory to be created
 cmip_dir = dir_output + 'cmip6/'

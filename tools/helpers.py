@@ -18,6 +18,15 @@ from functools import partial
 from urllib.parse import urljoin
 
 
+def runtime_profile():
+    """Return settings for the current notebook runtime."""
+    if os.environ.get('BINDER_LAUNCH_HOST') or os.environ.get('BINDER_REPO_URL'):
+        return {'name': 'Binder', 'compact_files': True, 'num_cores': 1}
+    if os.environ.get('JUPYTERHUB_SERVICE_PREFIX') or os.environ.get('JUPYTERHUB_USER'):
+        return {'name': 'JupyterHub', 'compact_files': None, 'num_cores': None}
+    return {'name': 'Local', 'compact_files': None, 'num_cores': None}
+
+
 def mean_elevation_from_raster(raster_path, geometry_gdf):
     """
     Calculate mean elevation from a raster within a polygon geometry.

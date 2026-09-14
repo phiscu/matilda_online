@@ -548,10 +548,11 @@ def pp_matrix(original, target, corrected, scenario=None, nrow=7, ncol=5, precip
 
 
 class MatildaSummary:
-    def __init__(self, dir_input, dir_output, settings):
+    def __init__(self, dir_input, dir_output, settings, compact_files=False):
         self.dir_input = dir_input
         self.dir_output = dir_output
         self.settings = settings
+        self.compact_files = compact_files
         self.arrow_props = dict(facecolor='grey', edgecolor='grey', arrowstyle='-', linewidth=0.5)
         self.matilda_scenarios = None
         self.obs = None
@@ -591,13 +592,18 @@ class MatildaSummary:
         self.obs = self.obs[self.obs.index >= '2000-01-01']
 
         # Load climate model data
-        self.tas = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/tas.pickle")
-        self.pr = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/pr.pickle")
+        if self.compact_files:
+            self.tas = parquet_to_dict(f"{self.dir_output}cmip6/adjusted/tas_parquet")
+            self.pr = parquet_to_dict(f"{self.dir_output}cmip6/adjusted/pr_parquet")
+            self.matilda_scenarios = parquet_to_dict(
+                f"{self.dir_output}cmip6/adjusted/matilda_scenarios_parquet")
+        else:
+            self.tas = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/tas.pickle")
+            self.pr = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/pr.pickle")
+            self.matilda_scenarios = pickle_to_dict(
+                f"{self.dir_output}cmip6/adjusted/matilda_scenarios.pickle")
         self.adjust_startdate(self.tas)
         self.adjust_startdate(self.pr)
-
-        # Load MATILDA scenarios
-        self.matilda_scenarios = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/matilda_scenarios.pickle")
         
         # Prepare data for plotting
         self.prepare_data_for_plot()

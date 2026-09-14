@@ -47,9 +47,16 @@ compact_files = config.getboolean('CONFIG','COMPACT_FILES')
 
 # get the number of available cores
 num_cores = int(config['CONFIG']['NUM_CORES'])
+from tools.helpers import runtime_profile
+profile = runtime_profile()
+if profile['compact_files'] is not None:
+    compact_files = profile['compact_files']
+if profile['num_cores'] is not None:
+    num_cores = profile['num_cores']
 
 print(f"Input path: '{dir_input}'")
 print(f"Output path: '{dir_output}'")
+print(f"Runtime profile: {profile['name']} (compact files: {compact_files}, cores: {num_cores})")
 
 
 # %% [markdown]
