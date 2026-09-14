@@ -3,6 +3,7 @@ import scienceplots
 import pandas as pd
 import warnings
 from matplotlib.legend import Legend
+from matplotlib.lines import Line2D
 import probscale
 from tools.helpers import read_era5l
 import configparser
@@ -746,30 +747,72 @@ class MatildaSummary:
 
     def add_cmip_ensemble(self, param_scenarios, val_name, ylabel, ax, ylim=None, target=None,
                           target_color='black', linestyle='solid', rolling=None,
-                          cutoff=None, intv_sum='YE', ylabel_pad=0):
-        """Add CMIP ensemble to a plot"""
-        colors = ['orange', 'dodgerblue']
-        col_dict = {key: value for key, value in zip(param_scenarios.keys(), colors)}
+                          cutoff=None, intv_sum='YE', ylabel_pad=0,
+                          spread_alpha=0.25, line_zorder=4, spread_zorder=2):
+        """
+        Add CMIP ensemble to a plot.
+
+        The line shows the ensemble mean.
+        The shaded band shows the central 90% ensemble spread
+        across climate-model members, i.e. the 5th-95th percentile range.
+        """
 
         linestyles = ['dotted', 'dashed']
         ls_dict = {key: value for key, value in zip(param_scenarios.keys(), linestyles)}
 
         for i in param_scenarios.keys():
-            df_pred = self.df2long(param_scenarios[i], val_name, intv_sum=intv_sum,
-                                  intv_mean='YE', rolling=rolling, cutoff=cutoff)
-            sns.lineplot(data=df_pred, x='TIMESTAMP', y=val_name,
-                         color=target_color, ax=ax, linestyle=ls_dict[i])
+            df_pred = self.df2long(
+                param_scenarios[i],
+                val_name,
+                intv_sum=intv_sum,
+                intv_mean='YE',
+                rolling=rolling,
+                cutoff=cutoff
+            )
 
-        ax.set_ylabel(ylabel, labelpad=ylabel_pad, fontsize = 12)
+            ens = (
+                df_pred
+                .groupby("TIMESTAMP")[val_name]
+                .agg(
+                    mean="mean",
+                    q05=lambda x: x.quantile(0.05),
+                    q95=lambda x: x.quantile(0.95)
+                )
+                .reset_index()
+            )
+
+            x = ens["TIMESTAMP"]
+
+            ax.fill_between(
+                x,
+                ens["q05"],
+                ens["q95"],
+                color=target_color,
+                alpha=spread_alpha,
+                linewidth=0,
+                zorder=spread_zorder
+            )
+
+            ax.plot(
+                x,
+                ens["mean"],
+                color=target_color,
+                linestyle=ls_dict[i],
+                linewidth=1.8,
+                zorder=line_zorder
+            )
+
+        ax.set_ylabel(ylabel, labelpad=ylabel_pad, fontsize=12)
 
         if ylim is not None:
             ax.set_ylim(ylim)
 
         if target is not None:
-            ax.plot(target, linewidth=1.5, c=target_color)
-        
+            ax.plot(target, linewidth=1.5, c=target_color, zorder=line_zorder + 1)
+
         ax.yaxis.set_ticks_position('left')
         ax.tick_params(axis='y', right=False, labelright=False)
+
 
     def ensemble_max(self, param_scenarios, val_name, rolling=None, cutoff=None, intv_sum='YE'):
         """Calculate ensemble maximum with confidence interval"""
@@ -812,7 +855,7 @@ class MatildaSummary:
         ax0l = axs[0]
         self.add_cmip_ensemble(param_scenarios=self.glacier_area, val_name='glac_area', 
                        ylabel='Glacierized\nArea (km²)',
-                       ax=ax0l, target_color='darkviolet', ylabel_pad=10)
+                       ax=ax0l, target_color='darkviolet', ylabel_pad=10, spread_alpha=0.25)
 
         # Annotate final glacier values with percentage
         for line in ax0l.lines:
@@ -890,19 +933,51 @@ class MatildaSummary:
         else:
             obs_rs = self.obs['Qobs'].resample('YE').agg(pd.Series.sum, skipna=False).mean()
 
-        self.add_cmip_ensemble(param_scenarios=self.runoff, val_name='runoff', ylabel=' (mm/a)',
-                       ylim=(0, ymax_ax2l), target=obs_rs, target_color='blue',
-                       ax=ax2l, rolling=rolling, cutoff='2000-12-31')
+        self.add_cmip_ensemble(
+            param_scenarios=self.runoff,
+            val_name='runoff',
+            ylabel=' (mm/a)',
+            ylim=(0, ymax_ax2l),
+            target=obs_rs,
+            target_color='blue',
+            ax=ax2l,
+            rolling=rolling,
+            cutoff='2000-12-31',
+            spread_alpha=0.30,
+            spread_zorder=3,
+            line_zorder=6
+        )
 
         # Plot evaporation
-        self.add_cmip_ensemble(param_scenarios=self.evaporation, val_name='eva', ylabel=' (mm/a)',
-                       target=None, target_color='green',
-                       ax=ax2l, rolling=rolling, cutoff='2000-12-31')
+        self.add_cmip_ensemble(
+            param_scenarios=self.evaporation,
+            val_name='eva',
+            ylabel=' (mm/a)',
+            target=None,
+            target_color='green',
+            ax=ax2l,
+            rolling=rolling,
+            cutoff='2000-12-31',
+            spread_alpha=0.20,
+            spread_zorder=2,
+            line_zorder=5
+        )
 
-        # Plot precipitation
-        self.add_cmip_ensemble(param_scenarios=self.precipitation, val_name='prec', ylabel=' (mm/a)',
-                       target=None, target_color='darkgrey',
-                       ax=ax2l, rolling=rolling, cutoff='2000-12-31', ylabel_pad=5)
+        # Plot precipitation as pale background context
+        self.add_cmip_ensemble(
+            param_scenarios=self.precipitation,
+            val_name='prec',
+            ylabel=' (mm/a)',
+            target=None,
+            target_color='darkgrey',
+            ax=ax2l,
+            rolling=rolling,
+            cutoff='2000-12-31',
+            ylabel_pad=5,
+            spread_alpha=0.12,
+            spread_zorder=1,
+            line_zorder=4
+        )
 
         self.annote_final_val_lines(ax2l, 'mm', min_dist=100)
         
@@ -929,7 +1004,7 @@ class MatildaSummary:
 
         self.add_cmip_ensemble(param_scenarios=self.tas, val_name='temp', ylabel='Temp. (°C)',
                        target=era5_temp_rs, target_color='red',
-                       ax=ax3l, rolling=rolling, cutoff='2000-12-31', intv_sum=None, ylabel_pad=10)
+                       ax=ax3l, rolling=rolling, cutoff='2000-12-31', intv_sum=None, ylabel_pad=10, spread_alpha=0.25)
         
         self.annote_final_val_lines(ax3l, '°C')
 
@@ -955,10 +1030,20 @@ class MatildaSummary:
         ax2l_legend.get_frame().set_facecolor('white')
         ax2l_legend.get_frame().set_edgecolor('white')
 
-        # Scenario legend
-        scenario_legend = ax3l.legend(['SSP2 Scenario', '_ci1', 'SSP5 Scenario', '_ci2'],
-                        loc="lower right", bbox_to_anchor=(1, -0.8), ncol=2,
-                        frameon=True,fontsize = 8)
+        # Scenario legend: linestyle only, applies to all panels
+        scenario_handles = [
+            Line2D([0], [0], color='black', linestyle=':', linewidth=1.8, label='SSP2 Scenario'),
+            Line2D([0], [0], color='black', linestyle='--', linewidth=1.8, label='SSP5 Scenario'),
+        ]
+
+        scenario_legend = ax3l.legend(
+            handles=scenario_handles,
+            loc="lower right",
+            bbox_to_anchor=(1, -0.8),
+            ncol=2,
+            frameon=True,
+            fontsize=8
+        )
 
         # ----- Add text annotations -----
         style = dict(size=8, color='black')
