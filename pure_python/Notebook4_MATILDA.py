@@ -51,7 +51,7 @@ config.read('config.ini')
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 date_range = ast.literal_eval(config['CONFIG']['CALIBRATION_PERIOD'])
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 print('MATILDA will be calibrated on the period ' + date_range[0] + ' to ' + date_range[1])
 

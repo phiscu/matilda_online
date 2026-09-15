@@ -61,7 +61,7 @@ filename = output_folder + config['FILE_SETTINGS']['DEM_FILENAME']
 output_gpkg = output_folder + config['FILE_SETTINGS']['GPKG_NAME']
 catchment_file = output_folder + config['FILE_SETTINGS']['CATCHMENT_FILENAME']
 rivers_file = output_folder + config['FILE_SETTINGS']['RIVERS_FILENAME']
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 dem_config = ast.literal_eval(config['CONFIG']['DEM'])
 y, x = ast.literal_eval(config['CONFIG']['COORDS'])

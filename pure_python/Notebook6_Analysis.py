@@ -47,7 +47,7 @@ config.read('config.ini')
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 settings = read_yaml(os.path.join(dir_output, 'settings.yml'))
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')

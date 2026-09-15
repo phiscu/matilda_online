@@ -40,7 +40,7 @@ config.read('config.ini')
 # get directories from config.ini
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')

@@ -46,7 +46,7 @@ config.read('config.ini')
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 dir_figures = config['FILE_SETTINGS']['DIR_FIGURES']
 output_gpkg = dir_output + config['FILE_SETTINGS']['GPKG_NAME']
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # get style for matplotlib plots
 # plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
