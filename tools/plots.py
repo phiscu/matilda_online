@@ -548,13 +548,13 @@ def pp_matrix(original, target, corrected, scenario=None, nrow=7, ncol=5, precip
 
 
 class MatildaSummary:
-    def __init__(self, dir_input, dir_output, settings, compact_files=False):
+    def __init__(self, dir_input, dir_output, settings, compact_files=False, matilda_scenarios=None):
         self.dir_input = dir_input
         self.dir_output = dir_output
         self.settings = settings
         self.compact_files = compact_files
         self.arrow_props = dict(facecolor='grey', edgecolor='grey', arrowstyle='-', linewidth=0.5)
-        self.matilda_scenarios = None
+        self.matilda_scenarios = matilda_scenarios
         self.obs = None
         self.df_era5 = None
         self.tas = None
@@ -595,13 +595,15 @@ class MatildaSummary:
         if self.compact_files:
             self.tas = parquet_to_dict(f"{self.dir_output}cmip6/adjusted/tas_parquet")
             self.pr = parquet_to_dict(f"{self.dir_output}cmip6/adjusted/pr_parquet")
-            self.matilda_scenarios = parquet_to_dict(
-                f"{self.dir_output}cmip6/adjusted/matilda_scenarios_parquet")
+            if self.matilda_scenarios is None:
+                self.matilda_scenarios = parquet_to_dict(
+                    f"{self.dir_output}cmip6/adjusted/matilda_scenarios_parquet")
         else:
             self.tas = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/tas.pickle")
             self.pr = pickle_to_dict(f"{self.dir_output}cmip6/adjusted/pr.pickle")
-            self.matilda_scenarios = pickle_to_dict(
-                f"{self.dir_output}cmip6/adjusted/matilda_scenarios.pickle")
+            if self.matilda_scenarios is None:
+                self.matilda_scenarios = pickle_to_dict(
+                    f"{self.dir_output}cmip6/adjusted/matilda_scenarios.pickle")
         self.adjust_startdate(self.tas)
         self.adjust_startdate(self.pr)
         
@@ -623,8 +625,7 @@ class MatildaSummary:
         df = pd.DataFrame()
         
         for key, value in self.matilda_scenarios[scenario].items():
-            s = value[dict_name][result_name]
-            s.name = key
+            s = value[dict_name][result_name].rename(key)
             df = pd.concat([df, s], axis=1)
 
         df.index = pd.to_datetime(df.index)

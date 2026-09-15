@@ -214,7 +214,8 @@ if handle_dash_availability():
 # %%
 from tools.plots import MatildaSummary
 
-summary = MatildaSummary(dir_input, dir_output, settings, compact_files=compact_files)
+summary = MatildaSummary(dir_input, dir_output, settings, compact_files=compact_files,
+                         matilda_scenarios=matilda_scenarios)
 
 summary.plot_summary(save_path=f"{dir_output}/figures/summary_ensemble.png");
 
