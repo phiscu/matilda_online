@@ -112,6 +112,20 @@ from tools.helpers import dict_to_parquet, dict_to_pickle, create_scenario_dict
 
 scenarios = create_scenario_dict(tas, pr, [2, 5])
 
+import gc
+
+def release_memory():
+    gc.collect()
+    if profile['name'] == 'Binder':
+        import ctypes
+        try:
+            ctypes.CDLL('libc.so.6').malloc_trim(0)
+        except (OSError, AttributeError):
+            pass
+
+del tas, pr
+release_memory()
+
 print("Storing MATILDA scenario input dataframes on disk...")
 
 if compact_files:
@@ -142,12 +156,18 @@ if num_cores == 1:
 else:
     matilda_scenarios = matilda_bulk.run_multi_process(num_cores=num_cores)
 
+del matilda_bulk, scenarios
+release_memory()
+
 print("Storing MATILDA scenario outputs on disk...")
 
 if compact_files:
     dict_to_parquet(matilda_scenarios, f"{dir_output}cmip6/adjusted/matilda_scenarios_parquet")
 else:
     dict_to_pickle(matilda_scenarios, f"{dir_output}cmip6/adjusted/matilda_scenarios.pickle")
+
+del matilda_scenarios
+release_memory()
 
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
