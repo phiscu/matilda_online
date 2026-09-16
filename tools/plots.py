@@ -1,6 +1,7 @@
 import seaborn as sns
 import scienceplots
 import pandas as pd
+from pathlib import Path
 import warnings
 from matplotlib.legend import Legend
 import probscale
@@ -1011,12 +1012,12 @@ class MatildaSummary:
 
 def custom_df_matilda(dic, scenario, var, resample_freq=None):
     """
-    Takes a dictionary of model outputs and returns a combined dataframe of a specific variable for a given scenario.
+    Takes model outputs and returns a combined dataframe of a specific variable for a given scenario.
 
     Parameters
     ----------
-    dic : dict
-        A nested dictionary of model outputs.
+    dic : dict or path
+        A nested dictionary of model outputs, or a path to its nested Parquet archive.
         The outer keys are scenario names and the inner keys are model names.
         The corresponding values are dictionaries containing two keys:
         - 'model_output' (DataFrame): containing model outputs for a given scenario and model
@@ -1101,18 +1102,18 @@ def custom_df_matilda(dic, scenario, var, resample_freq=None):
         raise ValueError("var needs to be one of the following strings: " +
                          str([i for i in [out1_cols, out2_cols]]))
 
-    # Create an empty list to store the dataframes
-    dfs = []
-    # Loop over the models in the selected scenario
-    for model in dic[scenario].keys():
-        # Get the dataframe for the current model
-        df = dic[scenario][model][output_df]
-        # Append the dataframe to the list of dataframes
-        dfs.append(df[var])
+    if isinstance(dic, (str, Path)):
+        scenario_dir = Path(dic) / scenario
+        models = sorted(path.name for path in scenario_dir.iterdir() if path.is_dir())
+        dfs = [pd.read_parquet(scenario_dir / model / f'{output_df}.parquet', columns=[var])[var]
+               for model in models]
+    else:
+        models = list(dic[scenario])
+        dfs = [dic[scenario][model][output_df][var] for model in models]
     # Concatenate the dataframes into a single dataframe
     combined_df = pd.concat(dfs, axis=1)
     # Set the column names of the combined dataframe to the model names
-    combined_df.columns = dic[scenario].keys()
+    combined_df.columns = models
     # Resample time series
     if resample_freq is not None:
         if output_df == 'glacier_rescaling':
@@ -1138,8 +1139,8 @@ def plot_ci_matilda(var, dic, resample_freq='YE', show=False):
     ----------
     var : str
         The variable to plot.
-    dic : dict, optional
-        A dictionary containing the scenarios as keys and the DataFrames as values. Default is matilda_scenarios.
+    dic : dict or path
+        Nested model outputs, or the path to their nested Parquet archive.
     resample_freq : str, optional
         The resampling frequency to apply to the data. Default is 'YE'.
     show : bool, optional

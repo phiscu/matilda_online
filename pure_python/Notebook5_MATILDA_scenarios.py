@@ -172,6 +172,14 @@ release_memory()
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
     shutil.make_archive('output_download', 'zip', 'output')
+    if profile['name'] == 'Binder':
+        import os
+        try:
+            with open('output_download.zip', 'rb') as archive:
+                os.fsync(archive.fileno())
+                os.posix_fadvise(archive.fileno(), 0, 0, os.POSIX_FADV_DONTNEED)
+        except (OSError, AttributeError):
+            pass
     print('Output folder can be download now (file output_download.zip)')
 
 
