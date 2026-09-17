@@ -58,6 +58,10 @@ if profile['compact_files'] is not None:
 
 print(f"Runtime profile: {profile['name']} (compact files: {compact_files})")
 
+if profile['name'] == 'Binder' and compact_files:
+    import pyarrow as pa
+    pa.set_memory_pool(pa.system_memory_pool())
+
 print("Importing MATILDA scenarios...")
 
 if compact_files:

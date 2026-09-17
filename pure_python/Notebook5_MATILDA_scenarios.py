@@ -58,6 +58,10 @@ print(f"Input path: '{dir_input}'")
 print(f"Output path: '{dir_output}'")
 print(f"Runtime profile: {profile['name']} (compact files: {compact_files}, cores: {num_cores})")
 
+if profile['name'] == 'Binder' and compact_files:
+    import pyarrow as pa
+    pa.set_memory_pool(pa.system_memory_pool())
+
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
