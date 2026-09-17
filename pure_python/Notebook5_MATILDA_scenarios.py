@@ -47,7 +47,7 @@ compact_files = config.getboolean('CONFIG','COMPACT_FILES')
 
 # get the number of available cores
 num_cores = int(config['CONFIG']['NUM_CORES'])
-from tools.helpers import runtime_profile
+from tools.helpers import configure_arrow_memory_pool, runtime_profile
 profile = runtime_profile()
 if profile['compact_files'] is not None:
     compact_files = profile['compact_files']
@@ -59,8 +59,7 @@ print(f"Output path: '{dir_output}'")
 print(f"Runtime profile: {profile['name']} (compact files: {compact_files}, cores: {num_cores})")
 
 if profile['name'] == 'Binder' and compact_files:
-    import pyarrow as pa
-    pa.set_memory_pool(pa.system_memory_pool())
+    configure_arrow_memory_pool(profile)
 
 
 # %% [markdown]
@@ -112,20 +111,9 @@ print("Forcing data loaded.")
 # The `create_scenario_dict` function converts the individual climate projections into MATILDA input dataframes. We store the ensemble of MATILDA inputs in a nested dictionary again and save the file in a `parquet` (or `pickle`). 
 
 # %%
-from tools.helpers import dict_to_parquet, dict_to_pickle, create_scenario_dict
+from tools.helpers import dict_to_parquet, dict_to_pickle, create_scenario_dict, release_memory
 
 scenarios = create_scenario_dict(tas, pr, [2, 5])
-
-import gc
-
-def release_memory():
-    gc.collect()
-    if profile['name'] == 'Binder':
-        import ctypes
-        try:
-            ctypes.CDLL('libc.so.6').malloc_trim(0)
-        except (OSError, AttributeError):
-            pass
 
 del tas, pr
 release_memory()
@@ -148,8 +136,7 @@ else:
 # <b>Note:</b> Don't be confused by the status bar. It only updates after one full scenario is processed.</div>
 
 # %%
-from tools.helpers import MatildaBulkProcessor
-import shutil
+from tools.helpers import MatildaBulkProcessor, refresh_output_archive
 
 # Create an instance of the MatildaBulkProcessor class
 matilda_bulk = MatildaBulkProcessor(scenarios, matilda_settings, param_dict)
@@ -175,15 +162,7 @@ release_memory()
 
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
-    if profile['name'] == 'Binder':
-        import os
-        try:
-            with open('output_download.zip', 'rb') as archive:
-                os.fsync(archive.fileno())
-                os.posix_fadvise(archive.fileno(), 0, 0, os.POSIX_FADV_DONTNEED)
-        except (OSError, AttributeError):
-            pass
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
 
 

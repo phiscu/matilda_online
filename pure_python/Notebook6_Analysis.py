@@ -37,7 +37,7 @@
 # First, we read our paths from the `config.ini` again and use some helper functions to convert our stored MATILDA output back into a dictionary.
 
 # %%
-from tools.helpers import pickle_to_dict, parquet_to_dict,read_yaml
+from tools.helpers import configure_arrow_memory_pool, pickle_to_dict, parquet_to_dict, read_yaml, release_memory
 import os
 import configparser
 
@@ -59,8 +59,7 @@ if profile['compact_files'] is not None:
 print(f"Runtime profile: {profile['name']} (compact files: {compact_files})")
 
 if profile['name'] == 'Binder' and compact_files:
-    import pyarrow as pa
-    pa.set_memory_pool(pa.system_memory_pool())
+    configure_arrow_memory_pool(profile)
 
 print("Importing MATILDA scenarios...")
 
@@ -212,16 +211,6 @@ if handle_dash_availability():
     app2.run(port=8052)
 
 if profile['name'] == 'Binder':
-    import ctypes
-    import gc
-
-    def release_memory():
-        gc.collect()
-        try:
-            ctypes.CDLL('libc.so.6').malloc_trim(0)
-        except (OSError, AttributeError):
-            pass
-
     del matilda_indicators
     release_memory()
 
@@ -263,7 +252,7 @@ plot_annual_cycles(matilda_scenarios, save_path=f"{dir_output}/figures/summary_g
 
 
 # %%
-import shutil
+from tools.helpers import refresh_output_archive
 
 if profile['name'] == 'Binder':
     plt.close('all')
@@ -272,15 +261,7 @@ if profile['name'] == 'Binder':
 
 if zip_output:
     # refresh `output_download.zip` with the final figures
-    shutil.make_archive('output_download', 'zip', 'output')
-    if profile['name'] == 'Binder':
-        import os
-        try:
-            with open('output_download.zip', 'rb') as archive:
-                os.fsync(archive.fileno())
-                os.posix_fadvise(archive.fileno(), 0, 0, os.POSIX_FADV_DONTNEED)
-        except (OSError, AttributeError):
-            pass
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
 
 # %% [markdown]

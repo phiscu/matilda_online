@@ -3,6 +3,8 @@ import pickle
 import pandas as pd
 import os
 import sys
+import ctypes
+import gc
 import numpy as np
 import zipfile
 import shutil
@@ -25,6 +27,44 @@ def runtime_profile():
     if os.environ.get('JUPYTERHUB_SERVICE_PREFIX') or os.environ.get('JUPYTERHUB_USER'):
         return {'name': 'JupyterHub', 'compact_files': None, 'num_cores': None}
     return {'name': 'Local', 'compact_files': None, 'num_cores': None}
+
+
+def release_memory():
+    """Collect Python objects and return unused Binder heap memory to Linux."""
+    gc.collect()
+    if runtime_profile()['name'] == 'Binder':
+        try:
+            ctypes.CDLL('libc.so.6').malloc_trim(0)
+        except (OSError, AttributeError):
+            pass
+
+
+def configure_arrow_memory_pool(profile=None):
+    """Use Arrow's system allocator in Binder so freed memory is reclaimable."""
+    if (profile or runtime_profile())['name'] == 'Binder':
+        import pyarrow as pa
+        pa.set_memory_pool(pa.system_memory_pool())
+
+
+def refresh_output_archive(output_directory='output', archive_path='output_download.zip'):
+    """Create an output ZIP and release its Binder file cache when finished."""
+    archive = Path(archive_path)
+    shutil.make_archive(str(archive.with_suffix('')), 'zip', output_directory)
+    if runtime_profile()['name'] != 'Binder':
+        return
+    paths = [*Path(output_directory).rglob('*'), archive]
+    for path in paths:
+        if not path.is_file():
+            continue
+        try:
+            with path.open('rb') as cached_file:
+                if path == archive:
+                    os.fsync(cached_file.fileno())
+                os.posix_fadvise(
+                    cached_file.fileno(), 0, 0, os.POSIX_FADV_DONTNEED
+                )
+        except (OSError, AttributeError):
+            pass
 
 
 def mean_elevation_from_raster(raster_path, geometry_gdf):

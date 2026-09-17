@@ -39,7 +39,7 @@
 
 
 # %%
-from tools.helpers import update_yaml, read_yaml, write_yaml
+from tools.helpers import release_memory, refresh_output_archive, update_yaml, read_yaml, write_yaml
 import configparser
 import ast
 
@@ -123,7 +123,10 @@ display(obs)
 # %% tags=["output_scroll"]
 from matilda.core import matilda_simulation
 
+# The default run illustrates the workflow; later cells do not reuse its output.
 output_matilda = matilda_simulation(era5, obs, **settings)
+del output_matilda
+release_memory()
 
 # %% [markdown]
 # The results are obviously far from reality and largely overestimate runoff. The **Kling-Gupta Efficiency coefficient ([KGE](https://doi.org/10.1029/2011WR010962))** rates the result as 0.36 with 1.0 being a perfect match with the observations. We can also see that the input precipitation is much higher than the total runoff. Clearly, **the model needs calibration**.
@@ -248,6 +251,8 @@ best_parameterset = best_summary['best_param']
 # Rounding all values for readability
 rounded_parameters = {key: round(value, 3) for key, value in best_parameterset.items()}
 print(rounded_parameters)
+del best_summary, best_parameterset, rounded_parameters
+release_memory()
 
 # %% [markdown]
 # Of course, to properly cover the full parameter space you would need way more repetitions. However, a high number of samples and a high KGE score don't necessarily give you the parameter set that describes the features of your catchment the best. To find the parameter combination most suitable to simulate the processes governing streamflow, we propose to calibrate MATILDA in several steps.
@@ -291,6 +296,8 @@ step1_summary = psample(
 			fix_param=['SFCF', 'CET', 'FC', 'K0', 'K1', 'K2', 'MAXBAS', 'PERC', 'UZL', 'CWH', 'AG', 'LP', 'CFR'],    # fixed on defaults
 			fix_val={'SFCF': 1, 'CET': 0}                                                                            # fixed on specific values
 		       )
+del step1_summary
+release_memory()
 
 # %% [markdown]
 # Next, we load the samples from the `.csv` file and can apply appropriate filters to the data, if desired.
@@ -341,6 +348,9 @@ for i, parameter in enumerate(step1_samples.columns[3:]):  # Exclude the first t
 
 plt.tight_layout()
 plt.show()
+plt.close(fig)
+del fig, axs
+release_memory()
 
 # %% [markdown]
 # Finally, we calculate the mean and standard deviation for each parameter and write the results to a table.
@@ -363,6 +373,8 @@ for col in step1_samples.columns[:]:
 
 table_df = pd.DataFrame(table_step1_samples, columns=['Mean', 'Stdv'], index=step1_samples.columns)
 print(table_df[3:])
+del step1_samples, table_step1_samples, table_df, stats_dict
+release_memory()
 
 # %% [markdown]
 # With an appropriate number of samples, these values will give you a good idea of the parameter distribution. In our example study, we'll fix `PCORR` and few insensitive parameters (`lr_temp`, `lr_prec`; see the <a href="#Sensitivity-Analysis-with-FAST">Sensitivity Section</a> for details) on their mean values and use the standard deviation of the other parameters to define the bounds for subsequent calibration steps. The insensitive refreezing parameter `CFR` is fixed on it's default value (0.15).
@@ -378,7 +390,7 @@ print(table_df[3:])
 psample_settings['dbname'] = 'calib_step2'
 
 # Running LHS with only three open parameters
-step1_summary = psample(
+step2_summary = psample(
                 df=era5, obs=obs, **psample_settings,
 		        fix_param=['PCORR', 'SFCF', 'CET', 'lr_temp', 'lr_prec', 'K0', 'LP', 'MAXBAS', 'CFMAX_rel', 'CFR', 'FC', 'K1', 'K2', 'PERC', 'UZL', 'CWH', 'AG', 'BETA'],
 		        fix_val={'PCORR': 0.58, 'SFCF': 1, 'CET': 0, 'lr_temp': -0.0061, 'lr_prec': 0.0015, 'CFR': 0.15},
@@ -409,6 +421,8 @@ for i, parameter in enumerate(step2_samples.columns[3:6]):  # Exclude the first 
     axs[i].axvline(mean_val + std_val, color='blue', linestyle='--', label='Mean + SD')
 plt.tight_layout()
 plt.show()
+plt.close(fig)
+del fig, axs
 
 # Calculate mean and standard deviation for each parameter
 stats_dict = {}
@@ -430,6 +444,8 @@ table_df = pd.DataFrame(table_step2_samples, columns=['Mean', 'Stdv'], index=ste
 # Show calibrated values
 print('\nCalibrated values:')
 print(table_df[3:])
+del step2_summary, step2_samples, table_step2_samples, table_df, stats_dict
+release_memory()
 
 # %% [markdown]
 # ### Step 3: Glacier routine calibration
@@ -463,6 +479,8 @@ step3_samples.columns = step3_samples.columns.str.replace('par', '')
 # Use the range of values that meet the target SMB range as bound for the next calibration steps
 print('\nCalibrated values:')
 print(f"CFMAX_rel lower bound: {step3_samples['CFMAX_rel'].min()}\nCFMAX_rel upper bound: {step3_samples['CFMAX_rel'].max()}")
+del step3_summary, step3_samples
+release_memory()
 
 # %% [markdown]
 # ### Step 4: Soil and routing routine calibration
@@ -512,6 +530,8 @@ step4_summary = psample(
                     CFMAX_rel_lo=1.2000372,
                     CFMAX_rel_up=1.5314099
 )
+del step4_summary
+release_memory()
 
 # %% [markdown]
 # Again, we can apply various criteria to filter the samples, e.g. for the glacier mass balance ($MAE_{smb}$) and runff ($KGE_{r}$).
@@ -544,6 +564,9 @@ for i, parameter in enumerate(step4_samples.columns[:-1]):  # Exclude the 'chain
 
 plt.tight_layout()
 plt.show()
+plt.close(fig)
+del fig, axs
+release_memory()
 
 # %% [markdown]
 # Depending on your sample size and filter criteria, there might still be a large number of possible parameter sets. To identify the best sample, you can either apply further criteria (e.g. seasonal $\text{KGE}$ scores) or use visual methods.
@@ -572,6 +595,8 @@ fig.update_layout(
 
 # Show the plot
 fig.show()
+del fig, custom_text
+release_memory()
 
 
 # %% [markdown]
@@ -589,6 +614,8 @@ parameters = {col.replace('par', ''): best[col].values[0] for col in par_columns
 
 # Print the dictionary
 print(parameters)
+del best, par_columns, parameters, step4_samples
+release_memory()
 
 # %% [markdown]
 # Together with your parameter values from previous steps, this is your calibrated parameter set you can use to run the projections.
@@ -647,6 +674,9 @@ output_matilda[9].show()
 
 # %%
 output_matilda[10].show()
+del output_matilda
+plt.close('all')
+release_memory()
 
 
 # %% [markdown]
@@ -779,6 +809,8 @@ new_settings = {'rep': 10,                             # Number of model runs. F
 psample_settings.update(new_settings)
 
 best_summary = psample(df=era5, obs=obs, **psample_settings, **fixed_param_bounds)
+del best_summary
+release_memory()
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
@@ -800,12 +832,9 @@ best_summary = psample(df=era5, obs=obs, **psample_settings, **fixed_param_bound
 write_yaml(param, dir_output + 'parameters.yml')
 print(f"Parameter set stored in '{dir_output}parameters.yml'")
 
-# %%
-import shutil
-
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
 
 # %%
