@@ -141,7 +141,7 @@ release_memory()
 #
 # - ...**snow water equivalent** (**SWE**) estimates from a dedicated snow reanalysis product.
 #
-# Unfortunately, both default datasets are **limited to High Mountain Asia (HMA)**. For study sites in other areas, please consult other sources and manually add the target values for calibration in the appropriate code cells. We are happy to include additional datasets as long as they are available online and can be integrated into the workflow.
+# The glacier mass balance data cover all RGI regions. The default SWE dataset is **limited to High Mountain Asia (HMA)**. For study sites outside HMA, provide a suitable SWE dataset or adapt the snow calibration target.
 #
 # <div class="alert alert-block alert-info">
 # <b>Note:</b> Statistical parameter optimization (SPOT) algorithms require a high number of model runs, especially for large parameter sets. <i>mybinder.org</i> offers a maximum of two cores per user. One MATILDA calibration run for 20 years takes roughly 3s on one core. Therefore, large optimization runs in an online environment will be slow and may require you to leave the respective browser tab in the foreground for hours. To speed things up, you can either:
@@ -158,26 +158,33 @@ release_memory()
 # ### Glacier surface mass balance data
 
 # %% [markdown]
-# There are various sources of SMB records but only remote sensing estimates provide data for (almost) all glaciers in the target catchment. [Shean et. al. 2020 ](https://doi.org/10.3389/feart.2019.00363) calculated geodetic mass balances for all glaciers in High Mountain Asia from 2000 to 2018. For this example (and all other catchments in HMA), we can use their data set so derive an average annual mass balance in the calibration period.
+# There are various sources of SMB records, but remote sensing estimates cover glaciers across the world. [Hugonnet et al. (2021)](https://doi.org/10.1038/s41586-021-03436-z) provide global geodetic mass balances ([data](https://doi.org/10.6096/13)). The supplied tables, labelled `2000_2020`, contain one file per RGI region. Each file reports annual mass balance (`B`) and uncertainty (`errB`) in m w.e. a⁻¹. The `ID` column distinguishes measured glacier values (`1`) from regional mean substitutes (`2`).
 #
 # <div class="alert alert-block alert-info">
-# <b>Note:</b> As all remote sensing estimates the used dataset has significant uncertainties. A comparison to other datasets and the impact on the modeling results are discussed in the associated publication. </div>
+# <b>Note:</b> Remote sensing mass balances have uncertainties. The uncertainty range below is illustrative: it uses the mean of the reported uncertainties, not a statistical uncertainty estimate for the catchment mean. </div>
 #
-# We pick all individual mass balance records that match the glacier IDs in our catchment and calculate the catchment-wide mean. In addition, we use the uncertainty estimate provided in the dataset to derive an uncertainty range.
+# We read only the RGI regions represented in our catchment, match their glacier IDs, and calculate the unweighted mean across matched glaciers, as in the original example. We convert both the balance and uncertainty from m to mm w.e. a⁻¹.
 
 # %%
 import pandas as pd
+from tools.helpers import read_hugonnet_mass_balances
 
-mass_balances = pd.read_csv(dir_input + '/hma_mb_20190215_0815_rmse.csv', usecols=['RGIId', 'mb_mwea', 'mb_mwea_sigma'])
-ids = pd.read_csv(dir_output + '/RGI/Glaciers_in_catchment.csv')
+ids = pd.read_csv(dir_output + '/RGI/Glaciers_in_catchment.csv', dtype={'RGIId': 'string'})
+ids['RGIId'] = ids['RGIId'].str.replace(r'^RGI60-', '', regex=True)
+mass_balances = read_hugonnet_mass_balances(ids['RGIId'], dir_input + 'Hugonnet_etal')
 
 merged = pd.merge(mass_balances, ids, on='RGIId')
-mean_mb = round(merged['mb_mwea'].mean() * 1000, 3)   # Mean catchment MB in mm w.e.
-mean_sigma = round(merged['mb_mwea_sigma'].mean() * abs(mean_mb), 3)  # Mean uncertainty of catchment MB in mm w.e.
+if merged.empty:
+    raise ValueError('No catchment glaciers matched the Hugonnet mass balance tables')
+
+mean_mb = round(merged['B'].mean() * 1000, 3)       # Mean glacier MB in mm w.e. a-1
+mean_sigma = round(merged['errB'].mean() * 1000, 3) # Mean reported uncertainty in mm w.e. a-1
 
 target_mb = [mean_mb - mean_sigma, mean_mb + mean_sigma]
 
-print('Target glacier mass balance for calibration: ' + str(mean_mb) + ' +-' + str(mean_sigma) + 'mm w.e.')
+print(f'Matched {len(merged)} of {len(ids)} catchment glaciers.')
+print(f"Regional mean substitutes: {(merged['ID'] == 2).sum()}.")
+print('Target glacier mass balance for calibration: ' + str(mean_mb) + ' +-' + str(mean_sigma) + ' mm w.e. a-1')
 
 # %% [markdown]
 # ### Snow water equivalent
@@ -623,10 +630,10 @@ release_memory()
 # This incremental calibration allows linking the parameters to the processes simulated instead of randomly fitting them to match the measured discharge. However, uncertainties in the calibration data still allow for a wide range of potential scenarios. For a detailed discussion please refer to the associated publication.
 
 # %% [markdown]
-# ## Run MATILDA with calibrated parameters
+# ## Run MATILDA with example calibrated parameters
 
 # %% [markdown]
-# The following parameter set was computed applying the mentioned calibration strategy on an HPC cluster with large sample sizes for every step.
+# The following parameter set is included as a demonstration example.
 # <a id="param"></a>
 
 # %%
@@ -658,7 +665,7 @@ print('Calibrated parameter set:\n\n')
 for key in param.keys(): print(key + ': ' + str(param[key]))
 
 # %% [markdown]
-# Properly calibrated, the model shows a much better results.
+# This illustrative parameter set gives a much better result for the example catchment.
 
 # %% tags=["output_scroll"]
 output_matilda = matilda_simulation(era5, obs, **settings, **param)
@@ -797,7 +804,7 @@ for key in fixed_param_bounds.keys(): print(key + ': ' + str(fixed_param_bounds[
 new_settings = {'rep': 10,                             # Number of model runs. For advice check the documentation of the algorithms.
                 'glacier_only': False,                 # True when calibrating a entirely glacierized catchment
                 'obj_dir': 'maximize',                 # should your objective funtion be maximized (e.g. NSE) or minimized (e.g. RMSE)
-                'target_mb': -156,                     # Average annual glacier mass balance to target at
+                'target_mb': mean_mb,                  # Average annual glacier mass balance from Hugonnet et al.
                 'dbformat': None,                      # Write the results to a file ('csv', 'hdf5', 'ram', 'sql')
                 'output': None,                        # Choose where to store the files
                 'algorithm': 'lhs',                    # Choose algorithm (for parallelization: mc, lhs, fast, rope, sceua or demcz)

@@ -29,6 +29,26 @@ def runtime_profile():
     return {'name': 'Local', 'compact_files': None, 'num_cores': None}
 
 
+def read_hugonnet_mass_balances(glacier_ids, directory):
+    """Read Hugonnet glacier balances for the RGI regions in a catchment."""
+    ids = pd.Series(glacier_ids, dtype='string').str.replace(r'^RGI60-', '', regex=True)
+    regions = ids.str.extract(r'^(\d{2})\.')[0]
+    if regions.isna().any():
+        raise ValueError('Glacier IDs must have the form 13.06353 or RGI60-13.06353')
+
+    frames = []
+    for region in regions.unique():
+        path = Path(directory) / f'{region}_mb_glspec.dat'
+        frame = pd.read_csv(
+            path, sep=r'\s+', skiprows=2,
+            usecols=['RGI-ID', 'B', 'errB', 'ID'],
+        )
+        frame['RGIId'] = frame.pop('RGI-ID').str.replace(r'^RGI60-', '', regex=True)
+        frames.append(frame)
+
+    return pd.concat(frames, ignore_index=True).loc[lambda frame: frame['RGIId'].isin(ids)]
+
+
 def release_memory():
     """Collect Python objects and return unused Binder heap memory to Linux."""
     gc.collect()
