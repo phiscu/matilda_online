@@ -40,16 +40,27 @@ config.read('config.ini')
 # get directories from config.ini
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')
 
 # get the number of available cores
 num_cores = int(config['CONFIG']['NUM_CORES'])
+from tools.helpers import configure_arrow_memory_pool, runtime_profile
+profile = runtime_profile()
+if profile['compact_files'] is not None:
+    compact_files = profile['compact_files']
+if profile['num_cores'] is not None:
+    num_cores = profile['num_cores']
 
 print(f"Input path: '{dir_input}'")
 print(f"Output path: '{dir_output}'")
+print(f"Runtime profile: {profile['name']} (compact files: {compact_files}, cores: {num_cores})")
+
+if profile['name'] == 'Binder' and compact_files:
+    configure_arrow_memory_pool(profile)
+
 
 
 # %% [markdown]
@@ -101,9 +112,12 @@ print("Forcing data loaded.")
 # The `create_scenario_dict` function converts the individual climate projections into MATILDA input dataframes. We store the ensemble of MATILDA inputs in a nested dictionary again and save the file in a `parquet` (or `pickle`). 
 
 # %%
-from tools.helpers import dict_to_parquet, dict_to_pickle, create_scenario_dict
+from tools.helpers import dict_to_parquet, dict_to_pickle, create_scenario_dict, release_memory
 
 scenarios = create_scenario_dict(tas, pr, [2, 5])
+
+del tas, pr
+release_memory()
 
 print("Storing MATILDA scenario input dataframes on disk...")
 
@@ -111,6 +125,7 @@ if compact_files:
     dict_to_parquet(scenarios, f"{dir_output}cmip6/adjusted/matilda_scenario_input_parquet")
 else:
     dict_to_pickle(scenarios, f"{dir_output}cmip6/adjusted/matilda_scenario_input.pickle")
+
 
 
 # %% [markdown]
@@ -123,8 +138,7 @@ else:
 # <b>Note:</b> Don't be confused by the status bar. It only updates after one full scenario is processed.</div>
 
 # %%
-from tools.helpers import MatildaBulkProcessor
-import shutil
+from tools.helpers import MatildaBulkProcessor, refresh_output_archive
 
 # Create an instance of the MatildaBulkProcessor class
 matilda_bulk = MatildaBulkProcessor(scenarios, matilda_settings, param_dict)
@@ -135,6 +149,9 @@ if num_cores == 1:
 else:
     matilda_scenarios = matilda_bulk.run_multi_process(num_cores=num_cores)
 
+del matilda_bulk, scenarios
+release_memory()
+
 print("Storing MATILDA scenario outputs on disk...")
 
 if compact_files:
@@ -142,10 +159,14 @@ if compact_files:
 else:
     dict_to_pickle(matilda_scenarios, f"{dir_output}cmip6/adjusted/matilda_scenarios.pickle")
 
+del matilda_scenarios
+release_memory()
+
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
+
 
 
 # %%

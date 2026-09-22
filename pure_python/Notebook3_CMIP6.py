@@ -46,19 +46,25 @@ config.read('config.ini')
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 dir_figures = config['FILE_SETTINGS']['DIR_FIGURES']
 output_gpkg = dir_output + config['FILE_SETTINGS']['GPKG_NAME']
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # get style for matplotlib plots
 # plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')
+from tools.helpers import runtime_profile
+profile = runtime_profile()
+if profile['compact_files'] is not None:
+    compact_files = profile['compact_files']
+print(f"Runtime profile: {profile['name']} (compact files: {compact_files})")
 
 # read cloud-project
 cloud_project = config['CONFIG']['CLOUD_PROJECT']
 
 # initialize GEE
 authenticate_and_initialize_ee(cloud_project)
+
 
 # %% [markdown]
 # Now we can send the catchment outline to GEE to use it as target polygon for aggregation.
@@ -309,8 +315,7 @@ ssp5_pr = replace_values(ssp5_pr, era5l, 'prec')
 # <b>Note:</b> In the config file you can choose between two storage options: <code>pickle</code> files are fast to read and write, but take up more disk space (<code>COMPACT_FILES = False</code>). You can use them on your local machine. <code>parquet</code> files need less disk space but take longer to read and write (<code>COMPACT_FILES = True</code>). They should be your choice in the Binder.</div>
 
 # %%
-from tools.helpers import dict_to_pickle, dict_to_parquet
-import shutil
+from tools.helpers import dict_to_pickle, dict_to_parquet, refresh_output_archive
 
 tas = {'SSP2': ssp2_tas, 'SSP5': ssp5_tas}
 pr = {'SSP2': ssp2_pr, 'SSP5': ssp5_pr}
@@ -326,8 +331,9 @@ else:
 
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
+
 
 # %%
 # %reset -f

@@ -39,7 +39,7 @@
 
 
 # %%
-from tools.helpers import update_yaml, read_yaml, write_yaml
+from tools.helpers import release_memory, refresh_output_archive, update_yaml, read_yaml, write_yaml
 import configparser
 import ast
 
@@ -51,9 +51,10 @@ config.read('config.ini')
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 date_range = ast.literal_eval(config['CONFIG']['CALIBRATION_PERIOD'])
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 print('MATILDA will be calibrated on the period ' + date_range[0] + ' to ' + date_range[1])
+
 
 # %% [markdown]
 # Since HBV is a so-called 'bucket' model and all the buckets are empty in the first place we need to fill them in a setup period of minimum one year. If not specified, the first two years of the `DATE_RANGE` in the `config` are used for set up.
@@ -123,7 +124,11 @@ display(obs)
 # %% tags=["output_scroll"]
 from matilda.core import matilda_simulation
 
+# The default run illustrates the workflow; later cells do not reuse its output.
 output_matilda = matilda_simulation(era5, obs, **settings)
+del output_matilda
+release_memory()
+
 
 # %% [markdown]
 # The results are obviously far from reality and largely overestimate runoff. The **Kling-Gupta Efficiency coefficient ([KGE](https://doi.org/10.1029/2011WR010962))** rates the result as 0.36 with 1.0 being a perfect match with the observations. We can also see that the input precipitation is much higher than the total runoff. Clearly, **the model needs calibration**.
@@ -138,7 +143,7 @@ output_matilda = matilda_simulation(era5, obs, **settings)
 #
 # - ...**snow water equivalent** (**SWE**) estimates from a dedicated snow reanalysis product.
 #
-# Unfortunately, both default datasets are **limited to High Mountain Asia (HMA)**. For study sites in other areas, please consult other sources and manually add the target values for calibration in the appropriate code cells. We are happy to include additional datasets as long as they are available online and can be integrated into the workflow.
+# The glacier mass balance data cover all RGI regions. The default SWE dataset is **limited to High Mountain Asia (HMA)**. For study sites outside HMA, provide a suitable SWE dataset or adapt the snow calibration target.
 #
 # <div class="alert alert-block alert-info">
 # <b>Note:</b> Statistical parameter optimization (SPOT) algorithms require a high number of model runs, especially for large parameter sets. <i>mybinder.org</i> offers a maximum of two cores per user. One MATILDA calibration run for 20 years takes roughly 3s on one core. Therefore, large optimization runs in an online environment will be slow and may require you to leave the respective browser tab in the foreground for hours. To speed things up, you can either:
@@ -150,31 +155,41 @@ output_matilda = matilda_simulation(era5, obs, **settings)
 # </div>
 #
 # For now, we will demonstrate how to use the SPOT features and then **continue with a parameter set from a large HPC optimization run**. If you need help implementing the routine on your HPC, consult the [SPOTPY documentation](https://spotpy.readthedocs.io/en/latest/Advanced_hints/#mpi-parallel-computing) and [contact us](https://github.com/phiscu/matilda_edu/issues/new) if you encounter problems.
+#
 
 # %% [markdown]
 # ### Glacier surface mass balance data
 
 # %% [markdown]
-# There are various sources of SMB records but only remote sensing estimates provide data for (almost) all glaciers in the target catchment. [Shean et. al. 2020 ](https://doi.org/10.3389/feart.2019.00363) calculated geodetic mass balances for all glaciers in High Mountain Asia from 2000 to 2018. For this example (and all other catchments in HMA), we can use their data set so derive an average annual mass balance in the calibration period.
+# There are various sources of SMB records, but remote sensing estimates cover glaciers across the world. [Hugonnet et al. (2021)](https://doi.org/10.1038/s41586-021-03436-z) provide global geodetic mass balances ([data](https://doi.org/10.6096/13)). The supplied tables, labelled `2000_2020`, contain one file per RGI region. Each file reports annual mass balance (`B`) and uncertainty (`errB`) in m w.e. a⁻¹. The `ID` column distinguishes measured glacier values (`1`) from regional mean substitutes (`2`).
 #
 # <div class="alert alert-block alert-info">
-# <b>Note:</b> As all remote sensing estimates the used dataset has significant uncertainties. A comparison to other datasets and the impact on the modeling results are discussed in the associated publication. </div>
+# <b>Note:</b> Remote sensing mass balances have uncertainties. The uncertainty range below is illustrative: it uses the mean of the reported uncertainties, not a statistical uncertainty estimate for the catchment mean. </div>
 #
-# We pick all individual mass balance records that match the glacier IDs in our catchment and calculate the catchment-wide mean. In addition, we use the uncertainty estimate provided in the dataset to derive an uncertainty range.
+# We read only the RGI regions represented in our catchment, match their glacier IDs, and calculate the unweighted mean across matched glaciers, as in the original example. We convert both the balance and uncertainty from m to mm w.e. a⁻¹.
+#
 
 # %%
 import pandas as pd
+from tools.helpers import read_hugonnet_mass_balances
 
-mass_balances = pd.read_csv(dir_input + '/hma_mb_20190215_0815_rmse.csv', usecols=['RGIId', 'mb_mwea', 'mb_mwea_sigma'])
-ids = pd.read_csv(dir_output + '/RGI/Glaciers_in_catchment.csv')
+ids = pd.read_csv(dir_output + '/RGI/Glaciers_in_catchment.csv', dtype={'RGIId': 'string'})
+ids['RGIId'] = ids['RGIId'].str.replace(r'^RGI60-', '', regex=True)
+mass_balances = read_hugonnet_mass_balances(ids['RGIId'], dir_input + 'Hugonnet_etal')
 
 merged = pd.merge(mass_balances, ids, on='RGIId')
-mean_mb = round(merged['mb_mwea'].mean() * 1000, 3)   # Mean catchment MB in mm w.e.
-mean_sigma = round(merged['mb_mwea_sigma'].mean() * abs(mean_mb), 3)  # Mean uncertainty of catchment MB in mm w.e.
+if merged.empty:
+    raise ValueError('No catchment glaciers matched the Hugonnet mass balance tables')
+
+mean_mb = round(merged['B'].mean() * 1000, 3)       # Mean glacier MB in mm w.e. a-1
+mean_sigma = round(merged['errB'].mean() * 1000, 3) # Mean reported uncertainty in mm w.e. a-1
 
 target_mb = [mean_mb - mean_sigma, mean_mb + mean_sigma]
 
-print('Target glacier mass balance for calibration: ' + str(mean_mb) + ' +-' + str(mean_sigma) + 'mm w.e.')
+print(f'Matched {len(merged)} of {len(ids)} catchment glaciers.')
+print(f"Regional mean substitutes: {(merged['ID'] == 2).sum()}.")
+print('Target glacier mass balance for calibration: ' + str(mean_mb) + ' +-' + str(mean_sigma) + ' mm w.e. a-1')
+
 
 # %% [markdown]
 # ### Snow water equivalent
@@ -248,6 +263,9 @@ best_parameterset = best_summary['best_param']
 # Rounding all values for readability
 rounded_parameters = {key: round(value, 3) for key, value in best_parameterset.items()}
 print(rounded_parameters)
+del best_summary, best_parameterset, rounded_parameters
+release_memory()
+
 
 # %% [markdown]
 # Of course, to properly cover the full parameter space you would need way more repetitions. However, a high number of samples and a high KGE score don't necessarily give you the parameter set that describes the features of your catchment the best. To find the parameter combination most suitable to simulate the processes governing streamflow, we propose to calibrate MATILDA in several steps.
@@ -291,6 +309,9 @@ step1_summary = psample(
 			fix_param=['SFCF', 'CET', 'FC', 'K0', 'K1', 'K2', 'MAXBAS', 'PERC', 'UZL', 'CWH', 'AG', 'LP', 'CFR'],    # fixed on defaults
 			fix_val={'SFCF': 1, 'CET': 0}                                                                            # fixed on specific values
 		       )
+del step1_summary
+release_memory()
+
 
 # %% [markdown]
 # Next, we load the samples from the `.csv` file and can apply appropriate filters to the data, if desired.
@@ -341,6 +362,10 @@ for i, parameter in enumerate(step1_samples.columns[3:]):  # Exclude the first t
 
 plt.tight_layout()
 plt.show()
+plt.close(fig)
+del fig, axs
+release_memory()
+
 
 # %% [markdown]
 # Finally, we calculate the mean and standard deviation for each parameter and write the results to a table.
@@ -363,6 +388,9 @@ for col in step1_samples.columns[:]:
 
 table_df = pd.DataFrame(table_step1_samples, columns=['Mean', 'Stdv'], index=step1_samples.columns)
 print(table_df[3:])
+del step1_samples, table_step1_samples, table_df, stats_dict
+release_memory()
+
 
 # %% [markdown]
 # With an appropriate number of samples, these values will give you a good idea of the parameter distribution. In our example study, we'll fix `PCORR` and few insensitive parameters (`lr_temp`, `lr_prec`; see the <a href="#Sensitivity-Analysis-with-FAST">Sensitivity Section</a> for details) on their mean values and use the standard deviation of the other parameters to define the bounds for subsequent calibration steps. The insensitive refreezing parameter `CFR` is fixed on it's default value (0.15).
@@ -430,6 +458,10 @@ table_df = pd.DataFrame(table_step2_samples, columns=['Mean', 'Stdv'], index=ste
 # Show calibrated values
 print('\nCalibrated values:')
 print(table_df[3:])
+plt.close(fig)
+del fig, axs, step1_summary, step2_samples, table_step2_samples, table_df, stats_dict
+release_memory()
+
 
 # %% [markdown]
 # ### Step 3: Glacier routine calibration
@@ -463,6 +495,9 @@ step3_samples.columns = step3_samples.columns.str.replace('par', '')
 # Use the range of values that meet the target SMB range as bound for the next calibration steps
 print('\nCalibrated values:')
 print(f"CFMAX_rel lower bound: {step3_samples['CFMAX_rel'].min()}\nCFMAX_rel upper bound: {step3_samples['CFMAX_rel'].max()}")
+del step3_summary, step3_samples
+release_memory()
+
 
 # %% [markdown]
 # ### Step 4: Soil and routing routine calibration
@@ -512,6 +547,9 @@ step4_summary = psample(
                     CFMAX_rel_lo=1.2000372,
                     CFMAX_rel_up=1.5314099
 )
+del step4_summary
+release_memory()
+
 
 # %% [markdown]
 # Again, we can apply various criteria to filter the samples, e.g. for the glacier mass balance ($MAE_{smb}$) and runff ($KGE_{r}$).
@@ -544,6 +582,10 @@ for i, parameter in enumerate(step4_samples.columns[:-1]):  # Exclude the 'chain
 
 plt.tight_layout()
 plt.show()
+plt.close(fig)
+del fig, axs
+release_memory()
+
 
 # %% [markdown]
 # Depending on your sample size and filter criteria, there might still be a large number of possible parameter sets. To identify the best sample, you can either apply further criteria (e.g. seasonal $\text{KGE}$ scores) or use visual methods.
@@ -572,6 +614,9 @@ fig.update_layout(
 
 # Show the plot
 fig.show()
+del fig, custom_text
+release_memory()
+
 
 
 # %% [markdown]
@@ -589,6 +634,9 @@ parameters = {col.replace('par', ''): best[col].values[0] for col in par_columns
 
 # Print the dictionary
 print(parameters)
+del best, par_columns, parameters, step4_samples
+release_memory()
+
 
 # %% [markdown]
 # Together with your parameter values from previous steps, this is your calibrated parameter set you can use to run the projections.
@@ -596,11 +644,13 @@ print(parameters)
 # This incremental calibration allows linking the parameters to the processes simulated instead of randomly fitting them to match the measured discharge. However, uncertainties in the calibration data still allow for a wide range of potential scenarios. For a detailed discussion please refer to the associated publication.
 
 # %% [markdown]
-# ## Run MATILDA with calibrated parameters
+# ## Run MATILDA with example calibrated parameters
+#
 
 # %% [markdown]
-# The following parameter set was computed applying the mentioned calibration strategy on an HPC cluster with large sample sizes for every step.
+# The following parameter set is included as a demonstration example.
 # <a id="param"></a>
+#
 
 # %%
 param = {
@@ -631,7 +681,8 @@ print('Calibrated parameter set:\n\n')
 for key in param.keys(): print(key + ': ' + str(param[key]))
 
 # %% [markdown]
-# Properly calibrated, the model shows a much better results.
+# This illustrative parameter set gives a much better result for the example catchment.
+#
 
 # %% tags=["output_scroll"]
 output_matilda = matilda_simulation(era5, obs, **settings, **param)
@@ -647,6 +698,9 @@ output_matilda[9].show()
 
 # %%
 output_matilda[10].show()
+del output_matilda
+plt.close('all')
+release_memory()
 
 
 # %% [markdown]
@@ -767,7 +821,7 @@ for key in fixed_param_bounds.keys(): print(key + ': ' + str(fixed_param_bounds[
 new_settings = {'rep': 10,                             # Number of model runs. For advice check the documentation of the algorithms.
                 'glacier_only': False,                 # True when calibrating a entirely glacierized catchment
                 'obj_dir': 'maximize',                 # should your objective funtion be maximized (e.g. NSE) or minimized (e.g. RMSE)
-                'target_mb': -156,                     # Average annual glacier mass balance to target at
+                'target_mb': mean_mb,                  # Average annual glacier mass balance from Hugonnet et al.
                 'dbformat': None,                      # Write the results to a file ('csv', 'hdf5', 'ram', 'sql')
                 'output': None,                        # Choose where to store the files
                 'algorithm': 'lhs',                    # Choose algorithm (for parallelization: mc, lhs, fast, rope, sceua or demcz)
@@ -779,6 +833,9 @@ new_settings = {'rep': 10,                             # Number of model runs. F
 psample_settings.update(new_settings)
 
 best_summary = psample(df=era5, obs=obs, **psample_settings, **fixed_param_bounds)
+del best_summary
+release_memory()
+
 
 # %% [markdown]
 # <div class="alert alert-block alert-info">
@@ -801,12 +858,11 @@ write_yaml(param, dir_output + 'parameters.yml')
 print(f"Parameter set stored in '{dir_output}parameters.yml'")
 
 # %%
-import shutil
-
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
+
 
 # %%
 # %reset -f
