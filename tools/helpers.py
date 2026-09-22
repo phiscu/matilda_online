@@ -435,6 +435,56 @@ def adjust_jupyter_config():
             print('JupyterLab seems to run on unsupported environment.')
 
 
+def handle_dash_availability():
+    """
+    Check whether the notebook is running locally.
+
+    Returns
+    -------
+    bool
+        True if Dash dashboards should be displayed.
+        False if Dash should be skipped.
+    """
+    from jupyter_server import serverapp
+    from IPython.display import Markdown, display
+
+    servers = list(serverapp.list_running_servers())
+    if not servers:
+        display(Markdown(
+            "⚠️ **Dash dashboards are unavailable.** "
+            "The notebook environment could not be identified."
+        ))
+        return False
+
+    js = servers[0]
+    hostname = js.get("hostname", "")
+    base_url = js.get("base_url", "")
+
+    # Local notebook
+    if hostname in ("localhost", "127.0.0.1"):
+        print("JupyterLab seems to run on a local machine. Dash dashboards are enabled.")
+        return True
+
+    # Binder / hosted environment
+    if "/binder/" in base_url or "/user/" in base_url:
+        display(Markdown(
+            "ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**\n\n"
+            "Unfortunately, they no longer run reliably in Binder-based environments. "
+            "This is caused by the current notebook/proxy setup, and we do not have a practical "
+            "way to fix it from within this notebook.\n\n"
+            "Please run the notebook locally if you would like to use the interactive dashboards."
+        ))
+        return False
+
+    # Fallback for any other hosted setup
+    display(Markdown(
+        "ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**\n\n"
+        "This notebook appears to be running in a hosted environment, so the Dash dashboards "
+        "will be skipped."
+    ))
+    return False
+
+
 class DataFilter:
     def __init__(self, df, zscore_threshold=3, resampling_rate=None, prec=False, jump_threshold=5):
         self.df = df
