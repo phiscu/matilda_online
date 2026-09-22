@@ -61,7 +61,7 @@
 #
 # MATILDA can currently be used in **two different workflows**.
 #
-# ### ☁️ 1. Web-service workflow (*v2.0.0-beta*)
+# ### ☁️ 1. Web-service workflow (*v2.0.0-beta.2*)
 #
 # This version is connected to a small web service in the background. Some tasks that were previously run directly with Google Earth Engine from inside the notebook are now sent to this service.
 #
@@ -72,13 +72,13 @@
 # - the notebooks are easier to use in teaching and demonstration settings
 #
 # <div class="alert alert-block alert-info">
-#     <b>Please note:</b> MATILDA-Online is currently under peer-review. During this period, the latest version <b>2.0.0-beta requires an API key</b>. If you have not been provided with one, please use version 1.0.2 (see below).
+#     <b>Please note:</b> MATILDA-Online is currently under peer-review. During this period, the latest version <b>2.0.0-beta.2 requires an API key</b>. If you have not been provided with one, please use version 1.1.0 (see below).
 # </div>
 #
 # You can start this version directly from this website's toolbar via the **rocket icon** (🚀) for the online option oder the **GitHub icon** (<img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18">) for the local installation.
 
 # %% [markdown]
-# ### 🖥️ 2. Fully local workflow (*v1.0.2*)
+# ### 🖥️ 2. Fully local workflow (*v1.1.0*)
 #
 # MATILDA can also be run in a more direct way on your own computer. In that case, requests are processed locally through your own setup rather than through the shared web service.
 #
