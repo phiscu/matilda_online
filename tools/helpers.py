@@ -3,6 +3,8 @@ import pickle
 import pandas as pd
 import os
 import sys
+import ctypes
+import gc
 import numpy as np
 import zipfile
 import shutil
@@ -15,6 +17,73 @@ from tqdm import tqdm
 from matilda.core import matilda_simulation
 from multiprocessing import Pool
 from functools import partial
+
+
+def runtime_profile():
+    """Return settings for the current notebook runtime."""
+    if os.environ.get('BINDER_LAUNCH_HOST') or os.environ.get('BINDER_REPO_URL'):
+        return {'name': 'Binder', 'compact_files': True, 'num_cores': 1}
+    if os.environ.get('JUPYTERHUB_SERVICE_PREFIX') or os.environ.get('JUPYTERHUB_USER'):
+        return {'name': 'JupyterHub', 'compact_files': None, 'num_cores': None}
+    return {'name': 'Local', 'compact_files': None, 'num_cores': None}
+
+
+def read_hugonnet_mass_balances(glacier_ids, directory):
+    """Read Hugonnet glacier balances for the RGI regions in a catchment."""
+    ids = pd.Series(glacier_ids, dtype='string').str.replace(r'^RGI60-', '', regex=True)
+    regions = ids.str.extract(r'^(\d{2})\.')[0]
+    if regions.isna().any():
+        raise ValueError('Glacier IDs must have the form 13.06353 or RGI60-13.06353')
+
+    frames = []
+    for region in regions.unique():
+        path = Path(directory) / f'{region}_mb_glspec.dat'
+        frame = pd.read_csv(
+            path, sep=r'\s+', skiprows=2,
+            usecols=['RGI-ID', 'B', 'errB', 'ID'],
+        )
+        frame['RGIId'] = frame.pop('RGI-ID').str.replace(r'^RGI60-', '', regex=True)
+        frames.append(frame)
+
+    return pd.concat(frames, ignore_index=True).loc[lambda frame: frame['RGIId'].isin(ids)]
+
+
+def release_memory():
+    """Collect Python objects and return unused Binder heap memory to Linux."""
+    gc.collect()
+    if runtime_profile()['name'] == 'Binder':
+        try:
+            ctypes.CDLL('libc.so.6').malloc_trim(0)
+        except (OSError, AttributeError):
+            pass
+
+
+def configure_arrow_memory_pool(profile=None):
+    """Use Arrow's system allocator in Binder so freed memory is reclaimable."""
+    if (profile or runtime_profile())['name'] == 'Binder':
+        import pyarrow as pa
+        pa.set_memory_pool(pa.system_memory_pool())
+
+
+def refresh_output_archive(output_directory='output', archive_path='output_download.zip'):
+    """Create an output ZIP and release its Binder file cache when finished."""
+    archive = Path(archive_path)
+    shutil.make_archive(str(archive.with_suffix('')), 'zip', output_directory)
+    if runtime_profile()['name'] != 'Binder':
+        return
+    paths = [*Path(output_directory).rglob('*'), archive]
+    for path in paths:
+        if not path.is_file():
+            continue
+        try:
+            with path.open('rb') as cached_file:
+                if path == archive:
+                    os.fsync(cached_file.fileno())
+                os.posix_fadvise(
+                    cached_file.fileno(), 0, 0, os.POSIX_FADV_DONTNEED
+                )
+        except (OSError, AttributeError):
+            pass
 
 
 def restore_output_archive(
@@ -364,6 +433,56 @@ def adjust_jupyter_config():
             print('Jupyter config has been updated to run Dash!')
         else:
             print('JupyterLab seems to run on unsupported environment.')
+
+
+def handle_dash_availability():
+    """
+    Check whether the notebook is running locally.
+
+    Returns
+    -------
+    bool
+        True if Dash dashboards should be displayed.
+        False if Dash should be skipped.
+    """
+    from jupyter_server import serverapp
+    from IPython.display import Markdown, display
+
+    servers = list(serverapp.list_running_servers())
+    if not servers:
+        display(Markdown(
+            "⚠️ **Dash dashboards are unavailable.** "
+            "The notebook environment could not be identified."
+        ))
+        return False
+
+    js = servers[0]
+    hostname = js.get("hostname", "")
+    base_url = js.get("base_url", "")
+
+    # Local notebook
+    if hostname in ("localhost", "127.0.0.1"):
+        print("JupyterLab seems to run on a local machine. Dash dashboards are enabled.")
+        return True
+
+    # Binder / hosted environment
+    if "/binder/" in base_url or "/user/" in base_url:
+        display(Markdown(
+            "ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**\n\n"
+            "Unfortunately, they no longer run reliably in Binder-based environments. "
+            "This is caused by the current notebook/proxy setup, and we do not have a practical "
+            "way to fix it from within this notebook.\n\n"
+            "Please run the notebook locally if you would like to use the interactive dashboards."
+        ))
+        return False
+
+    # Fallback for any other hosted setup
+    display(Markdown(
+        "ℹ️ **Interactive Dash dashboards are only available in local notebook sessions.**\n\n"
+        "This notebook appears to be running in a hosted environment, so the Dash dashboards "
+        "will be skipped."
+    ))
+    return False
 
 
 class DataFilter:

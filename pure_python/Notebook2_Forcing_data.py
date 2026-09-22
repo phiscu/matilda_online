@@ -61,7 +61,7 @@ dir_figures = config['FILE_SETTINGS']['DIR_FIGURES']
 output_gpkg = dir_output + config['FILE_SETTINGS']['GPKG_NAME']
 scenarios = config.getboolean('CONFIG', 'PROJECTIONS')
 show_map = config.getboolean('CONFIG','SHOW_MAP')
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # get style for matplotlib plots
 plt_style = ast.literal_eval(config['CONFIG']['PLOT_STYLE'])
@@ -344,7 +344,8 @@ update_yaml(dir_output + 'settings.yml', {'ele_dat': float(ele_dat)})
 
 if zip_output:
     # refresh `output_download.zip` with data retrieved within this notebook
-    shutil.make_archive('output_download', 'zip', 'output')
+    from tools.helpers import refresh_output_archive
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
 
 # %%

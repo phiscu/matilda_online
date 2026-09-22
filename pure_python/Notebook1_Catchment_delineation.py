@@ -63,7 +63,7 @@ output_folder = config['FILE_SETTINGS']['DIR_OUTPUT']
 figures_folder = config['FILE_SETTINGS']['DIR_FIGURES']
 filename = output_folder + config['FILE_SETTINGS']['DEM_FILENAME']
 output_gpkg = output_folder + config['FILE_SETTINGS']['GPKG_NAME']
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # create folder for output figures
 os.makedirs(figures_folder, exist_ok=True)
@@ -911,10 +911,10 @@ display(pd.DataFrame(settings.items(), columns=['Parameter', 'Value']).set_index
 #
 # ![download](images/download_output.png)
 # %%
-import shutil
+from tools.helpers import refresh_output_archive
 
 if zip_output:
-    shutil.make_archive('output_download', 'zip', 'output')
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
 
 # %%
