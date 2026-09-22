@@ -29,7 +29,7 @@ dependencies:
   - rioxarray==0.17.0
   - pip
   - pip:
-      - git+https://github.com/cryotools/matilda.git
+      - git+https://github.com/cryotools/matilda.git@v1.0.3
       - climate_indices==2.0.1
       - hydroeval==0.1.0
       - xarray==2024.10.0

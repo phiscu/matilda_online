@@ -371,6 +371,9 @@ def load_webservice_config(config_path=None, section="GOOGLE", prompt_for_api_ke
 
     config = dict(parser[section])
 
+    if section == "HU" and os.environ.get("MEDIA_PRIVATE_KEY"):
+        config["MEDIA_PRIVATE_KEY"] = os.environ["MEDIA_PRIVATE_KEY"]
+
     required_keys_by_section = {
     "GOOGLE": ["PUBLIC_CLOUD_PROJECT", "BASE_URL"],
     "HU": ["MEDIA_API_URL", "MEDIA_PRIVATE_KEY", "MEDIA_USER"],
@@ -1421,7 +1424,24 @@ class CMIPDownloaderWebservice:
             yield y, block_end
             y = block_end + 1
 
-    def _request_block(self, variable, block_start, block_end, pbar=None):
+    @staticmethod
+    def _missing_year_blocks(years, max_block_size=20):
+        """Group missing years into bounded, consecutive retry blocks."""
+        blocks = []
+        start = end = None
+        for year in sorted(set(years)):
+            if start is None:
+                start = end = year
+            elif year != end + 1 or year - start + 1 > max_block_size:
+                blocks.append((start, end))
+                start = end = year
+            else:
+                end = year
+        if start is not None:
+            blocks.append((start, end))
+        return blocks
+
+    def _request_block(self, variable, block_start, block_end, pbar=None, completed_years=None):
         cfg = load_webservice_config(config_path=self.config_path, section="GOOGLE")
         service_url = f"{cfg['BASE_URL'].rstrip('/')}/cmip6-data"
 
@@ -1457,7 +1477,8 @@ class CMIPDownloaderWebservice:
                 f"cmip6-data webservice request failed with status {response.status_code}: {detail}"
             )
 
-        received_years = []
+        received_years = set()
+        completed_years = completed_years or set()
 
         for raw_line in response.iter_lines(decode_unicode=False):
             if not raw_line:
@@ -1490,9 +1511,10 @@ class CMIPDownloaderWebservice:
             with open(out_path, "w", encoding="utf-8") as f:
                 f.write(csv_text)
 
-            received_years.append(year)
+            is_new = year not in received_years and year not in completed_years
+            received_years.add(year)
 
-            if pbar is not None:
+            if pbar is not None and is_new:
                 pbar.update(1)
                 pbar.set_postfix_str(f"variable={var}, year={year}")
 
@@ -1529,7 +1551,10 @@ class CMIPDownloaderWebservice:
                 variable_years = []
     
                 for block_start, block_end in self._iter_blocks():
-                    years = self._request_block(variable, block_start, block_end, pbar=pbar)
+                    years = self._request_block(
+                        variable, block_start, block_end, pbar=pbar,
+                        completed_years=set(variable_years),
+                    )
                     variable_years.extend(years)
     
                 variable_years = sorted(set(variable_years))
@@ -1537,9 +1562,26 @@ class CMIPDownloaderWebservice:
     
                 expected = list(range(self.starty, self.endy + 1))
                 missing = sorted(set(expected) - set(variable_years))
-    
-                if self.show_progress and missing:
-                    print(f"Missing years for {variable}: {missing[:10]}{' ...' if len(missing) > 10 else ''}")
+
+                if missing:
+                    if self.show_progress:
+                        print(f"Retrying {len(missing)} missing years for {variable}...")
+                    for block_start, block_end in self._missing_year_blocks(missing):
+                        variable_years.extend(
+                            self._request_block(
+                                variable, block_start, block_end, pbar=pbar,
+                                completed_years=set(variable_years),
+                            )
+                        )
+                    variable_years = sorted(set(variable_years))
+                    summary[variable] = variable_years
+                    missing = sorted(set(expected) - set(variable_years))
+
+                if missing:
+                    raise RuntimeError(
+                        f"Incomplete CMIP6 download for {variable} after bounded retry; "
+                        f"missing years: {missing}"
+                    )
     
         finally:
             pbar.close()
@@ -1852,4 +1894,3 @@ class CMIPProcessor:
 
 
         return ssp2_full, ssp5_full
-

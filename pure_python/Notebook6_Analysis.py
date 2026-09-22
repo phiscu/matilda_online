@@ -37,7 +37,7 @@
 # First, we read our paths from the `config.ini` again and use some helper functions to convert our stored MATILDA output back into a dictionary.
 
 # %%
-from tools.helpers import pickle_to_dict, parquet_to_dict,read_yaml
+from tools.helpers import configure_arrow_memory_pool, pickle_to_dict, parquet_to_dict, read_yaml, release_memory
 import os
 import configparser
 
@@ -47,10 +47,19 @@ config.read('config.ini')
 dir_output = config['FILE_SETTINGS']['DIR_OUTPUT']
 dir_input = config['FILE_SETTINGS']['DIR_INPUT']
 settings = read_yaml(os.path.join(dir_output, 'settings.yml'))
-zip_output = config['CONFIG']['ZIP_OUTPUT']
+zip_output = config.getboolean('CONFIG', 'ZIP_OUTPUT')
 
 # set the file format for storage
 compact_files = config.getboolean('CONFIG','COMPACT_FILES')
+from tools.helpers import runtime_profile
+profile = runtime_profile()
+if profile['compact_files'] is not None:
+    compact_files = profile['compact_files']
+
+print(f"Runtime profile: {profile['name']} (compact files: {compact_files})")
+
+if profile['name'] == 'Binder' and compact_files:
+    configure_arrow_memory_pool(profile)
 
 print("Importing MATILDA scenarios...")
 
@@ -62,6 +71,11 @@ else:
     matilda_scenarios = pickle_to_dict(f"{dir_output}cmip6/adjusted/matilda_scenarios.pickle")
 
 print("Done!")
+
+def scenario_plot_source():
+    if 'matilda_scenarios' in globals():
+        return matilda_scenarios
+    return f"{dir_output}cmip6/adjusted/matilda_scenarios_parquet"
 
 
 # %% [markdown]
@@ -101,7 +115,7 @@ import pandas as pd
 
 # Application example:
 print('Total Annual Runoff Projections across Ensemble Members:\n')
-matilda_SSP2 = custom_df_matilda(matilda_scenarios, 'SSP2', 'total_runoff', 'YE')
+matilda_SSP2 = custom_df_matilda(scenario_plot_source(), 'SSP2', 'total_runoff', 'YE')
 
 print(matilda_SSP2.head())
 
@@ -129,7 +143,7 @@ print(confidence_interval)
 from tools.plots import plot_ci_matilda
 
 # Application example
-plot_ci_matilda('total_runoff',dic=matilda_scenarios, resample_freq='YE', show=True)
+plot_ci_matilda('total_runoff',dic=scenario_plot_source(), resample_freq='YE', show=True)
 
 # %% [markdown]
 # ## Interactive plotting application 
@@ -196,6 +210,10 @@ if handle_dash_availability():
     matilda_indicators_dash(app2, matilda_indicators)
     app2.run(port=8052)
 
+if profile['name'] == 'Binder':
+    del matilda_indicators
+    release_memory()
+
 # %% [markdown]
 # ## Matilda Summary
 
@@ -208,7 +226,13 @@ if handle_dash_availability():
 # %%
 from tools.plots import MatildaSummary
 
-summary = MatildaSummary(dir_input, dir_output, settings)
+summary = MatildaSummary(dir_input, dir_output, settings, compact_files=compact_files,
+                         matilda_scenarios=matilda_scenarios)
+
+if profile['name'] == 'Binder':
+    summary.load_data()
+    summary.pr = summary.snow_melt = summary.ice_melt = summary.off_melt = None
+    release_memory()
 
 summary.plot_summary(save_path=f"{dir_output}/figures/summary_ensemble.png");
 
@@ -216,17 +240,28 @@ summary.plot_summary(save_path=f"{dir_output}/figures/summary_ensemble.png");
 # The second figure summarizes the ensemble means of the key variables in **two-dimensional grids**. This allows to easily identify **changes in the seasonal cycle** over the years.
 
 # %%
+if profile['name'] == 'Binder':
+    import matplotlib.pyplot as plt
+    plt.close('all')
+    del summary
+    release_memory()
+
 from tools.plots import plot_annual_cycles
 
 plot_annual_cycles(matilda_scenarios, save_path=f"{dir_output}/figures/summary_gridplots.png")
 
 
 # %%
-import shutil
+from tools.helpers import refresh_output_archive
+
+if profile['name'] == 'Binder':
+    plt.close('all')
+    del matilda_scenarios
+    release_memory()
 
 if zip_output:
     # refresh `output_download.zip` with the final figures
-    shutil.make_archive('output_download', 'zip', 'output')
+    refresh_output_archive()
     print('Output folder can be download now (file output_download.zip)')
 
 # %% [markdown]
