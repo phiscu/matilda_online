@@ -6,15 +6,15 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>tools.geetools &mdash; Matilda ONLINE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+  <title>tools.geetools &mdash; Matilda ONLINE 2.0.0-beta documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=8d563738"></script>
-      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/documentation_options.js?v=7a8f76e3"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -34,7 +34,7 @@
           
           <a href="index.html" class="icon icon-home">
             Matilda ONLINE
-              <img src="_static/matilda_cupcake.png" class="logo" alt="Logo"/>
+              <img src="_static/MATILDA_Logo_processes.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -58,6 +58,11 @@
 <li class="toctree-l4"><a class="reference internal" href="#tools.geetools.CMIPDownloader.download"><code class="docutils literal notranslate"><span class="pre">CMIPDownloader.download()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.CMIPDownloaderManifest"><code class="docutils literal notranslate"><span class="pre">CMIPDownloaderManifest</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.CMIPDownloaderWebservice"><code class="docutils literal notranslate"><span class="pre">CMIPDownloaderWebservice</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tools.geetools.CMIPDownloaderWebservice.download"><code class="docutils literal notranslate"><span class="pre">CMIPDownloaderWebservice.download()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#tools.geetools.CMIPProcessor"><code class="docutils literal notranslate"><span class="pre">CMIPProcessor</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#tools.geetools.CMIPProcessor.append_df"><code class="docutils literal notranslate"><span class="pre">CMIPProcessor.append_df()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#tools.geetools.CMIPProcessor.get_results"><code class="docutils literal notranslate"><span class="pre">CMIPProcessor.get_results()</span></code></a></li>
@@ -65,6 +70,15 @@
 <li class="toctree-l4"><a class="reference internal" href="#tools.geetools.CMIPProcessor.read_cmip"><code class="docutils literal notranslate"><span class="pre">CMIPProcessor.read_cmip()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.authenticate_and_initialize_ee"><code class="docutils literal notranslate"><span class="pre">authenticate_and_initialize_ee()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.delineate_catchment_local"><code class="docutils literal notranslate"><span class="pre">delineate_catchment_local()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.delineate_catchment_mghydro"><code class="docutils literal notranslate"><span class="pre">delineate_catchment_mghydro()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.download_dem_for_bbox"><code class="docutils literal notranslate"><span class="pre">download_dem_for_bbox()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.download_dem_webservice"><code class="docutils literal notranslate"><span class="pre">download_dem_webservice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.get_climate_data_webservice"><code class="docutils literal notranslate"><span class="pre">get_climate_data_webservice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.get_geopotential_webservice"><code class="docutils literal notranslate"><span class="pre">get_geopotential_webservice()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.load_webservice_config"><code class="docutils literal notranslate"><span class="pre">load_webservice_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tools.geetools.resolve_api_key"><code class="docutils literal notranslate"><span class="pre">resolve_api_key()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="plots.html">tools.plots</a></li>
@@ -113,6 +127,54 @@ the requested period. Downloads individual years in parallel processes to increa
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="tools.geetools.CMIPDownloaderManifest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">CMIPDownloaderManifest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catchment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manifest_concurrent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size_years</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#CMIPDownloaderManifest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.CMIPDownloaderManifest" title="Link to this definition"></a></dt>
+<dd><p>Fast CMIP6 downloader using the /cmip6-manifest endpoint.</p>
+<p>The MATILDA webservice generates signed Earth Engine download URLs.
+This helper downloads those files directly in parallel and saves them
+with the same filenames expected by CMIPProcessor.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tools.geetools.CMIPDownloaderWebservice">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">CMIPDownloaderWebservice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">starty</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catchment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_concurrent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_size_years</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#CMIPDownloaderWebservice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.CMIPDownloaderWebservice" title="Link to this definition"></a></dt>
+<dd><p>Download spatially averaged CMIP6 yearly CSV files from the MATILDA webservice.</p>
+<p>This class mirrors the output of the local CMIPDownloader, but uses the
+/cmip6-data endpoint. It is designed as a low-disruption bridge so that
+CMIPProcessor can remain unchanged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>starty</strong> (<em>int</em>) – First year to request.</p></li>
+<li><p><strong>endy</strong> (<em>int</em>) – Last year to request.</p></li>
+<li><p><strong>catchment</strong> (<em>dict</em><em> or </em><em>geopandas.GeoDataFrame</em><em> or </em><em>shapely geometry</em>) – Catchment geometry to send to the webservice.</p></li>
+<li><p><strong>variables</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – Variables to request. Default is [“tas”, “pr”].</p></li>
+<li><p><strong>dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Output directory for yearly CSV files.</p></li>
+<li><p><strong>max_concurrent</strong> (<em>int</em><em>, </em><em>optional</em>) – Concurrency passed to the webservice endpoint.</p></li>
+<li><p><strong>block_size_years</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If given, split each variable request into year blocks of this size.
+If None, request each variable over the full time period.</p></li>
+<li><p><strong>config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Optional path to webservices.ini.</p></li>
+<li><p><strong>show_progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to print progress information.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="tools.geetools.CMIPDownloaderWebservice.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#CMIPDownloaderWebservice.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.CMIPDownloaderWebservice.download" title="Link to this definition"></a></dt>
+<dd><p>Download all requested variables and save yearly CSV files locally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Summary of downloaded years by variable.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="tools.geetools.CMIPProcessor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">CMIPProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#CMIPProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.CMIPProcessor" title="Link to this definition"></a></dt>
 <dd><p>Class to read and pre-process CSV files downloaded by the CMIPDownloader class.</p>
@@ -144,6 +206,285 @@ Arranges the models in alphabetical order.</p>
 
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.authenticate_and_initialize_ee">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">authenticate_and_initialize_ee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cloud_project</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#authenticate_and_initialize_ee"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.authenticate_and_initialize_ee" title="Link to this definition"></a></dt>
+<dd><p>Robustly authenticates and initializes Earth Engine for local/notebook environments.</p>
+<p>It attempts to initialize Earth Engine:</p>
+<ol class="arabic simple">
+<li><p>Using existing credentials if available and valid for the project.</p></li>
+</ol>
+<p>2. If a permission error occurs, it forces a new interactive browser-based
+authentication suitable for notebooks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cloud_project</strong> (<em>str</em>) – The Google Cloud Project ID to use for Earth Engine.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If Earth Engine initialization ultimately fails after retries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.delineate_catchment_local">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">delineate_catchment_local</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">catchment_filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snap_acc_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#delineate_catchment_local"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.delineate_catchment_local" title="Link to this definition"></a></dt>
+<dd><p>Delineate a catchment locally with pysheds after downloading a DEM.</p>
+<p>The function uses the MATILDA DEM webservice to download a DEM either for
+a default square around the outlet point or for a custom bounding box.
+It then performs local delineation with pysheds.</p>
+<p>If the resulting catchment touches the DEM boundary, the DEM extent is
+likely too small and the function raises an error asking the user to
+provide a custom lat/lon bounding box.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat</strong> (<em>float</em>) – Latitude of the outlet / pour point.</p></li>
+<li><p><strong>lon</strong> (<em>float</em>) – Longitude of the outlet / pour point.</p></li>
+<li><p><strong>dem_filename</strong> (<em>str</em><em> or </em><em>Path</em>) – Output path for the downloaded DEM GeoTIFF.</p></li>
+<li><p><strong>catchment_filename</strong> (<em>str</em><em> or </em><em>Path</em>) – Output path for the delineated catchment GeoJSON.</p></li>
+<li><p><strong>asset_id</strong> (<em>str</em>) – Earth Engine asset ID of the DEM to download.</p></li>
+<li><p><strong>buffer_m</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Buffer radius in meters for the default DEM download box.
+Ignored when bbox is provided.</p></li>
+<li><p><strong>bbox</strong> (<em>list</em><em> or </em><em>tuple</em><em>, </em><em>optional</em>) – Custom bounding box in geographic coordinates:
+[xmin, ymin, xmax, ymax].</p></li>
+<li><p><strong>snap_acc_threshold</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Accumulation threshold used to snap the outlet point to the channel
+network. Default is 1000.</p></li>
+<li><p><strong>config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Optional path to webservices.ini.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>(catchment_gdf, info)</p>
+<dl class="simple">
+<dt>catchment_gdf<span class="classifier">geopandas.GeoDataFrame</span></dt><dd><p>Delineated catchment polygon.</p>
+</dd>
+<dt>info<span class="classifier">dict</span></dt><dd><p>Dictionary with useful diagnostics:
+- dem_filename
+- catchment_filename
+- snapped_lon
+- snapped_lat
+- bbox_used
+- edge_touched</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>RuntimeError</strong> – If delineation fails or if the DEM extent appears too small.</p></li>
+<li><p><strong>ValueError</strong> – If bbox is invalid.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.delineate_catchment_mghydro">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">delineate_catchment_mghydro</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watershed_output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rivers_output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'high'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_to_local</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_dem_asset_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MERIT/DEM/v1_0_3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_dem_filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dem_gee.tif'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_buffer_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fallback_bbox</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dem_config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#delineate_catchment_mghydro"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.delineate_catchment_mghydro" title="Link to this definition"></a></dt>
+<dd><p>Delineate a catchment and fetch upstream rivers from the MG Hydro /
+Global Watersheds API.</p>
+<p>This helper uses the public API of the Global Watersheds web app:
+<a class="reference external" href="https://mghydro.com/watersheds/">https://mghydro.com/watersheds/</a></p>
+<p>API/help documentation:
+<a class="reference external" href="https://mghydro.com/watersheds/help.html">https://mghydro.com/watersheds/help.html</a></p>
+<p>Python demo notebook by the author:
+<a class="reference external" href="https://mghydro.com/demo-use-the-global-watersheds-api-and-python-to-automatically-delineate-watersheds/">https://mghydro.com/demo-use-the-global-watersheds-api-and-python-to-automatically-delineate-watersheds/</a></p>
+<p>Related GitHub materials:
+<a class="reference external" href="https://gist.github.com/mheberger/c05f10de225fbee8f572c5dfbb38d0b5">https://gist.github.com/mheberger/c05f10de225fbee8f572c5dfbb38d0b5</a>
+<a class="reference external" href="https://github.com/mheberger/delineator">https://github.com/mheberger/delineator</a></p>
+<p>Author / maintainer:
+Matthew Heberger (mheberger)
+<a class="reference external" href="https://github.com/mheberger">https://github.com/mheberger</a>
+<a class="reference external" href="https://mghydro.com/author/mheberger/">https://mghydro.com/author/mheberger/</a></p>
+<p class="rubric">Notes</p>
+<p>The Global Watersheds app and API are based on global hydrographic datasets
+including MERIT-Hydro / MERIT-Basins and provide fast watershed delineation
+and upstream river extraction. The service is very useful for rapid
+catchment screening, but results should always be checked visually before
+further use in analysis workflows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lat</strong> (<em>float</em>) – Latitude of the outlet / pour point.</p></li>
+<li><p><strong>lon</strong> (<em>float</em>) – Longitude of the outlet / pour point.</p></li>
+<li><p><strong>watershed_output_path</strong> (<em>str</em><em> or </em><em>Path</em>) – Output path for the watershed GeoJSON.</p></li>
+<li><p><strong>rivers_output_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Output path for the upstream rivers GeoJSON.
+If None, a filename based on watershed_output_path is created.</p></li>
+<li><p><strong>precision</strong> (<em>str</em><em>, </em><em>optional</em>) – Delineation precision, either ‘low’ or ‘high’. Default is ‘high’.
+For very large basins, the service may automatically fall back to
+lower precision.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, create a quick visual check plot with catchment boundary,
+river network, and outlet point.</p></li>
+<li><p><strong>timeout</strong> (<em>int</em><em>, </em><em>optional</em>) – Timeout in seconds for each API request.</p></li>
+<li><p><strong>fallback_to_local</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, fall back to local pysheds delineation when the MG Hydro
+request fails. Default is False.</p></li>
+<li><p><strong>dem_asset_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Earth Engine asset ID of the DEM used for local fallback delineation.</p></li>
+<li><p><strong>dem_filename</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – DEM filename used for local fallback delineation.</p></li>
+<li><p><strong>fallback_buffer_m</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Default buffer radius in meters for local fallback delineation.</p></li>
+<li><p><strong>fallback_bbox</strong> (<em>list</em><em> or </em><em>tuple</em><em>, </em><em>optional</em>) – Optional custom bounding box [xmin, ymin, xmax, ymax] for local
+fallback delineation. If None, the user is prompted for a bbox.</p></li>
+<li><p><strong>dem_config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Optional path to webservices.ini for local DEM download.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(watershed_gdf, rivers_gdf)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If precision is invalid.</p></li>
+<li><p><strong>RuntimeError</strong> – If the API request fails or returns invalid data.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.download_dem_for_bbox">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">download_dem_for_bbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bbox</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#download_dem_for_bbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.download_dem_for_bbox" title="Link to this definition"></a></dt>
+<dd><p>Download a DEM for a custom geographic bounding box.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bbox</strong> (<em>list</em><em> or </em><em>tuple</em>) – Bounding box as [xmin, ymin, xmax, ymax] in lon/lat coordinates.</p></li>
+<li><p><strong>output_path</strong> (<em>str</em><em> or </em><em>Path</em>) – Local output path for the downloaded GeoTIFF.</p></li>
+<li><p><strong>asset_id</strong> (<em>str</em>) – Earth Engine asset ID of the DEM.</p></li>
+<li><p><strong>config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Optional path to webservices.ini.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the saved GeoTIFF file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If bbox is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.download_dem_webservice">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">download_dem_webservice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buffer_m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#download_dem_webservice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.download_dem_webservice" title="Link to this definition"></a></dt>
+<dd><p>Download a DEM GeoTIFF from the MATILDA webservice and save it locally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_path</strong> (<em>str</em><em> or </em><em>Path</em>) – Local output path for the downloaded GeoTIFF.</p></li>
+<li><p><strong>asset_id</strong> (<em>str</em>) – Earth Engine asset ID of the DEM.</p></li>
+<li><p><strong>lat</strong> (<em>float</em><em>, </em><em>optional</em>) – Latitude of the pour point. Must be used together with lon.</p></li>
+<li><p><strong>lon</strong> (<em>float</em><em>, </em><em>optional</em>) – Longitude of the pour point. Must be used together with lat.</p></li>
+<li><p><strong>buffer_m</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – Buffer radius in meters used to create the request box when using
+lat/lon input.</p></li>
+<li><p><strong>geometry</strong> (<em>dict</em><em> or </em><em>geopandas.GeoDataFrame</em><em> or </em><em>shapely geometry</em><em>, </em><em>optional</em>) – Polygon geometry to send directly to the webservice. This is the
+preferred option when a catchment outline is already available.</p></li>
+<li><p><strong>config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Optional path to webservices.ini.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Path to the saved GeoTIFF file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If neither a valid point+buffer nor a valid geometry is provided.</p></li>
+<li><p><strong>RuntimeError</strong> – If the webservice request fails or returns unexpected content.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.get_climate_data_webservice">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">get_climate_data_webservice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catchment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_concurrent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#get_climate_data_webservice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.get_climate_data_webservice" title="Link to this definition"></a></dt>
+<dd><p>Request spatially aggregated ERA5-Land forcing data from the MATILDA
+webservice and return them as a pandas DataFrame.</p>
+<p>The webservice streams one JSON record per year (NDJSON).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.get_geopotential_webservice">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">get_geopotential_webservice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">catchment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asset_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">band</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#get_geopotential_webservice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.get_geopotential_webservice" title="Link to this definition"></a></dt>
+<dd><p>Request catchment-mean geopotential and reference elevation from the
+MATILDA webservice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>catchment</strong> (<em>dict</em><em> or </em><em>geopandas.GeoDataFrame</em><em> or </em><em>shapely geometry</em>) – Catchment geometry as a GeoJSON FeatureCollection, GeoDataFrame,
+or shapely geometry. If a GeoDataFrame or shapely geometry is
+provided, it will be converted to a FeatureCollection payload.</p></li>
+<li><p><strong>config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Optional path to webservices.ini.</p></li>
+<li><p><strong>asset_id</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional override of the geopotential Earth Engine asset.</p></li>
+<li><p><strong>band</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional override of the band name.</p></li>
+<li><p><strong>show_progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, show a simple live status message while the request runs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with keys:
+- “geopotential_mean”
+- “elevation_m”</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>RuntimeError</strong> – If the webservice request fails or returns malformed output.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.load_webservice_config">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">load_webservice_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">section</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'GOOGLE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt_for_api_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#load_webservice_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.load_webservice_config" title="Link to this definition"></a></dt>
+<dd><p>Load settings from webservices.ini.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config_path</strong> (<em>str</em><em> or </em><em>Path</em><em>, </em><em>optional</em>) – Path to webservices.ini. If None, defaults to repo_root/webservices.ini
+assuming this file lives in repo_root.</p></li>
+<li><p><strong>section</strong> (<em>str</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>prompt_for_api_key</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True and section is [GOOGLE], prompt interactively for an API key when
+neither MATILDA_API_KEY nor PUBLIC_API_KEY is available.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dictionary with keys and values from the requested section.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>FileNotFoundError</strong> – If the config file does not exist.</p></li>
+<li><p><strong>KeyError</strong> – If the requested section is missing.</p></li>
+<li><p><strong>ValueError</strong> – If required keys for the section are missing.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tools.geetools.resolve_api_key">
+<span class="sig-prename descclassname"><span class="pre">tools.geetools.</span></span><span class="sig-name descname"><span class="pre">resolve_api_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_var</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MATILDA_API_KEY'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prompt_if_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools/geetools.html#resolve_api_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tools.geetools.resolve_api_key" title="Link to this definition"></a></dt>
+<dd><p>Resolve the MATILDA webservice API key.</p>
+<section id="priority">
+<h2>Priority<a class="headerlink" href="#priority" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>MATILDA_API_KEY environment variable</p></li>
+<li><p>PUBLIC_API_KEY from webservices.ini</p></li>
+<li><p>Interactive prompt (optional)</p></li>
+</ol>
+</section>
+</dd></dl>
+
 </section>
 
 
@@ -157,7 +498,7 @@ Arranges the models in alphabetical order.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2025, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
+    <p>&#169; Copyright 2026, Alexander Georgi, Phillip Schuster, Mia Janzen.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
