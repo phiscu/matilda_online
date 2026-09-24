@@ -401,6 +401,7 @@ def authenticate_and_initialize_ee(cloud_project):
     Robustly authenticates and initializes Earth Engine for local/notebook environments.
 
     It attempts to initialize Earth Engine:
+
     1. Using existing credentials if available and valid for the project.
     2. If a permission error occurs, it forces a new interactive browser-based
        authentication suitable for notebooks.

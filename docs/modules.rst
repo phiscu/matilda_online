@@ -1,9 +1,9 @@
-Tools Modules
+MATILDA Tools
 =============
 
 .. toctree::
    :maxdepth: 1
-   :caption: Tools Modules
+   :caption: MATILDA Tools
 
    helpers
    indicators
