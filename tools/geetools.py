@@ -1,11 +1,32 @@
 import pandas as pd
 import concurrent.futures
+from contextlib import contextmanager
+import logging
 import os
 import sys
 import requests
 from retry import retry
 from tqdm import tqdm
 import ee
+
+
+class _EarthEnginePoolWarningFilter(logging.Filter):
+    def filter(self, record):
+        return not record.getMessage().startswith(
+            'Connection pool is full, discarding connection: earthengine.googleapis.com.'
+        )
+
+
+@contextmanager
+def _suppress_earth_engine_pool_warning():
+    logger = logging.getLogger('urllib3.connectionpool')
+    warning_filter = _EarthEnginePoolWarningFilter()
+    logger.addFilter(warning_filter)
+    try:
+        yield
+    finally:
+        logger.removeFilter(warning_filter)
+
 
 def authenticate_and_initialize_ee(cloud_project):
     """
@@ -101,12 +122,14 @@ def authenticate_and_initialize_ee(cloud_project):
 class CMIPDownloader:
     """Class to download spatially averaged CMIP6 data for a given period, variable, and spatial subset."""
 
-    def __init__(self, var, starty, endy, shape, processes=10, dir='./'):
+    def __init__(self, var, starty, endy, shape, processes=None, dir='./'):
         self.var = var
         self.starty = starty
         self.endy = endy
         self.shape = shape
-        self.processes = processes
+        self.processes = processes if processes is not None else (
+            10 if os.environ.get('BINDER_LAUNCH_HOST') or os.environ.get('BINDER_REPO_URL') else 30
+        )
         self.directory = dir
 
         # create the download directory if it doesn't exist
@@ -115,7 +138,7 @@ class CMIPDownloader:
 
     def download(self):
         """Runs a subset routine for CMIP6 data on GEE servers to create ee.FeatureCollections for all years in
-        the requested period. Downloads individual years in parallel processes to increase the download time."""
+        the requested period. Downloads individual years in parallel threads to reduce download time."""
         
         print('Initiating download request for NEX-GDDP-CMIP6 data from ' +
               str(self.starty) + ' to ' + str(self.endy) + '.')
@@ -193,8 +216,9 @@ class CMIPDownloader:
         # Create a list of years to be downloaded. [Client side]
         items = getRequests(self.starty, self.endy)
 
-        # Launch download requests in parallel processes and display a status bar. [Client side]
-        with tqdm(total=len(items), desc="Downloading CMIP6 data for variable '" + self.var + "'") as pbar:
+        # Launch download requests in parallel threads and display a status bar. [Client side]
+        with _suppress_earth_engine_pool_warning(), \
+                tqdm(total=len(items), desc="Downloading CMIP6 data for variable '" + self.var + "'") as pbar:
             results = []
             with concurrent.futures.ThreadPoolExecutor(max_workers=self.processes) as executor:
                 for i, year in enumerate(items):

@@ -83,14 +83,14 @@ cmip_dir = dir_output + 'cmip6/'
 # %% [markdown]
 # We have designed a class called `CMIPDownloader` that does everything promised in the heading in one go. The `buildFeature()` function requests daily catchment wide averages of all available CMIP6 models for individual years. All requested years are stored in an `ee.ImageCollection` by the`getResult()` function. To provide the best basis for bias adjustment, a large overlap of reanalysis and scenario data is recommended. By default, the `CMIPDownloader` class requests everything between the earliest available date from ERA5 (1979) and the latest available date from CMIP6 (2100). The `download()` function then starts a given number of parallel requests, each downloading a single year and saving it as a CSV file.
 #
-# We can simply specify a target location and start the download for both variables individually. If you are in a binder or only have few CPUs available, choose a moderate number of requests to avoid "hickups". The download time depends on the number of parallel processes, the traffic on the GEE servers and other mysterious factors. If you run this notebook in a binder, it usually doesn't take more than 5 minutes for both downloads to finish.
+# We download the two variables in sequence, with 10 years processed concurrently on Binder or 30 locally. Download time depends on server traffic and other active sessions.
 
 # %%
 from tools.geetools import CMIPDownloader
 
-downloader_t = CMIPDownloader(var='tas', starty=1979, endy=2100, shape=catchment, processes=30, dir=cmip_dir)
+downloader_t = CMIPDownloader(var='tas', starty=1979, endy=2100, shape=catchment, dir=cmip_dir)
 downloader_t.download()
-downloader_p = CMIPDownloader(var='pr', starty=1979, endy=2100, shape=catchment, processes=30, dir=cmip_dir)
+downloader_p = CMIPDownloader(var='pr', starty=1979, endy=2100, shape=catchment, dir=cmip_dir)
 downloader_p.download()
 
 # %% [markdown]
